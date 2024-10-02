@@ -1,13 +1,55 @@
-<?php include 'config.php'; ?>
-
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Excel Data</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- =========================================================
+* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
+==============================================================
+* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
+* Created by: ThemeSelection
+* License: You must have a valid license purchased in order to legally use the theme for your project.
+* Copyright ThemeSelection (https://themeselection.com)
+=========================================================
+ -->
+<html
+  lang="en"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="../assets/"
+  data-template="vertical-menu-template-free"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+    <title>Upload Excel Data | Sneat Admin Template</title>
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    
+    <!-- Vendor CSS -->
+    <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css" />
+    
+    <!-- Script for handling Excel uploads -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,7 +67,7 @@
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Menambahkan bayangan halus untuk efek cantik */
         }
 
-
+        /* Styles for the upload section and table */
         .upload-section {
             display: flex;
             justify-content: space-between;
@@ -76,7 +118,6 @@
             background-color: #0056b3; /* Warna berubah saat hover */
         }
 
-
         td {
             text-align: center; /* Teks rata tengah */
             padding: 12px; /* Sedikit lebih besar untuk ruang lebih luas */
@@ -101,15 +142,6 @@
             background-color: #d1ecf1; /* Warna background biru muda saat baris di-hover */
         }
 
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #eaf5ff;
-        }
-
         .btn {
             margin-top: 10px;
             padding: 10px 20px;
@@ -127,22 +159,30 @@
             border-color: #28a745;
         }
     </style>
-</head>
-<body>
-    <h1 class="mb-4">Upload and Display Excel Data</h1>
+  </head>
+  
+  <body>
+    <div class="container">
+      <button id="backButton" class="btn btn-secondary" style="margin-top: 20px;">Back to Home</button>
+      <h1 class="mb-4">Upload and Display Excel Data</h1>
 
-    <div class="upload-section">
-        <input type="file" id="uploadExcel" accept=".xlsx, .xls" class="form-control" />
-        <button id="uploadButton" class="btn btn-primary">Upload</button>
+      <div class="upload-section">
+          <input type="file" id="uploadExcel" accept=".xlsx, .xls" class="form-control" />
+          <button id="uploadButton" class="btn btn-primary">Upload</button>
+      </div>
+
+      <table id="excelTable" class="table table-bordered table-hover">
+          <!-- Excel data will be displayed here -->
+      </table>
+
+      <button id="saveButton" class="btn btn-success">Save Data</button>
     </div>
 
-    <table id="excelTable" class="table table-bordered table-hover">
-        <!-- Excel data will be displayed here -->
-    </table>
-
-    <button id="saveButton" class="btn btn-success">Save Data</button>
-
     <script>
+        // Handle the Back button click
+        document.getElementById('backButton').addEventListener('click', function () {
+            window.location.href = 'index.html'; // Redirects to index.html
+        });
     document.getElementById('uploadButton').addEventListener('click', function () {
         var fileInput = document.getElementById('uploadExcel');
         if (fileInput.files.length === 0) {
@@ -157,20 +197,16 @@
             var data = new Uint8Array(e.target.result);
             var workbook = XLSX.read(data, { type: 'array' });
             
-            // Mengambil sheet pertama
             var firstSheet = workbook.Sheets[workbook.SheetNames[0]];
             
-            // Mengonversi sheet menjadi JSON
             var excelData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
 
-            // Menampilkan data ke tabel
             var table = document.getElementById('excelTable');
-            table.innerHTML = ""; // Kosongkan tabel sebelum menambahkan data baru
+            table.innerHTML = ""; 
             
             excelData.forEach(function (row, rowIndex) {
                 var rowElement = table.insertRow(-1);
                 
-                // Jika baris pertama, buat sebagai header (th)
                 if (rowIndex === 0) {
                     row.forEach(function (cell) {
                         var headerCell = document.createElement("th");
@@ -178,37 +214,59 @@
                         rowElement.appendChild(headerCell);
                     });
                 } else {
-                    // Baris berikutnya buat sebagai data (td)
                     row.forEach(function (cell, cellIndex) {
                         var cellElement = rowElement.insertCell(-1);
 
-                        // Format tanggal dan waktu untuk kolom ke-4
                         if (cellIndex === 4) { // Kolom tanggal dan waktu
-                            var cellValue = cell; // Nilai dari Excel
+                            var cellValue = cell;
                             var date;
 
-                            // Jika cellValue berupa angka (serial Excel date)
                             if (typeof cellValue === 'number') {
-                                date = XLSX.SSF.parse_date_code(cellValue);
-                                date = new Date(date.y, date.m - 1, date.d, date.h || 0, date.M || 0, date.s || 0);
-                            } else if (typeof cellValue === 'string') {
-                                // Cek jika format sudah berupa string
-                                date = new Date(cellValue);
-                            } else {
-                                date = cellValue instanceof Date ? cellValue : null;
-                            }
+                                // Pisahkan bagian tanggal dan waktu dari serial number
+                                var serialDate = Math.floor(cellValue); // bagian tanggal
+                                var serialTime = cellValue - serialDate; // bagian waktu (desimal)
+                                
+                                // Konversi serialDate menjadi objek Date
+                                date = XLSX.SSF.parse_date_code(serialDate);
+                                var parsedDate = new Date(date.y, date.m - 1, date.d);
 
-                            if (date) {
-                                // Format waktu seperti "MM/DD/YYYY HH:MM:SS AM/PM"
+                                // Konversi serialTime menjadi jam, menit, dan detik
+                                var totalSeconds = Math.round(serialTime * 24 * 3600);
+                                var hours = Math.floor(totalSeconds / 3600);
+                                var minutes = Math.floor((totalSeconds % 3600) / 60);
+                                var seconds = totalSeconds % 60;
+
+                                // Gabungkan tanggal dan waktu
+                                parsedDate.setHours(hours);
+                                parsedDate.setMinutes(minutes);
+                                parsedDate.setSeconds(seconds);
+
+                                // Format output tanggal dan waktu
                                 var formattedDate = 
-                                    (date.getMonth() + 1) + "/" + 
-                                    date.getDate() + "/" + 
-                                    date.getFullYear() + " " + 
-                                    date.toLocaleTimeString('en-US'); // Format AM/PM
+                                    parsedDate.getFullYear() + '/' + 
+                                    ('0' + (parsedDate.getMonth() + 1)).slice(-2) + '/' + 
+                                    ('0' + parsedDate.getDate()).slice(-2) + ' ' + 
+                                    ('0' + parsedDate.getHours()).slice(-2) + ':' + 
+                                    ('0' + parsedDate.getMinutes()).slice(-2) + ':' + 
+                                    ('0' + parsedDate.getSeconds()).slice(-2);
                                 
                                 cellElement.textContent = formattedDate;
+                            } else if (typeof cellValue === 'string') {
+                                date = new Date(cellValue);
+                                if (!isNaN(date.getTime())) {
+                                    var formattedDateString = 
+                                        date.getFullYear() + '/' + 
+                                        ('0' + (date.getMonth() + 1)).slice(-2) + '/' + 
+                                        ('0' + date.getDate()).slice(-2) + ' ' + 
+                                        ('0' + date.getHours()).slice(-2) + ':' + 
+                                        ('0' + date.getMinutes()).slice(-2) + ':' + 
+                                        ('0' + date.getSeconds()).slice(-2);
+                                    cellElement.textContent = formattedDateString;
+                                } else {
+                                    cellElement.textContent = "Invalid date";
+                                }
                             } else {
-                                cellElement.textContent = "Invalid date";
+                                cellElement.textContent = "Invalid data";
                             }
                         } else {
                             cellElement.textContent = cell;
@@ -225,19 +283,16 @@
         var table = document.getElementById('excelTable');
         var excelData = [];
 
-        // Mengambil data dari tabel
-        for (var i = 1; i < table.rows.length; i++) { // Mulai dari 1 untuk melewati header
+        for (var i = 1; i < table.rows.length; i++) { 
             var row = table.rows[i];
             var rowData = [];
 
             for (var j = 0; j < row.cells.length; j++) {
                 var cellContent = row.cells[j].textContent;
 
-                // Format tanggal untuk kolom ke-4 sesuai dengan format MySQL DATETIME
-                if (j === 4) { // Assuming column 4 is the date column
-                    var date = new Date(cellContent); // Parsing date
-                    if (!isNaN(date.getTime())) { // Check if date is valid
-                        // Format date as YYYY-MM-DD HH:MM:SS
+                if (j === 4) { 
+                    var date = new Date(cellContent);
+                    if (!isNaN(date.getTime())) {
                         var formattedDate = date.getFullYear() + '-' + 
                                             ('0' + (date.getMonth() + 1)).slice(-2) + '-' + 
                                             ('0' + date.getDate()).slice(-2) + ' ' + 
@@ -246,7 +301,7 @@
                                             ('0' + date.getSeconds()).slice(-2);
                         rowData.push(formattedDate);
                     } else {
-                        rowData.push('Invalid Date'); // Handle invalid date case
+                        rowData.push('Invalid Date');
                     }
                 } else {
                     rowData.push(cellContent);
@@ -255,8 +310,7 @@
             excelData.push(rowData);
         }
 
-        // Kirim data ke backend menggunakan fetch
-        fetch('save_data1.php', {
+        fetch('save_data3.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -264,14 +318,14 @@
             body: JSON.stringify(excelData),
         })
         .then(response => response.text())
-        .then(data => {
+        .then(result => {
+            console.log(result);
             alert("Data saved successfully!");
         })
         .catch(error => {
-            console.error("Error:", error);
+            console.error('Error:', error);
         });
     });
-
     </script>
-</body>
+  </body>
 </html>
