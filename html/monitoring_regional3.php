@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>Monitoring Regional 4</title>
+    <title>Monitoring Regional 3</title>
     <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -18,7 +18,7 @@
 </head>
 
 <body>
-    <div class="layout-wrapper layout-content-navbar layout-without-menu">
+    <!-- <div class="layout-wrapper layout-content-navbar layout-without-menu">
         <div class="layout-container">
             <div class="layout-page">
                 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
@@ -38,51 +38,97 @@
                             </li>
                         </ul>
                     </div>
-                </nav>
+                </nav> -->
 
                 <div class="content-wrapper">
                     <div class="container-xxl flex-grow-1 container-p-y">
-                        <h4 class="py-3 breadcrumb-wrapper mb-4"><span class="text-muted fw-light">Monitoring Regional 4</span></h4>
-                        
+                        <h4 class="py-3 breadcrumb-wrapper mb-4"><span class="text-muted fw-light">Monitoring Regional 3</span></h4>
+
                         <!-- Back Button -->
                         <div class="mb-3">
-                            <a href="pages-regional settings-reg4.html" class="btn btn-primary">Back</a>
+                            <a href="pages-regional settings-reg3.php" class="btn btn-primary">Back</a>
                         </div>
 
                         <!-- Data Monitoring Table -->
                         <div class="card">
-                            <div class="table-responsive text-nowrap">
+                            <div class="card-body">
+                                <?php
+                                // Koneksi ke database
+                                $host = "localhost";
+                                $user = "root"; // ganti dengan username MySQL Anda
+                                $password = ""; // ganti dengan password MySQL Anda
+                                $database = "iregularitas"; // ganti sesuai nama database Anda
+
+                                // Membuat koneksi
+                                $koneksi = mysqli_connect($host, $user, $password, $database);
+
+                                // Cek koneksi
+                                if (!$koneksi) {
+                                    die("Connection failed: " . mysqli_connect_error());
+                                }
+
+                                // Mengambil jumlah data untuk masing-masing validasi berdasarkan kantor tujuan P6
+                                $sql_data = "
+                                    SELECT kantor_tujuan_p6, 
+                                        SUM(CASE WHEN validasi_pusat = 'ok' THEN 1 ELSE 0 END) AS total_ok,
+                                        SUM(CASE WHEN validasi_pusat = 'belum entri evaluasi' THEN 1 ELSE 0 END) AS total_belum_antri,
+                                        SUM(CASE WHEN validasi_pusat = 'evidence belum upload' THEN 1 ELSE 0 END) AS total_evidence_belum_upload
+                                    FROM regional3
+                                    GROUP BY kantor_tujuan_p6
+                                ";
+
+                                $result_data = mysqli_query($koneksi, $sql_data);
+
+                                // Hitung grand total
+                                $grand_total_ok = 0;
+                                $grand_total_belum_antri = 0;
+                                $grand_total_evidence_belum_upload = 0;
+
+                                // Tutup koneksi
+                                mysqli_close($koneksi);
+                                ?>
+
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
-                                            <th>Data Item</th>
-                                            <th>Status</th>
-                                            <th>Timestamp</th>
+                                            <th>Kantor Tujuan P6</th>
+                                            <th>OK</th>
+                                            <th>Belum Antri Evaluasi</th>
+                                            <th>Evidence Belum Di-upload</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Data Example 1</td>
-                                            <td><span class="badge bg-success">Active</span></td>
-                                            <td>2024-10-01 10:00:00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Data Example 2</td>
-                                            <td><span class="badge bg-danger">Inactive</span></td>
-                                            <td>2024-10-01 10:05:00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Data Example 3</td>
-                                            <td><span class="badge bg-warning">Pending</span></td>
-                                            <td>2024-10-01 10:10:00</td>
-                                        </tr>
-                                        <!-- Tambahkan lebih banyak baris sesuai kebutuhan -->
+                                        <?php
+                                        // Tampilkan data dari query
+                                        if (mysqli_num_rows($result_data) > 0) {
+                                            while ($row = mysqli_fetch_assoc($result_data)) {
+                                                echo "<tr>";
+                                                echo "<td>" . $row['kantor_tujuan_p6'] . "</td>";
+                                                echo "<td>" . $row['total_ok'] . "</td>";
+                                                echo "<td>" . $row['total_belum_antri'] . "</td>";
+                                                echo "<td>" . $row['total_evidence_belum_upload'] . "</td>";
+                                                echo "</tr>";
+
+                                                // Tambah nilai ke grand total
+                                                $grand_total_ok += $row['total_ok'];
+                                                $grand_total_belum_antri += $row['total_belum_antri'];
+                                                $grand_total_evidence_belum_upload += $row['total_evidence_belum_upload'];
+                                            }
+                                        } else {
+                                            echo "<tr><td colspan='4'>Tidak ada data</td></tr>";
+                                        }
+                                        ?>
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td><strong>Grand Total</strong></td>
+                                            <td><strong><?php echo $grand_total_ok; ?></strong></td>
+                                            <td><strong><?php echo $grand_total_belum_antri; ?></strong></td>
+                                            <td><strong><?php echo $grand_total_evidence_belum_upload; ?></strong></td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
+
                             </div>
                         </div>
                     </div>
@@ -96,7 +142,7 @@
                                 <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
                                 <a href="https://themeselection.com/" class="footer-link me-4">More Themes</a>
                                 <a href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/" target="_blank" class="footer-link me-4">Documentation</a>
-                                <a href="https://github.com/themeselection/sneat-html-admin-template-free/issues" target="_blank" class="footer-link me-4">Support</a>
+                                <a href="https://themeselection.com/github/sneat-html-admin-template-free/issues" target="_blank" class="footer-link me-4">Support</a>
                             </div>
                         </div>
                     </footer>

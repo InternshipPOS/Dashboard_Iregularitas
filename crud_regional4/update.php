@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>Edit Regional 1 | Iregularitas</title>
+    <title>Edit Regional 4 | Iregularitas</title>
     <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -67,7 +67,7 @@
                         $validasi_pusat = $_POST['validasi_pusat'];
 
                         // Query untuk mengupdate data
-                        $sql = "UPDATE regional1 SET 
+                        $sql = "UPDATE regional4 SET 
                                     reg_asal_p6='$reg_asal_p6', 
                                     kantor_asal_p6='$kantor_asal_p6', 
                                     nopend_asal_p6='$nopend_asal_p6', 
@@ -94,7 +94,7 @@
                                     title: 'Data berhasil diperbarui!',
                                     showConfirmButton: true
                                 }).then(function() {
-                                    window.location.href = '../html/pages-regional settings-reg1.php';
+                                    window.location.href = '../html/pages-regional settings-reg4.php';
                                 });
                             </script>";
                         } else {
@@ -109,7 +109,7 @@
                     }
 
                     // Query untuk mendapatkan data yang ingin diedit
-                    $sql = "SELECT * FROM regional1 WHERE id_sistem='$id_sistem'";
+                    $sql = "SELECT * FROM regional4 WHERE id_sistem='$id_sistem'";
                     $result = $koneksi->query($sql);
 
                     if ($result->num_rows > 0) {
@@ -206,7 +206,7 @@
                         </div>
 
                         <button type="submit" class="btn btn-primary">Update</button>
-                        <a href="../html/pages-regional settings-reg1.php" class="btn btn-secondary">Cancel</a>
+                        <a href="../html/pages-regional settings-reg4.php" class="btn btn-secondary">Cancel</a>
                     </form>
 
                     <?php
