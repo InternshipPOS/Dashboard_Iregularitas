@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>Regional 1 | Iregularitas</title>
+    <title>Regional 5 | Iregularitas</title>
     <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -48,7 +48,7 @@
 <body>
     <div class="content-wrapper">
         <div class="container-xxl flex-grow-1 container-p-y">
-            <h4 class="py-3 breadcrumb-wrapper mb-4"><span class="text-muted fw-light">Regional 1</span></h4>
+            <h4 class="py-3 breadcrumb-wrapper mb-4"><span class="text-muted fw-light">Regional 5</span></h4>
 
             <!-- Back Button -->
             <div class="mb-3">
@@ -56,10 +56,10 @@
             </div>
 
             <!-- Button to Add Data -->
-            <!-- <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addDataModal">Insert Data</button> -->
+            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addDataModal">Insert Data</button>
 
             <!-- Button to Monitoring Page -->
-            <a href="monitoring_regional1.php" class="btn btn-success mb-3">Go to Monitoring</a>
+            <a href="monitoring_regional5.php" class="btn btn-success mb-3">Go to Monitoring</a>
 
             <!-- Data Table -->
             <div class="card">
@@ -109,7 +109,7 @@
                                 die("Connection failed: " . $koneksi->connect_error);
                             }
 
-                            $sql = "SELECT * FROM regional1";
+                            $sql = "SELECT * FROM regional5";
                             $result = $koneksi->query($sql);
 
                             if ($result->num_rows > 0) :
@@ -157,7 +157,7 @@
                                         <td><?php echo $row['validasi_regional']; ?></td>
                                         <td><?php echo $row['validasi_pusat']; ?></td>
                                         <td class="aksi">
-                                            <a href="../crud_regional/update.php?id_sistem=<?php echo $row['id_sistem']; ?>" class="btn btn-primary">Edit</a>
+                                            <a href="../crud_regional5/update.php?id_sistem=<?php echo $row['id_sistem']; ?>" class="btn btn-primary">Edit</a>
                                             <a href="#" class="btn btn-danger delete-btn" data-id="<?php echo $row['id_sistem']; ?>">Delete</a>
                                         </td>
                                     </tr>
@@ -199,7 +199,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: '../crud_regional/delete.php',
+                            url: '../crud_regional5/delete.php',
                             type: 'POST',
                             data: { id_sistem: id },
                             success: function(response) {
