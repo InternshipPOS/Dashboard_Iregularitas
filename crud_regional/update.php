@@ -141,18 +141,18 @@
 
                         <div class="mb-3">
                             <label for="deskripsi" class="form-label">Deskripsi</label>
-                            <textarea class="form-control" id="deskripsi" name="deskripsi" required><?php echo $row['deskripsi']; ?></textarea>
+                            <input type="text" class="form-control" id="deskripsi" name="deskripsi" value="<?php echo $row['deskripsi']; ?>" required>
                         </div>
 
                         <!-- Tambahan kolom baru -->
                         <div class="mb-3">
                             <label for="uraian_berita_acara" class="form-label">Uraian Berita Acara</label>
-                            <input type="text" class="form-control" id="uraian_berita_acara" name="uraian_berita_acara" value="<?php echo $row['uraian_berita_acara']; ?>" required>
+                            <textarea class="form-control" id="uraian_berita_acara" name="uraian_berita_acara" required><?php echo $row['uraian_berita_acara']; ?></textarea>
                         </div>
 
                         <div class="mb-3">
                             <label for="deskripsi_iregularitas" class="form-label">Deskripsi Iregularitas</label>
-                            <textarea class="form-control" id="deskripsi_iregularitas" name="deskripsi_iregularitas" required><?php echo $row['deskripsi_iregularitas']; ?></textarea>
+                            <input type="text" class="form-control" id="deskripsi_iregularitas" name="deskripsi_iregularitas" value="<?php echo $row['deskripsi_iregularitas']; ?>" required>
                         </div>
 
                         <div class="mb-3">
@@ -162,7 +162,23 @@
 
                         <div class="mb-3">
                             <label for="referensi_root_cause" class="form-label">Referensi Root Cause</label>
-                            <input type="text" class="form-control" id="referensi_root_cause" name="referensi_root_cause" value="<?php echo $row['referensi_root_cause']; ?>" required>
+                            <select class="form-select" id="referensi_root_cause" name="referensi_root_cause" required>
+                                <option value="" disabled selected>Pilih referensi root cause</option>
+                                <option value="gagal x-ray kiriman import" <?php echo ($row['referensi_root_cause'] == 'gagal x-ray kiriman import') ? 'selected' : ''; ?>>Gagal X-Ray Kiriman Import</option>
+                                <option value="incoming ln" <?php echo ($row['referensi_root_cause'] == 'incoming ln') ? 'selected' : ''; ?>>Incoming LN</option>
+                                <option value="pengirim tidak menginfokan isi kiriman yanng benar" <?php echo ($row['referensi_root_cause'] == 'pengirim tidak menginfokan isi kiriman yanng benar') ? 'selected' : ''; ?>>Pengirim Tidak Menginfokan Isi Kiriman Yanng Benar</option>
+                                <option value="petugas melakukan froud/kecurangan" <?php echo ($row['referensi_root_cause'] == 'petugas melakukan froud/kecurangan') ? 'selected' : ''; ?>>Petugas Melakukan Froud/Kecurangan</option>
+                                <option value="petugas tidak melaksanakan sop" <?php echo ($row['referensi_root_cause'] == 'petugas tidak melaksanakan sop') ? 'selected' : ''; ?>>Petugas Tidak Melaksanakan SOP</option>
+                                <option value="petugas tidak memeriksa isi kiriman (khusus pos internasional)" <?php echo ($row['referensi_root_cause'] == 'petugas tidak memeriksa isi kiriman (khusus pos internasional)') ? 'selected' : ''; ?>>Petugas Tidak Memeriksa Isi Kiriman (Khusus Pos International)</option>
+                                <option value="petugas tidak memeriksa packing" <?php echo ($row['referensi_root_cause'] == 'petugas tidak memeriksa packing') ? 'selected' : ''; ?>>Petugas Tidak Memeriksa Packing</option>
+                                <option value="petugas tidak menanyakan isi kiriman" <?php echo ($row['referensi_root_cause'] == 'petugas tidak menanyakan isi kiriman') ? 'selected' : ''; ?>>Petugas Tidak Menanyakan Isi Kiriman</option>
+                                <option value="petugas tidak teliti" <?php echo ($row['referensi_root_cause'] == 'petugas tidak teliti') ? 'selected' : ''; ?>>Petugas Tidak Teliti</option>
+                                <option value="salah salur p6" <?php echo ($row['referensi_root_cause'] == 'salah salur p6') ? 'selected' : ''; ?>>Salah Salur P6</option>
+                                <option value="potensi kerusakan pada saat perjalanan" <?php echo ($row['referensi_root_cause'] == 'potensi kerusakan pada saat perjalanan') ? 'selected' : ''; ?>>Potensi Kerusakan pada saat Perjalanan</option>
+                                <option value="pengirim tidak melakukan packing dengan baik" <?php echo ($row['referensi_root_cause'] == 'pengirim tidak melakukan packing dengan baik') ? 'selected' : ''; ?>>Pengirim Tidak Melakukan Packing dengan Baik</option>
+                                <option value="pengirim salah memberikan data penerima" <?php echo ($row['referensi_root_cause'] == 'pengirim salah memberikan data penerima') ? 'selected' : ''; ?>>Pengirim Salah Memberikan Data Penerima</option>
+                                <option value="lain-lain" <?php echo ($row['referensi_root_cause'] == 'lain-lain') ? 'selected' : ''; ?>>Lain-Lain</option>
+                            </select>
                         </div>
 
                         <div class="mb-3">
@@ -171,10 +187,16 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="corrective_action" class="form-label">Corrective Action</label>
-                            <input type="text" class="form-control" id="corrective_action" name="corrective_action" value="<?php echo $row['corrective_action']; ?>" required>
+                            <label for="corrective_action" class="form-label">corrective Action</label>
+                            <select class="form-select" id="corrective_action" name="corrective_action" required>
+                                <option value="" disabled selected>Pilih corrective action</option>
+                                <option value="surat pemanggilan pegawai organik" <?php echo ($row['corrective_action'] == 'surat pemanggilan pegawai organik') ? 'selected' : ''; ?>>Surat Pemanggilan Pegawai Organik</option>
+                                <option value="sp2 + denda (kemitraan/agenpos)" <?php echo ($row['corrective_action'] == 'sp2 + Denda (kemitraan/agenpos)') ? 'selected' : ''; ?>>SP2 + Denda (Kemitraan/Agenpos)</option>
+                                <option value="sp3 + denda tingkat berat/phk/penghentian kerjasama" <?php echo ($row['corrective_action'] == 'sp3 + dendatingkat berat/phk/penghentian kerjasama') ? 'selected' : ''; ?>>SP3 + DendaTingkat Berat/PHK/Penghentian Kerjasama</option>
+                                <option value="surat pemberitahuan kepada pengirim" <?php echo ($row['corrective_action'] == 'surat pemberitahuan kepada pengirim') ? 'selected' : ''; ?>>Surat Pemberitahuan Kepada Pengirim</option>
+                                <option value="tidak ada" <?php echo ($row['corrective_action'] == 'tidak ada') ? 'selected' : ''; ?>>Tidak Ada</option>
+                            </select>
                         </div>
-
                         <div class="mb-3">
                             <label for="locus" class="form-label">Locus</label>
                             <input type="text" class="form-control" id="locus" name="locus" value="<?php echo $row['locus']; ?>" required>
@@ -206,6 +228,7 @@
                         </div>
 
                         <button type="submit" class="btn btn-primary">Update</button>
+                        <a href="../html/pages-regional settings-reg1.php" class="btn btn-secondary">Cancel</a>
                     </form>
 
                     <?php

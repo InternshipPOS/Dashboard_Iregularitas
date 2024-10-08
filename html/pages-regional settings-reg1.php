@@ -56,7 +56,7 @@
             </div>
 
             <!-- Button to Add Data -->
-            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addDataModal">Insert Data</button>
+            <!-- <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addDataModal">Insert Data</button> -->
 
             <!-- Button to Monitoring Page -->
             <a href="monitoring_regional1.php" class="btn btn-success mb-3">Go to Monitoring</a>
