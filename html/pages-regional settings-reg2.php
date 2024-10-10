@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="../assets/vendor/js/helpers.js"></script>
     <script src="../assets/js/config.js"></script>
+     <!-- Favicon -->
+     <link rel="icon" type="image/x-icon" href="../assets/img/favicon/pos-favicon.png" />
     <style>
         .table {
             height: 600px; /* Ubah sesuai kebutuhan */
