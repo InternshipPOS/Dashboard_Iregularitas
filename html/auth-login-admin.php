@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['admin_username'] = $row['username']; // Set session for admin
             echo "<script>
                     alert('Login successful. Welcome, " . $row['username'] . "!');
-                    window.location.href = 'index.html'; // Redirect to admin dashboard
+                    window.location.href = 'index.php'; // Redirect to admin dashboard
                   </script>";
             exit;
         } else {

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template-free">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
@@ -19,20 +20,29 @@
     <script src="../assets/js/config.js"></script>
     <style>
         .table {
-            height: 600px; /* Ubah sesuai kebutuhan */
-            overflow-y: auto; /* Untuk scroll jika data lebih dari tinggi yang ditetapkan */
-            table-layout: auto; /* Memungkinkan lebar kolom menyesuaikan konten */
+            height: 600px;
+            /* Ubah sesuai kebutuhan */
+            overflow-y: auto;
+            /* Untuk scroll jika data lebih dari tinggi yang ditetapkan */
+            table-layout: auto;
+            /* Memungkinkan lebar kolom menyesuaikan konten */
         }
 
-        .table td, .table th {
-            padding: 1.5rem; /* Ubah padding untuk memperbesar ukuran sel */
-            vertical-align: top; /* Mengatur teks di atas secara vertikal */
-            word-wrap: break-word; /* Memungkinkan teks panjang terputus */
-            white-space: normal; /* Mengatur teks untuk tampil normal */
+        .table td,
+        .table th {
+            padding: 1.5rem;
+            /* Ubah padding untuk memperbesar ukuran sel */
+            vertical-align: top;
+            /* Mengatur teks di atas secara vertikal */
+            word-wrap: break-word;
+            /* Memungkinkan teks panjang terputus */
+            white-space: normal;
+            /* Mengatur teks untuk tampil normal */
         }
 
         .aksi {
-            min-width: 100px; /* Ubah lebar minimum kolom aksi jika diperlukan */
+            min-width: 100px;
+            /* Ubah lebar minimum kolom aksi jika diperlukan */
         }
 
         .short-text {
@@ -52,7 +62,7 @@
 
             <!-- Back Button -->
             <div class="mb-3">
-                <a href="index.html" class="btn btn-primary">Back</a>
+                <a href="index.php" class="btn btn-primary">Back</a>
             </div>
 
             <!-- Button to Add Data -->
@@ -183,8 +193,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        $(document).ready(function () {
-            $('.delete-btn').click(function (e) {
+        $(document).ready(function() {
+            $('.delete-btn').click(function(e) {
                 e.preventDefault();
                 var id = $(this).data('id'); // ambil id dari atribut data-id
 
@@ -201,7 +211,9 @@
                         $.ajax({
                             url: '../crud_regional/delete.php',
                             type: 'POST',
-                            data: { id_sistem: id },
+                            data: {
+                                id_sistem: id
+                            },
                             success: function(response) {
                                 if (response == 'success') {
                                     Swal.fire(
@@ -225,7 +237,7 @@
             });
 
             // Menampilkan teks lengkap saat mengklik "Baca Selengkapnya"
-            $(document).on('click', '.read-more-btn', function () {
+            $(document).on('click', '.read-more-btn', function() {
                 $(this).prev('.full-text').toggle();
                 $(this).prev('.short-text').toggle();
                 $(this).text($(this).text() === 'Baca Selengkapnya' ? 'Sembunyikan' : 'Baca Selengkapnya');
@@ -233,4 +245,5 @@
         });
     </script>
 </body>
+
 </html>
