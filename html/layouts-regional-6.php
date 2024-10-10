@@ -181,7 +181,7 @@
     <script>
         // Handle the Back button click
         document.getElementById('backButton').addEventListener('click', function () {
-            window.location.href = 'index.html'; // Redirects to index.html
+            window.location.href = '../html/index.html'; // Redirects to index.html
         });
     document.getElementById('uploadButton').addEventListener('click', function () {
         var fileInput = document.getElementById('uploadExcel');
