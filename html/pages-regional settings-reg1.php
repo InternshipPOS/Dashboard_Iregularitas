@@ -18,8 +18,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="../assets/vendor/js/helpers.js"></script>
     <script src="../assets/js/config.js"></script>
-     <!-- Favicon -->
-     <link rel="icon" type="image/x-icon" href="../assets/img/favicon/pos-favicon.png" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/img/favicon/pos-favicon.png" />
     <style>
         .table {
             height: 600px;
@@ -66,9 +66,6 @@
             <div class="mb-3">
                 <a href="index.php" class="btn btn-primary">Back</a>
             </div>
-
-            <!-- Button to Add Data -->
-            <!-- <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addDataModal">Insert Data</button> -->
 
             <!-- Button to Monitoring Page -->
             <a href="monitoring_regional1.php" class="btn btn-success mb-3">Go to Monitoring</a>
@@ -121,7 +118,20 @@
                                 die("Connection failed: " . $koneksi->connect_error);
                             }
 
-                            $sql = "SELECT * FROM regional1";
+                            // Pagination variables
+                            $limit = 10; // number of records per page
+                            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // get the current page number
+                            $offset = ($page - 1) * $limit; // calculate the offset
+
+                            // Get total records for pagination
+                            $total_sql = "SELECT COUNT(*) AS total FROM regional1";
+                            $total_result = $koneksi->query($total_sql);
+                            $total_row = $total_result->fetch_assoc();
+                            $total_records = $total_row['total'];
+                            $total_pages = ceil($total_records / $limit); // calculate total pages
+
+                            // Fetch data with limit and offset
+                            $sql = "SELECT * FROM regional1 LIMIT $limit OFFSET $offset";
                             $result = $koneksi->query($sql);
 
                             if ($result->num_rows > 0) :
@@ -170,80 +180,69 @@
                                         <td><?php echo $row['validasi_pusat']; ?></td>
                                         <td class="aksi">
                                             <a href="../crud_regional/update.php?id_sistem=<?php echo $row['id_sistem']; ?>" class="btn btn-primary">Edit</a>
-                                            <a href="#" class="btn btn-danger delete-btn" data-id="<?php echo $row['id_sistem']; ?>">Delete</a>
+                                            <a href="../crud_regional/delete.php?id_sistem=<?php echo $row['id_sistem']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this record?');">Delete</a>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
                             <?php else : ?>
                                 <tr>
-                                    <td colspan="25" class="text-center">Tidak ada data tersedia</td>
+                                    <td colspan="26" class="text-center">No data available</td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
+
+                <!-- Pagination -->
+                <div class="col-lg-8">
+                    <small class="text-muted">Menampilkan <?php echo $offset + 1; ?>-<?php echo min($offset + $limit, $total_records); ?> dari total <?php echo $total_records; ?> hasil</small>
+                </div>
+                <div class="col-lg-4">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-end">
+                            <li class="page-item <?php if($page <= 1) echo 'disabled'; ?>">
+                                <a class="page-link" href="?page=<?php echo $page - 1; ?>" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                <li class="page-item <?php if($i == $page) echo 'active'; ?>">
+                                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                </li>
+                            <?php endfor; ?>
+                            <li class="page-item <?php if($page >= $total_pages) echo 'disabled'; ?>">
+                                <a class="page-link" href="?page=<?php echo $page + 1; ?>" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
     <script src="../assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="../assets/vendor/libs/popper/popper.js"></script>
     <script src="../assets/vendor/js/bootstrap.js"></script>
+    <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="../assets/vendor/js/menu.js"></script>
     <script src="../assets/js/main.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        $(document).ready(function() {
-            $('.delete-btn').click(function(e) {
-                e.preventDefault();
-                var id = $(this).data('id'); // ambil id dari atribut data-id
-
-                Swal.fire({
-                    title: 'Apakah Anda yakin?',
-                    text: "Data ini akan dihapus!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Hapus'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: '../crud_regional/delete.php',
-                            type: 'POST',
-                            data: {
-                                id_sistem: id
-                            },
-                            success: function(response) {
-                                if (response == 'success') {
-                                    Swal.fire(
-                                        'Dihapus!',
-                                        'Data telah berhasil dihapus.',
-                                        'success'
-                                    );
-                                    // Menghapus baris dari tabel
-                                    $('a.delete-btn[data-id="' + id + '"]').closest('tr').fadeOut();
-                                } else {
-                                    Swal.fire(
-                                        'Gagal!',
-                                        'Data gagal dihapus.',
-                                        'error'
-                                    );
-                                }
-                            }
-                        });
-                    }
-                });
-            });
-
-            // Menampilkan teks lengkap saat mengklik "Baca Selengkapnya"
-            $(document).on('click', '.read-more-btn', function() {
-                $(this).prev('.full-text').toggle();
-                $(this).prev('.short-text').toggle();
-                $(this).text($(this).text() === 'Baca Selengkapnya' ? 'Sembunyikan' : 'Baca Selengkapnya');
-            });
+        // Toggle full text display on click
+        $(document).on('click', '.read-more-btn', function() {
+            var $shortText = $(this).siblings('.short-text');
+            var $fullText = $(this).siblings('.full-text');
+            if ($fullText.is(':visible')) {
+                $shortText.show();
+                $fullText.hide();
+                $(this).text('Baca Selengkapnya');
+            } else {
+                $shortText.hide();
+                $fullText.show();
+                $(this).text('Tutup');
+            }
         });
     </script>
 </body>
