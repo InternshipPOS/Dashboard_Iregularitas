@@ -58,7 +58,7 @@
 
       <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
         <div class="app-brand demo">
-          <a href="index.php" class="app-brand-link">
+          <a href="dashboard.php" class="app-brand-link">
             <span class="app-brand-logo demo">
               <img src="../assets/img/favicon/pos-logo.png" alt="Logo" width="40" height="45">
             </span>
@@ -75,7 +75,7 @@
         <ul class="menu-inner py-1">
           <!-- Dashboard -->
           <li class="menu-item active">
-            <a href="index.php" class="menu-link">
+            <a href="dashboard.php" class="menu-link">
               <i class="menu-icon tf-icons bx bx-home-circle"></i>
               <div data-i18n="Analytics">Dashboard</div>
             </a>
@@ -471,8 +471,8 @@
                           </div>
                         </div>
                         <div class="flex-grow-1">
-                          <span class="fw-semibold d-block">Admin Pusat</span>
-                          <small class="text-muted">Admin</small>
+                          <span class="fw-semibold d-block">Bastian</span>
+                          <small class="text-muted">User KC</small>
                         </div>
                       </div>
                     </a>
@@ -530,7 +530,7 @@
                   <div class="d-flex align-items-end row">
                     <div class="col-sm-7">
                       <div class="card-body">
-                        <h5 class="card-title text-primary">Hello Admin Pusat! </h5>
+                        <h5 class="card-title text-primary">Hello User! </h5>
                         <p class="mb-4">
                           Selamat datang di <span class="fw-bold">dashboard iregularitas</span>, kelola data dengan efisien dan pantau kinerja secara real-time dengan lebih cepat dan tepat.
                         </p>

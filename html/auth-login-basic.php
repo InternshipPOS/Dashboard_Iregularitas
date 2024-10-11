@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['username'] = $row['username']; // Set session with username
             echo "<script>
                     alert('Login berhasil. Selamat datang, " . $row['username'] . "!');
-                    window.location.href = 'index.php';
+                    window.location.href = 'dashboard.php';
                   </script>";
             exit;
         } else {
