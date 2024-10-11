@@ -180,7 +180,7 @@
                                         <td><?php echo $row['validasi_pusat']; ?></td>
                                         <td class="aksi">
                                             <a href="../crud_regional/update.php?id_sistem=<?php echo $row['id_sistem']; ?>" class="btn btn-primary">Edit</a>
-                                            <a href="../crud_regional/delete.php?id_sistem=<?php echo $row['id_sistem']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this record?');">Delete</a>
+                                            <a href="../crud_regional/delete.php" class="btn btn-danger delete-btn" data-id="<?php echo $row['id_sistem']; ?>">Delete</a>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
@@ -228,8 +228,54 @@
     <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="../assets/vendor/js/menu.js"></script>
     <script src="../assets/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script>
+        <script>
+            $(document).ready(function() {
+                $('.delete-btn').click(function(e) {
+                    e.preventDefault();
+                    var id = $(this).data('id'); // ambil id dari atribut data-id
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: "Data ini akan dihapus!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Hapus'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: '../crud_regional/delete.php',
+                                type: 'POST',
+                                data: {
+                                    id_sistem: id
+                                },
+                                success: function(response) {
+                                    if (response == 'success') {
+                                        Swal.fire(
+                                            'Dihapus!',
+                                            'Data telah berhasil dihapus.',
+                                            'success'
+                                        );
+                                        // Menghapus baris dari tabel
+                                        $('a.delete-btn[data-id="' + id + '"]').closest('tr').fadeOut();
+                                    } else {
+                                        Swal.fire(
+                                            'Gagal!',
+                                            'Data gagal dihapus.',
+                                            'error'
+                                        );
+                                    }
+                                }
+                            });
+                        }
+                    });
+                });
+            })
+        </script>
+        
+        <script>
         // Toggle full text display on click
         $(document).on('click', '.read-more-btn', function() {
             var $shortText = $(this).siblings('.short-text');
