@@ -244,8 +244,8 @@ data-template="vertical-menu-template-free">
                                 <input type="text" class="form-control" id="nama" name="nama" placeholder="Enter your name" required />
                             </div>
                             <div class="mb-3">
-                                <label for="nik" class="form-label">NIK Pos</label>
-                                <input type="text" class="form-control" id="nik" name="nik" placeholder="Enter your nik" required />
+                                <label for="nik" class="form-label">NIPPos</label>
+                                <input type="text" class="form-control" id="nik" name="nik" placeholder="Enter your NIPPOS " required />
                             </div>
                             <div class="mb-3">
                                 <label for="jenis" class="form-label">Jenis Kantor</label>

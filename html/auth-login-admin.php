@@ -94,8 +94,8 @@ $koneksi->close(); // Close database connection
 
                         <form id="formAuthentication" class="mb-3" action="auth-login-admin.php" method="POST">
                             <div class="mb-3">
-                                <label for="nik" class="form-label">NIK Pos</label>
-                                <input type="text" class="form-control" id="nik" name="nik" placeholder="Enter your NIK Pos" required />
+                                <label for="nik" class="form-label">NIPPos</label>
+                                <input type="text" class="form-control" id="nik" name="nik" placeholder="Enter your NIPPOS" required />
                             </div>
                             <div class="mb-3 form-password-toggle">
                                 <label class="form-label" for="password">Password</label>
