@@ -471,7 +471,7 @@
                           </div>
                         </div>
                         <div class="flex-grow-1">
-                          <span class="fw-semibold d-block">John Doe</span>
+                          <span class="fw-semibold d-block">Admin Pusat</span>
                           <small class="text-muted">Admin</small>
                         </div>
                       </div>
@@ -505,7 +505,7 @@
                     <div class="dropdown-divider"></div>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="auth-login-basic.html">
+                    <a class="dropdown-item" href="auth-login-admin.php">
                       <i class="bx bx-power-off me-2"></i>
                       <span class="align-middle">Log Out</span>
                     </a>
@@ -1048,10 +1048,9 @@
                 <script>
                   document.write(new Date().getFullYear());
                 </script>
-                , made with ❤️ by
-                <a href="https://themeselection.com" target="_blank" class="footer-link fw-bolder">ThemeSelection</a>
+                , made with ❤️ by ARYKA JUWITA RIZKYRIA
               </div>
-              <div>
+              <!-- <div>
                 <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
                 <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More Themes</a>
 
@@ -1064,7 +1063,7 @@
                   href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
                   target="_blank"
                   class="footer-link me-4">Support</a>
-              </div>
+              </div> -->
             </div>
           </footer>
           <!-- / Footer -->
@@ -1081,12 +1080,12 @@
   </div>
   <!-- / Layout wrapper -->
 
-  <div class="buy-now">
+  <!-- <div class="buy-now">
     <a
       href="https://themeselection.com/products/sneat-bootstrap-html-admin-template/"
       target="_blank"
       class="btn btn-danger btn-buy-now">Upgrade to Pro</a>
-  </div>
+  </div> -->
 
   <!-- Core JS -->
   <!-- build:js assets/vendor/js/core.js -->
