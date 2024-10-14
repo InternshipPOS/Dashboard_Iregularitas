@@ -4,7 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <title>Edit Manage Users | Iregularitas</title>
+<<<<<<< HEAD
     <!-- Favicon -->
+=======
+>>>>>>> 5b516d9144057f6c1d6abd1ecaf1e3ecce9c8e75
     <link rel="icon" type="image/x-icon" href="../assets/img/favicon/pos-favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
