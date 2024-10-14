@@ -21,9 +21,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Verify password
         if (password_verify($password, $row['password'])) {
             // If password is correct, start session
-            $_SESSION['username'] = $row['username']; // Set session with username
+            $_SESSION['nama'] = $row['nama']; // Set session with nama
             echo "<script>
-                    alert('Login berhasil. Selamat datang, " . $row['username'] . "!');
+                    alert('Login berhasil. Selamat datang, " . $row['nama'] . "!');
                     window.location.href = 'dashboard.php';
                   </script>";
             exit;

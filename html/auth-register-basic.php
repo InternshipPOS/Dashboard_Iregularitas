@@ -10,11 +10,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $jenis = $_POST['jenis'];
     $regional = $_POST['regional'];
     $kantor_asal = $_POST['kantor_asal'];
-    $kode_pos = $_POST['kode_pos'];
     $password = $_POST['password'];
     
     // Validate form data (basic validation example)
-    if (empty($username) || empty($nama) || empty($nik) || empty($jenis) || empty($regional) || empty($kantor_asal) || empty($kode_pos) || empty($password)) {
+    if (empty($username) || empty($nama) || empty($nik) || empty($jenis) || empty($regional) || empty($kantor_asal)  || empty($password)) {
         echo "All fields are required!";
         exit;
     }
@@ -33,11 +32,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
         // Prepare the SQL statement
-        $stmt = $koneksi->prepare("INSERT INTO user (username, nama, nik, jenis, regional, kantor_asal, kode_pos, password) 
-                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $koneksi->prepare("INSERT INTO user (username, nama, nik, jenis, regional, kantor_asal,  password) 
+                                    VALUES (?, ?, ?, ?, ?, ?, ?)");
 
         // Bind parameters
-        $stmt->bind_param("ssssssss", $username, $nama, $nik, $jenis, $regional, $kantor_asal, $kode_pos, $hashed_password);
+        $stmt->bind_param("sssssss", $username, $nama, $nik, $jenis, $regional, $kantor_asal, $hashed_password);
 
         // Password validation
         if (!preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/', $password)) {
@@ -178,42 +177,28 @@ data-template="vertical-menu-template-free">
     ],
         };
 
-        $(document).ready(function () {
-            $('#regional').change(function () {
-                const regionalId = $(this).val();
-                const postOfficeSelect = $('#kantor_asal');
-                const kodePosSelect = $('#kode_pos');
+        $(document).ready(function() {
+        // Set the selected kantorn_asal based on existing data
+        var existingKantorAsal = "<?php echo isset($row['kantor_asal']) ? $row['kantor_asal'] : ''; ?>";
+        
+        // Ketika regional berubah
+        $('#regional').change(function() {
+            var regionalId = $(this).val();
+            var postOfficeSelect = $('#kantor_asal');
+            postOfficeSelect.empty(); // Reset dropdown
 
-                // Clear previous options
-                postOfficeSelect.empty().append('<option value="">Pilih Kantor Asal</option>');
-                kodePosSelect.empty().append('<option value="">Pilih Kode Pos</option>');
+            // Populasi kantor_asal berdasarkan regional yang dipilih
+            if (postOffices[regionalId]) {
+                postOffices[regionalId].forEach(office => {
+                    postOfficeSelect.append(`<option value="${office.kcu}|${office.nama}" ${existingKantorAsal == office.kcu + '|' + office.nama ? 'selected' : ''}>${office.nama}</option>`);
+                });
+            }
 
-                // Populate KC Asal based on selected regional
-                if (postOffices[regionalId]) {
-                    postOffices[regionalId].forEach(office => {
-                        postOfficeSelect.append(`<option value="${office.kode}">${office.nama}</option>`);
-                    });
-                }
-            });
-
-            $('#kantor_asal').change(function () {
-                const selectedKode = $(this).val();
-                const kodePosSelect = $('#kode_pos');
-
-                // Clear previous options
-                kodePosSelect.empty().append('<option value="">Pilih Kode Pos</option>');
-
-                // Populate Kode Pos based on selected KC Asal
-                for (const regional in postOffices) {
-                    const offices = postOffices[regional];
-                    offices.forEach(office => {
-                        if (office.kode === selectedKode) {
-                            kodePosSelect.append(`<option value="${office.kode}">${office.kode}</option>`);
-                        }
-                    });
-                }
-            });
         });
+
+        // Trigger change event on page load to set the initial state
+        $('#regional').trigger('change');
+    });
     </script>
 </head>
 

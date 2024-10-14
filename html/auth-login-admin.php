@@ -27,9 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Verify password (adjust if password is hashed)
         if ($password === $row['password']) {
             // Correct password, create session for admin
-            $_SESSION['admin_username'] = $row['username']; // Set session for admin
+            $_SESSION['admin_nama'] = $row['nama']; // Set session for admin
             echo "<script>
-                    alert('Login successful. Welcome, " . $row['username'] . "!');
+                    alert('Login successful. Welcome, " . $row['nama'] . "!');
                     window.location.href = 'index.php'; // Redirect to admin dashboard
                   </script>";
             exit;

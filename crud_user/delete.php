@@ -2,28 +2,36 @@
 $host = "localhost"; // atau nama host lain
 $user = "root"; // username MySQL
 $password = ""; // password MySQL
-$database = "iregularitas"; // ganti sesuai nama database yang kamu buat
+$database = "iregularitas"; // nama database
 
-$koneksi = mysqli_connect($host, $user, $password, $database);
+// Koneksi ke database
+$conn = mysqli_connect($host, $user, $password, $database);
 
-if ($koneksi->connect_error) {
-    die("Connection failed: " . $koneksi->connect_error);
+// Periksa koneksi
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
 }
 
+// Ambil ID dari request POST
 if (isset($_POST['id'])) {
-    $id_sistem = $_POST['id'];
-    
-    $sql = "DELETE FROM user WHERE id = ?";
-    $stmt = $koneksi->prepare($sql);
-    $stmt->bind_param("s", $id_sistem);
+    $id = $_POST['id'];
 
+    // SQL untuk menghapus data
+    $sql = "DELETE FROM user WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id); // Mengikat parameter, "i" berarti integer
+
+    // Eksekusi statement
     if ($stmt->execute()) {
-        echo 'success';
+        echo 'success'; // Jika berhasil
     } else {
-        echo 'error';
+        echo 'error'; // Jika gagal
     }
-    
+
+    // Menutup statement dan koneksi
     $stmt->close();
 }
-$koneksi->close();
+
+// Menutup koneksi
+$conn->close();
 ?>
