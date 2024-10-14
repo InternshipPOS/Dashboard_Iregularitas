@@ -93,21 +93,20 @@ $koneksi->close(); // Close database connection
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="../assets/js/config.js"></script>
   </head>
-  <body>
+  <body style="background-color: #f8f9fa;">
     <div class="container-xxl">
       <div class="authentication-wrapper authentication-basic container-p-y">
         <div class="authentication-inner">
-          <div class="card">
-            <div class="card-body">
+          <div class="card shadow-lg border-0 rounded-lg" style="max-width: 900px; margin: 0 auto;">
+            <div class="card-body p-4">
               <div class="app-brand justify-content-center">
-              <a href="auth-login-basic.php" class="app-brand-link">
-                <span class="app-brand-logo demo">
-                  <img src="../assets/img/favicon/pos-logo.png" alt="Logo" width="40" height="45">
-                </span>
-                <span class="app-brand-text demo menu-text fw-bolder ms-2 irregularitas-text">Iregularitas</span>
-              </a>
+              <!-- Logo and Title -->
+                <a href="auth-login-basic.php" class="app-brand-link d-flex align-items-center">
+                  <img src="../assets/img/favicon/pos-logo.png" alt="Logo" width="40" height="45" class="me-2">
+                  <span class="app-brand-text menu-text fw-bolder ms-2" style="font-size: 1.5rem;">ReguTrack</span>
+                </a>
               </div>
-              <h4 class="mb-2">Welcome back! 👋</h4>
+              <h4 class="mb-2">Welcome! 👋</h4>
               <p class="mb-4">Please sign-in to your account</p>
 
               <!-- Error message if login failed -->

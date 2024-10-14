@@ -58,11 +58,9 @@
 
       <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
         <div class="app-brand demo">
-          <a href="index.php" class="app-brand-link">
-            <span class="app-brand-logo demo">
-              <img src="../assets/img/favicon/pos-logo.png" alt="Logo" width="40" height="45">
-            </span>
-            <span class="app-brand-text demo menu-text fw-bolder ms-2 irregularitas-text">Iregularitas</span>
+          <a href="index.php" class="app-brand-link d-flex align-items-center">
+            <img src="../assets/img/favicon/pos-logo.png" alt="Logo" width="40" height="45" class="me-2">
+            <span class="app-brand-text menu-text fw-bolder ms-2" style="font-size: 1.5rem;">ReguTrack</span>
           </a>
 
           <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">

@@ -217,99 +217,124 @@ data-template="vertical-menu-template-free">
     </script>
 </head>
 
-<body>
+<body style="background-color: #f8f9fa;">
     <div class="container-xxl">
-        <div class="authentication-wrapper authentication-basic container-p-y">
-            <div class="authentication-inner">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="app-brand justify-content-center">
-                        <a href="auth-register-basic.php" class="app-brand-link">
-                            <span class="app-brand-logo demo">
-                            <img src="../assets/img/favicon/pos-logo.png" alt="Logo" width="40" height="45">
-                            </span>
-                            <span class="app-brand-text demo menu-text fw-bolder ms-2 irregularitas-text">Iregularitas</span>
-                        </a>
+        <div class=" authentication-basic container-p-y">
+            <div class="">
+                <!-- Card -->
+                <div class="card shadow-lg border-0 rounded-lg" style="max-width: 900px; margin: 0 auto;">
+                    <div class="card-body p-4">
+                        <!-- Logo and Title -->
+                        <div class="app-brand justify-content-center mb-3">
+                            <a href="auth-register-basic.php" class="app-brand-link d-flex align-items-center">
+                                <img src="../assets/img/favicon/pos-logo.png" alt="Logo" width="40" height="45" class="me-2">
+                                <span class="app-brand-text menu-text fw-bolder ms-2" style="font-size: 1.5rem;">ReguTrack</span>
+                            </a>
                         </div>
-                        <h4 class="mb-2">Adventure starts here 🚀</h4>
-                        <p class="mb-4">Make your app management easy and fun!</p>
+                        <h4 class="text-center mb-3" style="font-size: 1.25rem;">Empowering You to Uncover Hidden Irregularities</h4>
+                        <p class="text-center mb-4" style="font-size: 0.9rem;">Simplify your oversight and ensure operational excellence!</p>
 
+                        <!-- Registration Form -->
                         <form id="formAuthentication" class="mb-3" action="" method="POST">
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" autofocus required />
-                            </div>
-                            <div class="mb-3">
-                                <label for="nama" class="form-label">Nama</label>
-                                <input type="text" class="form-control" id="nama" name="nama" placeholder="Enter your name" required />
-                            </div>
-                            <div class="mb-3">
-                                <label for="nik" class="form-label">NIPPos</label>
-                                <input type="text" class="form-control" id="nik" name="nik" placeholder="Enter your NIPPOS " required />
-                            </div>
-                            <div class="mb-3">
-                                <label for="jenis" class="form-label">Jenis Kantor</label>
-                                <select class="form-control" id="jenis" name="jenis" required>
-                                    <option value="">Jenis Kantor</option>
-                                    <option value="KC">KC</option>
-                                    <option value="KCU">KCU</option>
-                                    <option value="SPP">SPP</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="regional" class="form-label">Regional</label>
-                                <select class="form-control" id="regional" name="regional" required>
-                                    <option value="Pilih Regional">Pilih Regional</option>
-                                    <option value="Regional 1 - Sumatra">Regional 1 - Sumatra</option>
-                                    <option value="Regional 2 - Jakarta & Banten">Regional 2 - Jakarta & Banten</option>
-                                    <option value="Regional 3 - Jawa Barat">Regional 3 - Jawa Barat</option>
-                                    <option value="Regional 4 - Jawa Tengah & DIY">Regional 4 - Jawa Tengah & DIY</option>
-                                    <option value="Regional 5 - Jawa Timur, Bali & Nusa Tenggara">Regional 5 - Jawa Timur, Bali & Nusa Tenggara</option>
-                                    <option value="Regional 6 - Kalimantan, Sulawesi & Papua">Regional 6 - Kalimantan, Sulawesi & Papua</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="kantor_asal" class="form-label">Kantor Asal</label>
-                                <select class="form-control" id="kantor_asal" name="kantor_asal" required>
-                                    <option value="">Pilih Kantor Asal</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="kode_pos" class="form-label">Kode Pos</label>
-                                <select class="form-control" id="kode_pos" name="kode_pos" required>
-                                    <option value="">Pilih Kode Pos</option>
-                                </select>
-                            </div>
-                            <div class="mb-3 form-password-toggle">
-                                <label class="form-label" for="password">Password</label>
-                                <div class="input-group input-group-merge">
-                                    <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required />
-                                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                            <div class="row">
+                                <!-- Username -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control shadow-sm" id="username" name="username" placeholder="Enter your username" required />
+                                </div>
+
+                                <!-- Nama -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="nama" class="form-label">Nama</label>
+                                    <input type="text" class="form-control shadow-sm" id="nama" name="nama" placeholder="Enter your name" required />
                                 </div>
                             </div>
+
+                            <div class="row">
+                                <!-- NIPPos -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="nik" class="form-label">NIPPos</label>
+                                    <input type="text" class="form-control shadow-sm" id="nik" name="nik" placeholder="Enter your NIPPOS" required />
+                                </div>
+
+                                <!-- Jenis Kantor -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="jenis" class="form-label">Jenis Kantor</label>
+                                    <select class="form-control shadow-sm" id="jenis" name="jenis" required>
+                                        <option value="" disabled selected>Pilih Jenis Kantor</option>
+                                        <option value="KC">KC</option>
+                                        <option value="KCU">KCU</option>
+                                        <option value="SPP">SPP</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <!-- Regional -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="regional" class="form-label">Regional</label>
+                                    <select class="form-control" id="regional" name="regional" required>
+                                        <option value="Pilih Regional">Pilih Regional</option>
+                                        <option value="Regional 1 - Sumatra">Regional 1 - Sumatra</option>
+                                        <option value="Regional 2 - Jakarta & Banten">Regional 2 - Jakarta & Banten</option>
+                                        <option value="Regional 3 - Jawa Barat">Regional 3 - Jawa Barat</option>
+                                        <option value="Regional 4 - Jawa Tengah & DIY">Regional 4 - Jawa Tengah & DIY</option>
+                                        <option value="Regional 5 - Jawa Timur, Bali & Nusa Tenggara">Regional 5 - Jawa Timur, Bali & Nusa Tenggara</option>
+                                        <option value="Regional 6 - Kalimantan, Sulawesi & Papua">Regional 6 - Kalimantan, Sulawesi & Papua</option>
+                                    </select>
+                                </div>
+
+                                <!-- Kantor Asal -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="kantor_asal" class="form-label">Kantor Asal</label>
+                                    <select class="form-control shadow-sm" id="kantor_asal" name="kantor_asal" required>
+                                        <option value="" disabled selected>Pilih Kantor Asal</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+
+                                <!-- Password -->
+                                <div class="col-md-6 mb-3 form-password-toggle">
+                                    <label for="password" class="form-label">Password</label>
+                                    <div class="input-group input-group-merge">
+                                        <input type="password" id="password" class="form-control shadow-sm" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required />
+                                        <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Terms & Conditions -->
                             <div class="mb-3">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms" required />
-                                    <label class="form-check-label" for="terms-conditions">
+                                    <label class="form-check-label" for="terms-conditions" style="font-size: 0.85rem;">
                                         I agree to <a href="javascript:void(0);">privacy policy & terms</a>
                                     </label>
                                 </div>
                             </div>
-                            <button id="saveButton" class="register btn btn-primary d-grid w-100">Save Data</button>
+
+                            <!-- Submit Button -->
+                            <button id="saveButton" class="register btn btn-primary d-grid w-100 shadow-sm">Sign Up</button>
                         </form>
 
-                        <p class="text-center">
+                        <p class="text-center mt-3" style="font-size: 0.85rem;">
                             <span>Already have an account?</span>
                             <a href="auth-login-basic.php"><span>Sign in instead</span></a>
                         </p>
                     </div>
                 </div>
+                <!-- /Card -->
             </div>
         </div>
     </div>
+
     <div class="buy-now">
         <a href="https://1.envato.market/4dR0y" target="_blank" class="btn btn-danger btn-buy-now">Buy Now</a>
     </div>
+
+    <!-- Script dependencies -->
     <script src="../assets/vendor/libs/jquery/jquery.js"></script>
     <script src="../assets/vendor/libs/popper/popper.js"></script>
     <script src="../assets/vendor/js/bootstrap.js"></script>
@@ -317,4 +342,5 @@ data-template="vertical-menu-template-free">
     <script src="../assets/vendor/js/menu.js"></script>
     <script src="../assets/js/main.js"></script>
 </body>
+
 </html>
