@@ -82,7 +82,7 @@
           </li>
 
           <!-- Layouts -->
-          <li class="menu-item">
+          <!-- <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
               <i class="menu-icon tf-icons bx bx-layout"></i>
               <div data-i18n="Layouts">Regional</div>
@@ -120,7 +120,7 @@
                 </a>
               </li>
             </ul>
-          </li>
+          </li> -->
 
           <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Pages</span>
@@ -132,32 +132,32 @@
             </a>
             <ul class="menu-sub">
               <li class="menu-item">
-                <a href="../html/pages-regional settings-reg1.php" class="menu-link">
+                <a href="../user/user-setting-reg1.php" class="menu-link">
                   <div data-i18n="Regional 1">Regional 1</div>
                 </a>
               </li>
               <li class="menu-item">
-                <a href="../html/pages-regional settings-reg2.php" class="menu-link">
+                <a href="../user/user-setting-reg2.php" class="menu-link">
                   <div data-i18n="Regional 2">Regional 2</div>
                 </a>
               </li>
               <li class="menu-item">
-                <a href="../html/pages-regional settings-reg3.php" class="menu-link">
+                <a href="../user/user-setting-reg3.php" class="menu-link">
                   <div data-i18n="Regional 3">Regional 3</div>
                 </a>
               </li>
               <li class="menu-item">
-                <a href="../html/pages-regional settings-reg4.php" class="menu-link">
+                <a href="../user/user-setting-reg4.php" class="menu-link">
                   <div data-i18n="Regional 4">Regional 4</div>
                 </a>
               </li>
               <li class="menu-item">
-                <a href="../html/pages-regional settings-reg5.php" class="menu-link">
+                <a href="../user/user-setting-reg5.php" class="menu-link">
                   <div data-i18n="Regional 5">Regional 5</div>
                 </a>
               </li>
               <li class="menu-item">
-                <a href="../html/pages-regional settings-reg6.php" class="menu-link">
+                <a href="../user/user-setting-reg6.php" class="menu-link">
                   <div data-i18n="Regional 6">Regional 6</div>
                 </a>
               </li>
