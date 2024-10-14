@@ -4,10 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <title>Edit Manage Users | Iregularitas</title>
-<<<<<<< HEAD
-    <!-- Favicon -->
-=======
->>>>>>> 5b516d9144057f6c1d6abd1ecaf1e3ecce9c8e75
     <link rel="icon" type="image/x-icon" href="../assets/img/favicon/pos-favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -216,56 +212,143 @@
                                 <form action="" method="POST">
                                     <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
 
-                                    <div class="mb-3">
-                                        <label for="username" class="form-label">Username</label>
-                                        <input type="text" class="form-control" id="username" name="username" value="<?php echo $row['username']; ?>" required>
+                                    <div class="col-xxl">
+                                        <div class="card mb-4">
+                                        <div class="card-header d-flex align-items-center justify-content-between">
+                                            <h5 class="mb-0">Edit User Information</h5>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <div class="row mb-3">
+                                            <label class="col-sm-2 col-form-label" for="username">Username</label>
+                                            <div class="col-sm-10">
+                                                <div class="input-group input-group-merge">
+                                                <span class="input-group-text"><i class="bx bx-user"></i></span>
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    id="username"
+                                                    name="username"
+                                                    value="<?php echo $row['username']; ?>"
+                                                    required
+                                                    aria-label="Enter username"
+                                                />
+                                                </div>
+                                            </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                            <label class="col-sm-2 col-form-label" for="nama">Nama</label>
+                                            <div class="col-sm-10">
+                                                <div class="input-group input-group-merge">
+                                                <span class="input-group-text"><i class="bx bx-user-circle"></i></span>
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    id="nama"
+                                                    name="nama"
+                                                    value="<?php echo $row['nama']; ?>"
+                                                    required
+                                                    aria-label="Enter full name"
+                                                />
+                                                </div>
+                                            </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                            <label class="col-sm-2 col-form-label" for="nik">NIPPOS</label>
+                                            <div class="col-sm-10">
+                                                <div class="input-group input-group-merge">
+                                                <span class="input-group-text"><i class="bx bx-id-card"></i></span>
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    id="nik"
+                                                    name="nik"
+                                                    value="<?php echo $row['nik']; ?>"
+                                                    required
+                                                    aria-label="Enter NIPPOS"
+                                                />
+                                                </div>
+                                            </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                            <label class="col-sm-2 col-form-label" for="jenis">Jenis Kantor</label>
+                                            <div class="col-sm-10">
+                                                <select class="form-select" id="jenis" name="jenis" required>
+                                                <option value="">Jenis Kantor</option>
+                                                <option value="KC" <?php echo ($row['jenis'] == "KC") ? 'selected' : ''; ?>>KC</option>
+                                                <option value="KCU" <?php echo ($row['jenis'] == "KCU") ? 'selected' : ''; ?>>KCU</option>
+                                                <option value="SPP" <?php echo ($row['jenis'] == "SPP") ? 'selected' : ''; ?>>SPP</option>
+                                                </select>
+                                            </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                            <label class="col-sm-2 col-form-label" for="regional">Regional</label>
+                                            <div class="col-sm-10">
+                                                <select class="form-select" id="regional" name="regional" required>
+                                                <option value="Regional 1 - Sumatra" <?php echo ($row['regional'] == "Regional 1 - Sumatra") ? 'selected' : ''; ?>>Regional 1 - Sumatra</option>
+                                                <option value="Regional 2 - Jakarta & Banten" <?php echo ($row['regional'] == "Regional 2 - Jakarta & Banten") ? 'selected' : ''; ?>>Regional 2 - Jakarta & Banten</option>
+                                                <option value="Regional 3 - Jawa Barat" <?php echo ($row['regional'] == "Regional 3 - Jawa Barat") ? 'selected' : ''; ?>>Regional 3 - Jawa Barat</option>
+                                                <option value="Regional 4 - Jawa Tengah & DIY" <?php echo ($row['regional'] == "Regional 4 - Jawa Tengah & DIY") ? 'selected' : ''; ?>>Regional 4 - Jawa Tengah & DIY</option>
+                                                <option value="Regional 5 - Jawa Timur, Bali & Nusa Tenggara" <?php echo ($row['regional'] == "Regional 5 - Jawa Timur, Bali & Nusa Tenggara") ? 'selected' : ''; ?>>Regional 5 - Jawa Timur, Bali & Nusa Tenggara</option>
+                                                <option value="Regional 6 - Kalimantan, Sulawesi & Papua" <?php echo ($row['regional'] == "Regional 6 - Kalimantan, Sulawesi & Papua") ? 'selected' : ''; ?>>Regional 6 - Kalimantan, Sulawesi & Papua</option>
+                                                </select>
+                                            </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                            <label class="col-sm-2 col-form-label" for="kantor_asal">Kantor Asal</label>
+                                            <div class="col-sm-10">
+                                                <select class="form-select" id="kantor_asal" name="kantor_asal" required>
+                                                <option value="">Pilih Kantor Asal</option>
+                                                <!-- Add options for Kantor Asal here -->
+                                                </select>
+                                            </div>
+                                            </div>
+
+                                            <div class="row justify-content-end">
+                                            <div class="col-sm-10">
+                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                <a href="../html/manage-user.php" class="btn btn-secondary">Cancel</a>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </div>
                                     </div>
-
-                                    <div class="mb-3">
-                                        <label for="nama" class="form-label">Nama</label>
-                                        <input type="text" class="form-control" id="nama" name="nama" value="<?php echo $row['nama']; ?>" required>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="nik" class="form-label">NIPPOS</label>
-                                        <input type="text" class="form-control" id="nik" name="nik" value="<?php echo $row['nik']; ?>" required>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="jenis" class="form-label">Jenis Kantor</label>
-                                        <select class="form-select" id="jenis" name="jenis" required>
-                                            <option value="">Jenis Kantor</option>
-                                            <option value="KC" <?php echo ($row['jenis'] == "KC") ? 'selected' : ''; ?>>KC</option>
-                                            <option value="KCU" <?php echo ($row['jenis'] == "KCU") ? 'selected' : ''; ?>>KCU</option>
-                                            <option value="SPP" <?php echo ($row['jenis'] == "SPP") ? 'selected' : ''; ?>>SPP</option>
-                                        </select>
-                                    </div>
+                                    </form>
 
 
-                                    <div class="mb-3">
-                                        <label for="regional" class="form-label">Regional</label>
-                                        <select class="form-select" id="regional" name="regional" required>
-                                            <option value="Regional 1 - Sumatra" <?php echo ($row['regional'] == "Regional 1 - Sumatra") ? 'selected' : ''; ?>>Regional 1 - Sumatra</option>
-                                            <option value="Regional 2 - Jakarta & Banten" <?php echo ($row['regional'] == "Regional 2 - Jakarta & Banten") ? 'selected' : ''; ?>>Regional 2 - Jakarta & Banten</option>
-                                            <option value="Regional 3 - Jawa Barat" <?php echo ($row['regional'] == "Regional 3 - Jawa Barat") ? 'selected' : ''; ?>>Regional 3 - Jawa Barat</option>
-                                            <option value="Regional 4 - Jawa Tengah & DIY" <?php echo ($row['regional'] == "Regional 4 - Jawa Tengah & DIY") ? 'selected' : ''; ?>>Regional 4 - Jawa Tengah & DIY</option>
-                                            <option value="Regional 5 - Jawa Timur, Bali & Nusa Tenggara" <?php echo ($row['regional'] == "Regional 5 - Jawa Timur, Bali & Nusa Tenggara") ? 'selected' : ''; ?>>Regional 5 - Jawa Timur, Bali & Nusa Tenggara</option>
-                                            <option value="Regional 6 - Kalimantan, Sulawesi & Papua" <?php echo ($row['regional'] == "Regional 6 - Kalimantan, Sulawesi & Papua") ? 'selected' : ''; ?>>Regional 6 - Kalimantan, Sulawesi & Papua</option>
-                                        </select>
-                                    </div>
-
-
-                                    <!-- Tambahan kolom baru -->
-                                    <div class="mb-3">
-                                        <label for="kantor_asal" class="form-label">Kantor Asal</label>
-                                        <select class="form-select" id="kantor_asal" name="kantor_asal" required>
+                                    <script>
+                                        // JavaScript section
+                                        $(document).ready(function() {
+                                            // Set the selected kantorn_asal based on existing data
+                                            var existingKantorAsal = "<?php echo isset($row['kantor_asal']) ? $row['kantor_asal'] : ''; ?>";
                                             
-                                        </select>
-                                    </div>
+                                            // Set the selected regional based on existing data
+                                            var existingRegional = "<?php echo isset($row['regional']) ? $row['regional'] : ''; ?>";
 
-                                    <button type="submit" class="btn btn-primary">Update</button>
-                                    <a href="../html/manage-user.php" class="btn btn-secondary">Cancel</a>
-                                </form>
+                                            // Ketika regional berubah
+                                            $('#regional').change(function() {
+                                                var regionalId = $(this).val();
+                                                var postOfficeSelect = $('#kantor_asal');
+                                                postOfficeSelect.empty(); // Reset dropdown
+
+                                                // Populasi kantor_asal berdasarkan regional yang dipilih
+                                                if (postOffices[regionalId]) {
+                                                    postOffices[regionalId].forEach(office => {
+                                                        postOfficeSelect.append(`<option value="${office.kcu}|${office.nama}" ${existingKantorAsal == office.kcu + '|' + office.nama ? 'selected' : ''}>${office.nama}</option>`);
+                                                    });
+                                                }
+                                            });
+
+                                            // Trigger change event on page load to set the initial state
+                                            $('#regional').val(existingRegional).trigger('change'); // Set the regional and populate kantor_asal
+                                        });
+                                    </script>
+
                             <?php
                             } else {
                                 echo "Data tidak ditemukan.";
