@@ -128,7 +128,7 @@
           <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
               <i class="menu-icon tf-icons bx bx-dock-top"></i>
-              <div data-i18n="Account Settings">Regional Manage</div>
+              <div data-i18n="Account Settings">Manage Regional</div>
             </a>
             <ul class="menu-sub">
               <li class="menu-item">
@@ -208,9 +208,9 @@
           <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
           <!-- Cards -->
           <li class="menu-item">
-            <a href="cards-basic.html" class="menu-link">
+            <a href="manage-user.php" class="menu-link">
               <i class="menu-icon tf-icons bx bx-collection"></i>
-              <div data-i18n="Basic">Cards</div>
+              <div data-i18n="Basic">Manage Users</div>
             </a>
           </li>
           <!-- User interface -->
