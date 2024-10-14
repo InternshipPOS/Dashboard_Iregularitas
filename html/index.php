@@ -58,11 +58,9 @@
 
       <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
         <div class="app-brand demo">
-          <a href="index.php" class="app-brand-link">
-            <span class="app-brand-logo demo">
-              <img src="../assets/img/favicon/pos-logo.png" alt="Logo" width="40" height="45">
-            </span>
-            <span class="app-brand-text demo menu-text fw-bolder ms-2 irregularitas-text">Iregularitas</span>
+          <a href="index.php" class="app-brand-link d-flex align-items-center">
+            <img src="../assets/img/favicon/pos-logo.png" alt="Logo" width="40" height="45" class="me-2">
+            <span class="app-brand-text menu-text fw-bolder ms-2" style="font-size: 1.5rem;">ReguTrack</span>
           </a>
 
           <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -128,7 +126,7 @@
           <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
               <i class="menu-icon tf-icons bx bx-dock-top"></i>
-              <div data-i18n="Account Settings">Regional Manage</div>
+              <div data-i18n="Account Settings">Manage Regional</div>
             </a>
             <ul class="menu-sub">
               <li class="menu-item">
@@ -208,9 +206,9 @@
           <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
           <!-- Cards -->
           <li class="menu-item">
-            <a href="cards-basic.html" class="menu-link">
+            <a href="manage-user.php" class="menu-link">
               <i class="menu-icon tf-icons bx bx-collection"></i>
-              <div data-i18n="Basic">Cards</div>
+              <div data-i18n="Basic">Manage Users</div>
             </a>
           </li>
           <!-- User interface -->

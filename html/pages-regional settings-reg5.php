@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>Regional 5 | Iregularitas</title>
+    <title>Regional 4 | Iregularitas</title>
     <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -121,7 +121,20 @@
                                 die("Connection failed: " . $koneksi->connect_error);
                             }
 
-                            $sql = "SELECT * FROM regional5";
+                            // Pagination variables
+                            $limit = 10; // number of records per page
+                            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // get the current page number
+                            $offset = ($page - 1) * $limit; // calculate the offset
+
+                            // Get total records for pagination
+                            $total_sql = "SELECT COUNT(*) AS total FROM regional5";
+                            $total_result = $koneksi->query($total_sql);
+                            $total_row = $total_result->fetch_assoc();
+                            $total_records = $total_row['total'];
+                            $total_pages = ceil($total_records / $limit); // calculate total pages
+
+                            // Fetch data with limit and offset
+                            $sql = "SELECT * FROM regional5 LIMIT $limit OFFSET $offset";
                             $result = $koneksi->query($sql);
 
                             if ($result->num_rows > 0) :
@@ -170,8 +183,7 @@
                                         <td><?php echo $row['validasi_pusat']; ?></td>
                                         <td class="aksi">
                                             <a href="../crud_regional5/update.php?id_sistem=<?php echo $row['id_sistem']; ?>" class="btn btn-primary">Edit</a>
-                                            <a href="#" class="btn btn-danger delete-btn" data-id="<?php echo $row['id_sistem']; ?>">Delete</a>
-                                        </td>
+                                            <a href="../crud_regional5/delete.php" class="btn btn-danger delete-btn" data-id="<?php echo $row['id_sistem']; ?>">Delete</a>
                                     </tr>
                                 <?php endwhile; ?>
                             <?php else : ?>
@@ -181,6 +193,30 @@
                             <?php endif; ?>
                         </tbody>
                     </table>
+                </div>
+                <div class="col-lg-8">
+                    <small class="text-muted">Menampilkan <?php echo $offset + 1; ?>-<?php echo min($offset + $limit, $total_records); ?> dari total <?php echo $total_records; ?> hasil</small>
+                </div>
+                <div class="col-lg-4">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-end">
+                            <li class="page-item <?php if($page <= 1) echo 'disabled'; ?>">
+                                <a class="page-link" href="?page=<?php echo $page - 1; ?>" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                <li class="page-item <?php if($i == $page) echo 'active'; ?>">
+                                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                </li>
+                            <?php endfor; ?>
+                            <li class="page-item <?php if($page >= $total_pages) echo 'disabled'; ?>">
+                                <a class="page-link" href="?page=<?php echo $page + 1; ?>" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
@@ -237,15 +273,25 @@
                     }
                 });
             });
-
-            // Menampilkan teks lengkap saat mengklik "Baca Selengkapnya"
-            $(document).on('click', '.read-more-btn', function() {
-                $(this).prev('.full-text').toggle();
-                $(this).prev('.short-text').toggle();
-                $(this).text($(this).text() === 'Baca Selengkapnya' ? 'Sembunyikan' : 'Baca Selengkapnya');
-            });
         });
+        
     </script>
+        <script>
+            // Toggle full text display on click
+            $(document).on('click', '.read-more-btn', function() {
+                var $shortText = $(this).siblings('.short-text');
+                var $fullText = $(this).siblings('.full-text');
+                if ($fullText.is(':visible')) {
+                    $shortText.show();
+                    $fullText.hide();
+                    $(this).text('Baca Selengkapnya');
+                } else {
+                    $shortText.hide();
+                    $fullText.show();
+                    $(this).text('Tutup');
+                }
+            });
+        </script>
 </body>
 
 </html>
