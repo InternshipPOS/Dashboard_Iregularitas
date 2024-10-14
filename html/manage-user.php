@@ -22,21 +22,22 @@
     <script src="../assets/js/config.js"></script>
     <style>
         .table {
-            height: 600px;
+            height: 400px; /* Reduced height */
             overflow-y: auto;
             table-layout: auto;
+            font-size: 0.875rem; /* Adjusted font size */
         }
 
         .table td,
         .table th {
-            padding: 1.5rem;
+            padding: 0.75rem; /* Reduced padding */
             vertical-align: top;
             word-wrap: break-word;
             white-space: normal;
         }
 
         .aksi {
-            min-width: 100px;
+            min-width: 80px; /* Reduced minimum width for action buttons */
         }
     </style>
 </head>
