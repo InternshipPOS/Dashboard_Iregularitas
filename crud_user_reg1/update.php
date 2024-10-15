@@ -57,9 +57,9 @@
                         $uraian_berita_acara = $_POST['uraian_berita_acara'];
                         $deskripsi_iregularitas = $_POST['deskripsi_iregularitas'];
                         $rincian_root_cause = $_POST['rincian_root_cause'];
-                        $referensi_root_cause = $_POST['referensi_root_cause'];
+                        $referensi_root_cause = isset($_POST['referensi_root_cause']) ? $_POST['referensi_root_cause'] : null;
                         $tindakan_pencegahan = $_POST['tindakan_pencegahan'];
-                        $corrective_action = $_POST['corrective_action'];
+                        $corrective_action = isset($_POST['corrective_action']) ? $_POST['corrective_action'] : null;
                         $locus = $_POST['locus'];
                         $nama_nik_pegawai = $_POST['nama_nik_pegawai'];
                         $nomor_evidence = $_POST['nomor_evidence'];
