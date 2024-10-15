@@ -3,11 +3,19 @@ session_start(); // Start the session for login
 
 include 'config.php'; // Include database configuration
 
+// Aktifkan tampilan error untuk debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+$successMessage = ''; // Menyimpan pesan sukses
+$errorMessage = ''; // Menyimpan pesan error
+$nikErrorMessage = ''; // Menyimpan pesan error khusus untuk NIK
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nik = $_POST['nik'];
     $password = $_POST['password'];
 
-    // Query to check if NIK exists in the admin table
+    // Query untuk memeriksa apakah NIK ada di tabel admin
     $sql = "SELECT * FROM admin WHERE nik = ?";
     $stmt = $koneksi->prepare($sql);
     
@@ -15,43 +23,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Query failed: " . $koneksi->error);
     }
 
-    $stmt->bind_param("s", $nik); // Use prepared statement to prevent SQL injection
+    $stmt->bind_param("s", $nik); // Menggunakan prepared statement untuk mencegah SQL injection
     $stmt->execute();
     $result = $stmt->get_result();
 
-    // Check if NIK is found
+    // Cek apakah NIK ditemukan
     if ($result->num_rows > 0) {
-        // Fetch admin data
+        // Ambil data admin
         $row = $result->fetch_assoc();
 
-        // Verify password (adjust if password is hashed)
+        // Verifikasi password (sesuaikan jika password di-hash)
         if ($password === $row['password']) {
-            // Correct password, create session for admin
-            $_SESSION['admin_nama'] = $row['nama']; // Set session for admin
-            echo "<script>
-                    alert('Login successful. Welcome, " . $row['nama'] . "!');
-                    window.location.href = 'index.php'; // Redirect to admin dashboard
-                  </script>";
-            exit;
+            // Password benar, buat sesi untuk admin
+            $_SESSION['admin_nama'] = $row['nama']; // Set sesi untuk admin
+            $successMessage = $row['nama']; // Simpan nama admin untuk pesan sukses
         } else {
-            echo "<script>
-                    alert('Wrong password');
-                    window.location.href = 'auth-login-admin.php'; // Redirect back to login if password is wrong
-                  </script>";
-            exit;
+            $errorMessage = 'Wrong password. Please try again.';
         }
     } else {
-        echo "<script>
-                alert('NIK not found');
-                window.location.href = 'auth-login-admin.php'; // Redirect back to login if NIK not found
-              </script>";
-        exit;
+        $nikErrorMessage = 'NIPPOS not found. Please check your NIPPOS and try again.';
     }
 
-    $stmt->close(); // Close statement
+    $stmt->close(); // Tutup statement
 }
 
-$koneksi->close(); // Close database connection
+$koneksi->close(); // Tutup koneksi database
 ?>
 
 <!DOCTYPE html>
@@ -74,6 +70,8 @@ $koneksi->close(); // Close database connection
 
     <!-- Page CSS -->
     <link rel="stylesheet" href="../assets/vendor/css/pages/page-auth.css" />
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 <body style="background-color: #f8f9fa;">
     <div class="container-xxl">
@@ -99,7 +97,6 @@ $koneksi->close(); // Close database connection
                                 <label class="form-label" for="password">Password</label>
                                 <div class="input-group input-group-merge">
                                     <input type="password" id="password" class="form-control" name="password" placeholder="********" required />
-                                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -121,5 +118,47 @@ $koneksi->close(); // Close database connection
     <!-- Core JS -->
     <script src="../assets/vendor/libs/jquery/jquery.js"></script>
     <script src="../assets/vendor/js/bootstrap.js"></script>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    // Fungsi untuk menampilkan alert sukses
+    function showSuccessAlert(nama) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Login successful!',
+            text: 'Welcome, ' + nama + '!',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'index.php'; // Redirect ke dashboard admin
+            }
+        });
+    }
+
+    // Fungsi untuk menampilkan alert error
+    function showErrorAlert(title, text) {
+        Swal.fire({
+            icon: 'error',
+            title: title,
+            text: text,
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'auth-login-admin.php'; // Redirect kembali ke login
+            }
+        });
+    }
+
+    // Cek apakah ada pesan sukses atau error untuk ditampilkan
+    window.onload = function() {
+        <?php if ($successMessage): ?>
+            showSuccessAlert('<?php echo $successMessage; ?>');
+        <?php elseif ($errorMessage): ?>
+            showErrorAlert('Error', '<?php echo $errorMessage; ?>');
+        <?php elseif ($nikErrorMessage): ?>
+            showErrorAlert('Error', '<?php echo $nikErrorMessage; ?>');
+        <?php endif; ?>
+    };
+    </script>
 </body>
 </html>
