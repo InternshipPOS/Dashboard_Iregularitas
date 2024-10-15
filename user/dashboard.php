@@ -230,17 +230,10 @@ if (!isset($_SESSION['nama'])) {
                     <div class="dropdown-divider"></div>
                   </li>
                   <li>
-<<<<<<< HEAD:user/dashboard.php
-                    <a class="dropdown-item" href="auth-login-basic.php">
-                      <i class="bx bx-power-off me-2"></i>
-                      <span class="align-middle">Log Out</span>
-                    </a>
-=======
                       <a class="dropdown-item" href="#" onclick="confirmLogout()">
                           <i class="bx bx-power-off me-2"></i>
                           <span class="align-middle">Log Out</span>
                       </a>
->>>>>>> b2c7da0339a6e5c6b45d7f190b6bcb3ac557bca8:html/dashboard.php
                   </li>
                 </ul>
               </li>
@@ -843,7 +836,7 @@ if (!isset($_SESSION['nama'])) {
   <!-- Place this tag in your head or just before your close body tag. -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
 
-   <!-- SweetAlert2 JS -->
+  <!-- SweetAlert2 JS -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
       function confirmLogout() {
@@ -859,7 +852,7 @@ if (!isset($_SESSION['nama'])) {
           }).then((result) => {
               if (result.isConfirmed) {
                   // Redirect ke halaman logout jika pengguna menekan "Ya, Keluar!"
-                  window.location.href = 'auth-login-basic.php';
+                  window.location.href = '../html/auth-login-basic.php';
               }
           })
       }

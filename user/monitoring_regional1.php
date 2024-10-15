@@ -46,11 +46,7 @@
 
                         <!-- Back Button -->
                         <div class="mb-3">
-<<<<<<< HEAD
                             <a href="user-setting-reg1.php" class="btn btn-primary">Back</a>
-=======
-                            <a href="../user/user-setting-reg1.php" class="btn btn-primary">Back</a>
->>>>>>> b2c7da0339a6e5c6b45d7f190b6bcb3ac557bca8
                         </div>
 
                         <!-- Data Monitoring Table -->

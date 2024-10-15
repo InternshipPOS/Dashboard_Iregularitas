@@ -168,7 +168,6 @@ if (!isset($_SESSION['nama'])) {
             </div>
             <!-- /Search -->
 
-<<<<<<< HEAD
             <ul class="navbar-nav flex-row align-items-center ms-auto">
               <!-- Place this tag where you want the button to render. -->
               <li class="nav-item lh-1 me-3">
@@ -180,10 +179,6 @@ if (!isset($_SESSION['nama'])) {
                   data-show-count="true"
                   aria-label="Star themeselection/sneat-html-admin-template-free on GitHub">Star</a>
               </li>
-=======
-            <!-- Button to Monitoring Page -->
-            <a href="../user/monitoring_regional3.php" class="btn btn-success mb-3">Go to Monitoring</a>
->>>>>>> b2c7da0339a6e5c6b45d7f190b6bcb3ac557bca8
 
               <!-- User -->
               <li class="nav-item navbar-dropdown dropdown-user dropdown">
@@ -240,10 +235,10 @@ if (!isset($_SESSION['nama'])) {
                     <div class="dropdown-divider"></div>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="auth-login-basic.php">
-                      <i class="bx bx-power-off me-2"></i>
-                      <span class="align-middle">Log Out</span>
-                    </a>
+                      <a class="dropdown-item" href="#" onclick="confirmLogout()">
+                          <i class="bx bx-power-off me-2"></i>
+                          <span class="align-middle">Log Out</span>
+                      </a>
                   </li>
                 </ul>
               </li>
@@ -530,6 +525,27 @@ if (!isset($_SESSION['nama'])) {
             }
         });
     </script>
+    <!-- SweetAlert2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+      function confirmLogout() {
+          Swal.fire({
+              title: 'Apakah Anda yakin ingin keluar?',
+              text: "Anda akan keluar dari sesi saat ini!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Ya, Keluar!',
+              cancelButtonText: 'Batal'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  // Redirect ke halaman logout jika pengguna menekan "Ya, Keluar!"
+                  window.location.href = '../html/auth-login-basic.php';
+              }
+          })
+      }
+  </script>
 </body>
 
 </html>
