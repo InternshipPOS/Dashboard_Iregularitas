@@ -285,7 +285,6 @@ data-template="vertical-menu-template-free">
                                     <label for="password" class="form-label">Password</label>
                                     <div class="input-group input-group-merge">
                                         <input type="password" id="password" class="form-control shadow-sm" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required />
-                                        <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                                     </div>
                                 </div>
                             </div>
@@ -313,10 +312,6 @@ data-template="vertical-menu-template-free">
                 <!-- /Card -->
             </div>
         </div>
-    </div>
-
-    <div class="buy-now">
-        <a href="https://1.envato.market/4dR0y" target="_blank" class="btn btn-danger btn-buy-now">Buy Now</a>
     </div>
 
     <!-- Script dependencies -->
