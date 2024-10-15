@@ -1,3 +1,14 @@
+<?php
+session_start(); 
+if (!isset($_SESSION['nama'])) {
+    echo "<script>
+            alert('Anda harus login terlebih dahulu!');
+            window.location.href = 'auth-login-basic.php';
+          </script>";
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template-free">
 
@@ -58,169 +69,392 @@
 </head>
 
 <body>
-    <div class="content-wrapper">
-        <div class="container-xxl flex-grow-1 container-p-y">
-            <h4 class="py-3 breadcrumb-wrapper mb-4"><span class="text-muted fw-light">Regional 1</span></h4>
+    <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <!-- Menu -->
 
-            <!-- Back Button -->
-            <div class="mb-3">
-                <a href="../html/dashboard.php" class="btn btn-primary">Back</a>
+      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+        <div class="app-brand demo">
+          <a href="dashboard.php" class="app-brand-link d-flex align-items-center">
+            <img src="../assets/img/favicon/pos-logo.png" alt="Logo" width="40" height="45" class="me-2">
+            <span class="app-brand-text menu-text fw-bolder ms-2" style="font-size: 1.5rem;">ReguTrack</span>
+          </a>
+
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+          </a>
+        </div>
+
+        <div class="menu-inner-shadow"></div>
+
+        <ul class="menu-inner py-1">
+          <!-- Dashboard -->
+          <li class="menu-item active">
+            <a href="dashboard.php" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Dashboard</div>
+            </a>
+          </li>
+
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Pages</span>
+          </li>
+          <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                    <div data-i18n="Account Settings">Manage Regional</div>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="../user/user-setting-reg1.php" class="menu-link">
+                    <div data-i18n="Regional 1">Regional 1</div>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="../user/user-setting-reg2.php" class="menu-link">
+                    <div data-i18n="Regional 2">Regional 2</div>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="../user/user-setting-reg3.php" class="menu-link">
+                    <div data-i18n="Regional 3">Regional 3</div>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="../user/user-setting-reg4.php" class="menu-link">
+                    <div data-i18n="Regional 4">Regional 4</div>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="../user/user-setting-reg5.php" class="menu-link">
+                    <div data-i18n="Regional 5">Regional 5</div>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="../user/user-setting-reg6.php" class="menu-link">
+                    <div data-i18n="Regional 6">Regional 6</div>
+                </a>
+            </li>
+          </li>
+        </ul>
+      </aside>
+      <!-- / Menu -->
+
+      <!-- Layout container -->
+      <div class="layout-page">
+        <!-- Navbar -->
+
+        <nav
+          class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+          id="layout-navbar">
+          <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+              <i class="bx bx-menu bx-sm"></i>
+            </a>
+          </div>
+
+          <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+            <!-- Search -->
+            <div class="navbar-nav align-items-center">
+              <div class="nav-item d-flex align-items-center">
+                <i class="bx bx-search fs-4 lh-0"></i>
+                <input
+                  type="text"
+                  class="form-control border-0 shadow-none"
+                  placeholder="Search..."
+                  aria-label="Search..." />
+              </div>
             </div>
+            <!-- /Search -->
 
-            <!-- Button to Monitoring Page
-            <a href="monitoring_regional1.php" class="btn btn-success mb-3">Go to Monitoring</a> -->
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+              <!-- Place this tag where you want the button to render. -->
+              <li class="nav-item lh-1 me-3">
+                <a
+                  class="github-button"
+                  href="https://github.com/themeselection/sneat-html-admin-template-free"
+                  data-icon="octicon-star"
+                  data-size="large"
+                  data-show-count="true"
+                  aria-label="Star themeselection/sneat-html-admin-template-free on GitHub">Star</a>
+              </li>
 
-            <!-- Data Table -->
-            <div class="card">
-                <div class="table-responsive text-nowrap">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>ID Sistem</th>
-                                <th>Reg Asal P6</th>
-                                <th>Kantor Asal P6</th>
-                                <th>No Pend Asal P6</th>
-                                <th>Tanggal Berita Acara</th>
-                                <th>Bulan</th>
-                                <th>Week</th>
-                                <th>Tahun</th>
-                                <th>Reg Tujuan P6</th>
-                                <th>Kantor Tujuan P6</th>
-                                <th>No Pend Tujuan P6</th>
-                                <th>Deskripsi</th>
-                                <th>DNLN</th>
-                                <th>Nomor Kiriman</th>
-                                <th>Uraian Berita Acara</th>
-                                <th>Deskripsi Iregularitas</th>
-                                <th>Rincian Root Cause</th>
-                                <th>Referensi Root Cause</th>
-                                <th>Tindakan Pencegahan</th>
-                                <th>Corrective Action</th>
-                                <th>Locus</th>
-                                <th>Nama NIK Pegawai</th>
-                                <th>No Evidence</th>
-                                <th>Validasi Regional</th>
-                                <th>Validasi Pusat</th>
-                                <th class="aksi">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            // display_data.php
-                            $host = "localhost"; // atau nama host lain
-                            $user = "root"; // username MySQL
-                            $password = ""; // password MySQL
-                            $database = "iregularitas"; // ganti sesuai nama database yang kamu buat
+              <!-- User -->
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                  <div class="avatar avatar-online">
+                    <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="avatar avatar-online">
+                            <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                          </div>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-semibold d-block">
+                            <?php echo isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User'; ?>
+                          </span>
+                          <small class="text-muted">
+                            <?php echo $_SESSION['jenis']; ?>
+                          </small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="../user/profile.php">
+                      <i class="bx bx-user me-2"></i>
+                      <span class="align-middle">My Profile</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      <i class="bx bx-cog me-2"></i>
+                      <span class="align-middle">Settings</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      <span class="d-flex align-items-center align-middle">
+                        <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
+                        <span class="flex-grow-1 align-middle">Billing</span>
+                        <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
+                      </span>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="auth-login-basic.php">
+                      <i class="bx bx-power-off me-2"></i>
+                      <span class="align-middle">Log Out</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ User -->
+            </ul>
+          </div>
+        </nav>
 
-                            $koneksi = mysqli_connect($host, $user, $password, $database);
+        <!-- / Navbar -->
 
-                            if ($koneksi->connect_error) {
-                                die("Connection failed: " . $koneksi->connect_error);
-                            }
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+            <div class="container-xxl flex-grow-1 container-p-y">
+                <h4 class="py-3 breadcrumb-wrapper mb-4"><span class="text-muted fw-light">Regional 1</span></h4>
 
-                            // Pagination variables
-                            $limit = 10; // number of records per page
-                            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // get the current page number
-                            $offset = ($page - 1) * $limit; // calculate the offset
+                    <!-- Back Button
+                    <div class="mb-3">
+                        <a href="../html/dashboard.php" class="btn btn-primary">Back</a>
+                    </div> -->
 
-                            // Get total records for pagination
-                            $total_sql = "SELECT COUNT(*) AS total FROM regional1";
-                            $total_result = $koneksi->query($total_sql);
-                            $total_row = $total_result->fetch_assoc();
-                            $total_records = $total_row['total'];
-                            $total_pages = ceil($total_records / $limit); // calculate total pages
+                    <!-- Button to Monitoring Page -->
+                    <a href="monitoring_regional1.php" class="btn btn-success mb-3">Go to Monitoring</a>
 
-                            // Fetch data with limit and offset
-                            $sql = "SELECT * FROM regional1 LIMIT $limit OFFSET $offset";
-                            $result = $koneksi->query($sql);
-
-                            if ($result->num_rows > 0) :
-                                while ($row = $result->fetch_assoc()) : ?>
+                    <!-- Data Table -->
+                    <div class="card">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table">
+                                <thead>
                                     <tr>
-                                        <td><?php echo $row['id_sistem']; ?></td>
-                                        <td><?php echo $row['reg_asal_p6']; ?></td>
-                                        <td><?php echo $row['kantor_asal_p6']; ?></td>
-                                        <td><?php echo $row['nopend_asal_p6']; ?></td>
-                                        <td><?php echo date('d-m-Y H:i', strtotime($row['tanggal_berita_acara'])); ?></td>
-                                        <td><?php echo $row['bulan']; ?></td>
-                                        <td><?php echo $row['week']; ?></td>
-                                        <td><?php echo $row['tahun']; ?></td>
-                                        <td><?php echo $row['reg_tujuan_p6']; ?></td>
-                                        <td><?php echo $row['kantor_tujuan_p6']; ?></td>
-                                        <td><?php echo $row['nopend_tujuan_p6']; ?></td>
-                                        <td><?php echo $row['deskripsi']; ?></td>
-                                        <td><?php echo $row['dnln']; ?></td>
-                                        <td><?php echo $row['nomor_kiriman']; ?></td>
-                                        <td>
-                                            <?php
-                                            $uraian = $row['uraian_berita_acara'];
-                                            if (strlen($uraian) > 100) {
-                                                $short_text = substr($uraian, 0, 100);
-                                                $full_text = substr($uraian, 100);
-                                            } else {
-                                                $short_text = $uraian;
-                                                $full_text = '';
-                                            }
-                                            ?>
-                                            <span class="short-text"><?php echo $short_text; ?></span>
-                                            <?php if ($full_text): ?>
-                                                <span class="full-text" style="display: none;"><?php echo $full_text; ?></span>
-                                                <span class="read-more-btn" style="color: blue; cursor: pointer;">Baca Selengkapnya</span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td><?php echo $row['deskripsi_iregularitas']; ?></td>
-                                        <td><?php echo $row['rincian_root_cause']; ?></td>
-                                        <td><?php echo $row['referensi_root_cause']; ?></td>
-                                        <td><?php echo $row['tindakan_pencegahan']; ?></td>
-                                        <td><?php echo $row['corrective_action']; ?></td>
-                                        <td><?php echo $row['locus']; ?></td>
-                                        <td><?php echo $row['nama_nik_pegawai']; ?></td>
-                                        <td><?php echo $row['nomor_evidence']; ?></td>
-                                        <td><?php echo $row['validasi_regional']; ?></td>
-                                        <td><?php echo $row['validasi_pusat']; ?></td>
-                                        <td class="aksi">
-                                            <a href="../crud_user_reg1/update.php?id_sistem=<?php echo $row['id_sistem']; ?>" class="btn btn-primary">Edit</a>
-                                            <!-- <a href="../crud_user_reg1/update.php" class="btn btn-danger delete-btn" data-id="<?php echo $row['id_sistem']; ?>">Delete</a> -->
-                                        </td>
+                                        <th>ID Sistem</th>
+                                        <th>Reg Asal P6</th>
+                                        <th>Kantor Asal P6</th>
+                                        <th>No Pend Asal P6</th>
+                                        <th>Tanggal Berita Acara</th>
+                                        <th>Bulan</th>
+                                        <th>Week</th>
+                                        <th>Tahun</th>
+                                        <th>Reg Tujuan P6</th>
+                                        <th>Kantor Tujuan P6</th>
+                                        <th>No Pend Tujuan P6</th>
+                                        <th>Deskripsi</th>
+                                        <th>DNLN</th>
+                                        <th>Nomor Kiriman</th>
+                                        <th>Uraian Berita Acara</th>
+                                        <th>Deskripsi Iregularitas</th>
+                                        <th>Rincian Root Cause</th>
+                                        <th>Referensi Root Cause</th>
+                                        <th>Tindakan Pencegahan</th>
+                                        <th>Corrective Action</th>
+                                        <th>Locus</th>
+                                        <th>Nama NIK Pegawai</th>
+                                        <th>No Evidence</th>
+                                        <th>Validasi Regional</th>
+                                        <th>Validasi Pusat</th>
+                                        <th class="aksi">Aksi</th>
                                     </tr>
-                                <?php endwhile; ?>
-                            <?php else : ?>
-                                <tr>
-                                    <td colspan="26" class="text-center">No data available</td>
-                                </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    // display_data.php
+                                    $host = "localhost"; // atau nama host lain
+                                    $user = "root"; // username MySQL
+                                    $password = ""; // password MySQL
+                                    $database = "iregularitas"; // ganti sesuai nama database yang kamu buat
 
-                <!-- Pagination -->
-                <div class="col-lg-8">
-                    <small class="text-muted">Menampilkan <?php echo $offset + 1; ?>-<?php echo min($offset + $limit, $total_records); ?> dari total <?php echo $total_records; ?> hasil</small>
-                </div>
-                <div class="col-lg-4">
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-end">
-                            <li class="page-item <?php if($page <= 1) echo 'disabled'; ?>">
-                                <a class="page-link" href="?page=<?php echo $page - 1; ?>" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                                <li class="page-item <?php if($i == $page) echo 'active'; ?>">
-                                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                                </li>
-                            <?php endfor; ?>
-                            <li class="page-item <?php if($page >= $total_pages) echo 'disabled'; ?>">
-                                <a class="page-link" href="?page=<?php echo $page + 1; ?>" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+                                    $koneksi = mysqli_connect($host, $user, $password, $database);
+
+                                    if ($koneksi->connect_error) {
+                                        die("Connection failed: " . $koneksi->connect_error);
+                                    }
+
+                                    // Pagination variables
+                                    $limit = 10; // number of records per page
+                                    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // get the current page number
+                                    $offset = ($page - 1) * $limit; // calculate the offset
+
+                                    // Get total records for pagination
+                                    $total_sql = "SELECT COUNT(*) AS total FROM regional1";
+                                    $total_result = $koneksi->query($total_sql);
+                                    $total_row = $total_result->fetch_assoc();
+                                    $total_records = $total_row['total'];
+                                    $total_pages = ceil($total_records / $limit); // calculate total pages
+
+                                    // Fetch data with limit and offset
+                                    $sql = "SELECT * FROM regional1 LIMIT $limit OFFSET $offset";
+                                    $result = $koneksi->query($sql);
+
+                                    if ($result->num_rows > 0) :
+                                        while ($row = $result->fetch_assoc()) : ?>
+                                            <tr>
+                                                <td><?php echo $row['id_sistem']; ?></td>
+                                                <td><?php echo $row['reg_asal_p6']; ?></td>
+                                                <td><?php echo $row['kantor_asal_p6']; ?></td>
+                                                <td><?php echo $row['nopend_asal_p6']; ?></td>
+                                                <td><?php echo date('d-m-Y H:i', strtotime($row['tanggal_berita_acara'])); ?></td>
+                                                <td><?php echo $row['bulan']; ?></td>
+                                                <td><?php echo $row['week']; ?></td>
+                                                <td><?php echo $row['tahun']; ?></td>
+                                                <td><?php echo $row['reg_tujuan_p6']; ?></td>
+                                                <td><?php echo $row['kantor_tujuan_p6']; ?></td>
+                                                <td><?php echo $row['nopend_tujuan_p6']; ?></td>
+                                                <td><?php echo $row['deskripsi']; ?></td>
+                                                <td><?php echo $row['dnln']; ?></td>
+                                                <td><?php echo $row['nomor_kiriman']; ?></td>
+                                                <td>
+                                                    <?php
+                                                    $uraian = $row['uraian_berita_acara'];
+                                                    if (strlen($uraian) > 100) {
+                                                        $short_text = substr($uraian, 0, 100);
+                                                        $full_text = substr($uraian, 100);
+                                                    } else {
+                                                        $short_text = $uraian;
+                                                        $full_text = '';
+                                                    }
+                                                    ?>
+                                                    <span class="short-text"><?php echo $short_text; ?></span>
+                                                    <?php if ($full_text): ?>
+                                                        <span class="full-text" style="display: none;"><?php echo $full_text; ?></span>
+                                                        <span class="read-more-btn" style="color: blue; cursor: pointer;">Baca Selengkapnya</span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td><?php echo $row['deskripsi_iregularitas']; ?></td>
+                                                <td><?php echo $row['rincian_root_cause']; ?></td>
+                                                <td><?php echo $row['referensi_root_cause']; ?></td>
+                                                <td><?php echo $row['tindakan_pencegahan']; ?></td>
+                                                <td><?php echo $row['corrective_action']; ?></td>
+                                                <td><?php echo $row['locus']; ?></td>
+                                                <td><?php echo $row['nama_nik_pegawai']; ?></td>
+                                                <td><?php echo $row['nomor_evidence']; ?></td>
+                                                <td><?php echo $row['validasi_regional']; ?></td>
+                                                <td><?php echo $row['validasi_pusat']; ?></td>
+                                                <td class="aksi">
+                                                    <a href="../crud_user_reg1/update.php?id_sistem=<?php echo $row['id_sistem']; ?>" class="btn btn-primary">Edit</a>
+                                                    <!-- <a href="../crud_user_reg1/update.php" class="btn btn-danger delete-btn" data-id="<?php echo $row['id_sistem']; ?>">Delete</a> -->
+                                                </td>
+                                            </tr>
+                                        <?php endwhile; ?>
+                                    <?php else : ?>
+                                        <tr>
+                                            <td colspan="26" class="text-center">No data available</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="col-lg-8">
+                            <small class="text-muted">Menampilkan <?php echo $offset + 1; ?>-<?php echo min($offset + $limit, $total_records); ?> dari total <?php echo $total_records; ?> hasil</small>
+                        </div>
+                        <div class="col-lg-4">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-end">
+                                    <li class="page-item <?php if($page <= 1) echo 'disabled'; ?>">
+                                        <a class="page-link" href="?page=<?php echo $page - 1; ?>" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                        <li class="page-item <?php if($i == $page) echo 'active'; ?>">
+                                            <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                        </li>
+                                    <?php endfor; ?>
+                                    <li class="page-item <?php if($page >= $total_pages) echo 'disabled'; ?>">
+                                        <a class="page-link" href="?page=<?php echo $page + 1; ?>" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
             </div>
         </div>
+          <!-- / Content -->
+
+          <!-- Footer -->
+          <footer class="content-footer footer bg-footer-theme">
+            <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+              <div class="mb-2 mb-md-0">
+                ©
+                <script>
+                  document.write(new Date().getFullYear());
+                </script>
+                , made with ❤️ by ARYKA JUWITA RIZKYRIA HISYAM
+              </div>
+              <!-- <div>
+                <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
+                <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More Themes</a>
+
+                <a
+                  href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"
+                  target="_blank"
+                  class="footer-link me-4">Documentation</a>
+
+                <a
+                  href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
+                  target="_blank"
+                  class="footer-link me-4">Support</a>
+              </div> -->
+            </div>
+          </footer>
+          <!-- / Footer -->
+
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
     </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <!-- / Layout wrapper -->
 
     <script src="../assets/vendor/libs/jquery/jquery.js"></script>
     <script src="../assets/vendor/libs/popper/popper.js"></script>
