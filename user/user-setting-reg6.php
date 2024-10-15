@@ -68,7 +68,7 @@
             </div>
 
             <!-- Button to Monitoring Page -->
-            <a href="../html/monitoring_regional6.php" class="btn btn-success mb-3">Go to Monitoring</a>
+            <a href="../user/monitoring_regional6.php" class="btn btn-success mb-3">Go to Monitoring</a>
 
             <!-- Data Table -->
             <div class="card">
