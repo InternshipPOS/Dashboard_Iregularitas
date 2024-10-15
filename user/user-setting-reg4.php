@@ -168,6 +168,7 @@ if (!isset($_SESSION['nama'])) {
             </div>
             <!-- /Search -->
 
+<<<<<<< HEAD
             <ul class="navbar-nav flex-row align-items-center ms-auto">
               <!-- Place this tag where you want the button to render. -->
               <li class="nav-item lh-1 me-3">
@@ -179,6 +180,10 @@ if (!isset($_SESSION['nama'])) {
                   data-show-count="true"
                   aria-label="Star themeselection/sneat-html-admin-template-free on GitHub">Star</a>
               </li>
+=======
+            <!-- Button to Monitoring Page -->
+            <a href="../user/monitoring_regional4.php" class="btn btn-success mb-3">Go to Monitoring</a>
+>>>>>>> b2c7da0339a6e5c6b45d7f190b6bcb3ac557bca8
 
               <!-- User -->
               <li class="nav-item navbar-dropdown dropdown-user dropdown">

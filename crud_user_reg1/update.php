@@ -57,9 +57,9 @@
                         $uraian_berita_acara = $_POST['uraian_berita_acara'];
                         $deskripsi_iregularitas = $_POST['deskripsi_iregularitas'];
                         $rincian_root_cause = $_POST['rincian_root_cause'];
-                        $referensi_root_cause = $_POST['referensi_root_cause'];
+                        $referensi_root_cause = isset($_POST['referensi_root_cause']) ? $_POST['referensi_root_cause'] : null;
                         $tindakan_pencegahan = $_POST['tindakan_pencegahan'];
-                        $corrective_action = $_POST['corrective_action'];
+                        $corrective_action = isset($_POST['corrective_action']) ? $_POST['corrective_action'] : null;
                         $locus = $_POST['locus'];
                         $nama_nik_pegawai = $_POST['nama_nik_pegawai'];
                         $nomor_evidence = $_POST['nomor_evidence'];
@@ -228,13 +228,13 @@
                         <!-- Rincian Root Cause -->
                         <div class="mb-3">
                             <label for="rincian_root_cause" class="form-label">Rincian Root Cause</label>
-                            <textarea class="form-control" id="rincian_root_cause" name="rincian_root_cause" required><?php echo $row['rincian_root_cause']; ?></textarea>
+                            <textarea class="form-control" id="rincian_root_cause" name="rincian_root_cause" ><?php echo $row['rincian_root_cause']; ?></textarea>
                         </div>
 
                         <!-- Referensi Root Cause -->
                         <div class="mb-3">
                             <label for="referensi_root_cause" class="form-label">Referensi Root Cause</label>
-                            <select class="form-select" id="referensi_root_cause" name="referensi_root_cause" required>
+                            <select class="form-select" id="referensi_root_cause" name="referensi_root_cause" >
                                 <option value="" disabled selected>Pilih referensi root cause</option>
                                 <option value="gagal x-ray kiriman import" <?php echo ($row['referensi_root_cause'] == 'gagal x-ray kiriman import') ? 'selected' : ''; ?>>Gagal X-Ray Kiriman Import</option>
                                 <option value="incoming ln" <?php echo ($row['referensi_root_cause'] == 'incoming ln') ? 'selected' : ''; ?>>Incoming LN</option>
@@ -256,13 +256,13 @@
                         <!-- Tindakan Pencegahan -->
                         <div class="mb-3">
                             <label for="tindakan_pencegahan" class="form-label">Tindakan Pencegahan</label>
-                            <input type="text" class="form-control" id="tindakan_pencegahan" name="tindakan_pencegahan" value="<?php echo $row['tindakan_pencegahan']; ?>" required>
+                            <input type="text" class="form-control" id="tindakan_pencegahan" name="tindakan_pencegahan" value="<?php echo $row['tindakan_pencegahan']; ?>" >
                         </div>
 
                         <!-- Corrective Action -->
                         <div class="mb-3">
                             <label for="corrective_action" class="form-label">corrective Action</label>
-                            <select class="form-select" id="corrective_action" name="corrective_action" required>
+                            <select class="form-select" id="corrective_action" name="corrective_action" >
                                 <option value="" disabled selected>Pilih corrective action</option>
                                 <option value="surat pemanggilan pegawai organik" <?php echo ($row['corrective_action'] == 'surat pemanggilan pegawai organik') ? 'selected' : ''; ?>>Surat Pemanggilan Pegawai Organik</option>
                                 <option value="sp2 + denda (kemitraan/agenpos)" <?php echo ($row['corrective_action'] == 'sp2 + Denda (kemitraan/agenpos)') ? 'selected' : ''; ?>>SP2 + Denda (Kemitraan/Agenpos)</option>
@@ -275,25 +275,25 @@
                         <!-- Locus -->
                         <div class="mb-3">
                             <label for="locus" class="form-label">Locus</label>
-                            <input type="text" class="form-control" id="locus" name="locus" value="<?php echo $row['locus']; ?>" required>
+                            <input type="text" class="form-control" id="locus" name="locus" value="<?php echo $row['locus']; ?>" >
                         </div>
 
                         <!-- Nama NIK Pegawai -->
                         <div class="mb-3">
                             <label for="nama_nik_pegawai" class="form-label">Nama/NIK Pegawai</label>
-                            <input type="text" class="form-control" id="nama_nik_pegawai" name="nama_nik_pegawai" value="<?php echo $row['nama_nik_pegawai']; ?>" required>
+                            <input type="text" class="form-control" id="nama_nik_pegawai" name="nama_nik_pegawai" value="<?php echo $row['nama_nik_pegawai']; ?>" >
                         </div>
 
                         <!-- Nomor Evidence -->
                         <div class="mb-3">
                             <label for="nomor_evidence" class="form-label">No Evidence</label>
-                            <input type="text" class="form-control" id="nomor_evidence" name="nomor_evidence" value="<?php echo $row['nomor_evidence']; ?>" required>
+                            <input type="text" class="form-control" id="nomor_evidence" name="nomor_evidence" value="<?php echo $row['nomor_evidence']; ?>" >
                         </div>
 
                         <!-- Validasi Regional -->
                         <div class="mb-3">
                             <label for="validasi_regional" class="form-label">Validasi Regional</label>
-                            <input type="text" class="form-control" id="validasi_regional" name="validasi_regional" value="<?php echo $row['validasi_regional']; ?>" required>
+                            <input type="text" class="form-control" id="validasi_regional" name="validasi_regional" value="<?php echo $row['validasi_regional']; ?>" >
                         </div>
 
                         <!-- Validasi Pusat -->

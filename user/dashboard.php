@@ -59,6 +59,8 @@ if (!isset($_SESSION['nama'])) {
   <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
   <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
   <script src="../assets/js/config.js"></script>
+  <!-- SweetAlert2 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 
 <body>
@@ -228,10 +230,17 @@ if (!isset($_SESSION['nama'])) {
                     <div class="dropdown-divider"></div>
                   </li>
                   <li>
+<<<<<<< HEAD:user/dashboard.php
                     <a class="dropdown-item" href="auth-login-basic.php">
                       <i class="bx bx-power-off me-2"></i>
                       <span class="align-middle">Log Out</span>
                     </a>
+=======
+                      <a class="dropdown-item" href="#" onclick="confirmLogout()">
+                          <i class="bx bx-power-off me-2"></i>
+                          <span class="align-middle">Log Out</span>
+                      </a>
+>>>>>>> b2c7da0339a6e5c6b45d7f190b6bcb3ac557bca8:html/dashboard.php
                   </li>
                 </ul>
               </li>
@@ -833,6 +842,28 @@ if (!isset($_SESSION['nama'])) {
 
   <!-- Place this tag in your head or just before your close body tag. -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+   <!-- SweetAlert2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+      function confirmLogout() {
+          Swal.fire({
+              title: 'Apakah Anda yakin ingin keluar?',
+              text: "Anda akan keluar dari sesi saat ini!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Ya, Keluar!',
+              cancelButtonText: 'Batal'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  // Redirect ke halaman logout jika pengguna menekan "Ya, Keluar!"
+                  window.location.href = 'auth-login-basic.php';
+              }
+          })
+      }
+  </script>
 </body>
 
 </html>
