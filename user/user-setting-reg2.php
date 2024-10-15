@@ -67,8 +67,8 @@
                 <a href="../html/dashboard.php" class="btn btn-primary">Back</a>
             </div>
 
-            <!-- Button to Monitoring Page
-            <a href="monitoring_regional2.php" class="btn btn-success mb-3">Go to Monitoring</a> -->
+            <!-- Button to Monitoring Page -->
+            <a href="monitoring_regional2.php" class="btn btn-success mb-3">Go to Monitoring</a>
 
             <!-- Data Table -->
             <div class="card">
