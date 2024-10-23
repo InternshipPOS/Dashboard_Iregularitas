@@ -106,30 +106,30 @@
                             $total_records = $total_row['total'];
                             $total_pages = ceil($total_records / $limit); 
 
-                            // Get total records for view_newtab
-                            $total_sql_view_newtab = "SELECT COUNT(*) AS total FROM view_newtab";
-                            $total_result_view_newtab = $koneksi->query($total_sql_view_newtab);
-                            $total_row_view_newtab = $total_result_view_newtab->fetch_assoc();
-                            $total_records_view_newtab = $total_row_view_newtab['total'];
+                            // Get total records for newtab
+                            $total_sql_newtab = "SELECT COUNT(*) AS total FROM newtab";
+                            $total_result_newtab = $koneksi->query($total_sql_newtab);
+                            $total_row_newtab = $total_result_newtab->fetch_assoc();
+                            $total_records_newtab = $total_row_newtab['total'];
 
                             // Total records for pagination
-                            $total_records = $total_records + $total_records_view_newtab; // Adjusted line
+                            $total_records = $total_records + $total_records_newtab; // Adjusted line
                             $total_pages = ceil($total_records / $limit); 
 
                             // Initialize query for report_agung
                             $sql = "SELECT ID_Sistem, ZonaAsal, Nama_Kantor_Asal, Kantor_Asal, Tanggal_Berita_Acara, ZonaTujuan, Nama_Kantor_Tujuan, Kantor_Tujuan, Deskripsi, DNLN, Nomor_Kiriman, Uraian_Berita_Acara, Deskripsi_Iregularitas, Bulan_BA, Week, month_name FROM report_agung LIMIT $limit OFFSET $offset";
                             $result = $koneksi->query($sql);
 
-                            // Initialize query for view_newtab
-                            $sql_view_newtab = "SELECT Rincian_Root_Cause, Referensi_Root_Cause, Tindakan_Pencegahan, Corrective_Action, Locus, Nama_NIK_Pegawai, No_Evidence, Validasi_Regional, Validasi_Pusat FROM view_newtab LIMIT $limit OFFSET $offset";
-                            $result_view_newtab = $koneksi->query($sql_view_newtab);
+                            // Initialize query for newtab
+                            $sql_newtab = "SELECT Rincian_Root_Cause, Referensi_Root_Cause, Tindakan_Pencegahan, Corrective_Action, Locus, Nama_NIK_Pegawai, No_Evidence, Validasi_Regional, Validasi_Pusat FROM newtab LIMIT $limit OFFSET $offset";
+                            $result_newtab = $koneksi->query($sql_newtab);
 
                             // Check if both queries return data
-                            if ($result->num_rows > 0 || $result_view_newtab->num_rows > 0) :
+                            if ($result->num_rows > 0 || $result_newtab->num_rows > 0) :
                                 // Loop for report_agung data
                                 while ($row = $result->fetch_assoc()) :
-                                    // Fetch view_newtab data for the corresponding row
-                                    $row_view_newtab = $result_view_newtab->fetch_assoc();
+                                    // Fetch newtab data for the corresponding row
+                                    $row_newtab = $result_newtab->fetch_assoc();
                             ?>
                                 <tr>
                                     <td><?php echo $row['ID_Sistem']; ?></td>
@@ -147,15 +147,15 @@
                                     <td><?php echo $row['Deskripsi_Iregularitas']; ?></td>
                                     <td><?php echo $row['Bulan_BA']; ?></td>
                                     <td><?php echo $row['Week']; ?></td>
-                                    <td><?php echo isset($row_view_newtab['Rincian_Root_Cause']) ? $row_view_newtab['Rincian_Root_Cause'] : ''; ?></td>
-                                    <td><?php echo isset($row_view_newtab['Referensi_Root_Cause']) ? $row_view_newtab['Referensi_Root_Cause'] : ''; ?></td>
-                                    <td><?php echo isset($row_view_newtab['Tindakan_Pencegahan']) ? $row_view_newtab['Tindakan_Pencegahan'] : ''; ?></td>
-                                    <td><?php echo isset($row_view_newtab['Corrective_Action']) ? $row_view_newtab['Corrective_Action'] : ''; ?></td>
-                                    <td><?php echo isset($row_view_newtab['Locus']) ? $row_view_newtab['Locus'] : ''; ?></td>
-                                    <td><?php echo isset($row_view_newtab['Nama_NIK_Pegawai']) ? $row_view_newtab['Nama_NIK_Pegawai'] : ''; ?></td>
-                                    <td><?php echo isset($row_view_newtab['No_Evidence']) ? $row_view_newtab['No_Evidence'] : ''; ?></td>
-                                    <td><?php echo isset($row_view_newtab['Validasi_Regional']) ? $row_view_newtab['Validasi_Regional'] : ''; ?></td>
-                                    <td><?php echo isset($row_view_newtab['Validasi_Pusat']) ? $row_view_newtab['Validasi_Pusat'] : ''; ?></td>
+                                    <td><?php echo isset($row_newtab['Rincian_Root_Cause']) ? $row_newtab['Rincian_Root_Cause'] : ''; ?></td>
+                                    <td><?php echo isset($row_newtab['Referensi_Root_Cause']) ? $row_newtab['Referensi_Root_Cause'] : ''; ?></td>
+                                    <td><?php echo isset($row_newtab['Tindakan_Pencegahan']) ? $row_newtab['Tindakan_Pencegahan'] : ''; ?></td>
+                                    <td><?php echo isset($row_newtab['Corrective_Action']) ? $row_newtab['Corrective_Action'] : ''; ?></td>
+                                    <td><?php echo isset($row_newtab['Locus']) ? $row_newtab['Locus'] : ''; ?></td>
+                                    <td><?php echo isset($row_newtab['Nama_NIK_Pegawai']) ? $row_newtab['Nama_NIK_Pegawai'] : ''; ?></td>
+                                    <td><?php echo isset($row_newtab['No_Evidence']) ? $row_newtab['No_Evidence'] : ''; ?></td>
+                                    <td><?php echo isset($row_newtab['Validasi_Regional']) ? $row_newtab['Validasi_Regional'] : ''; ?></td>
+                                    <td><?php echo isset($row_newtab['Validasi_Pusat']) ? $row_newtab['Validasi_Pusat'] : ''; ?></td>
                                     <td class="aksi">
                                         <a href="../crud_user_reg11/update.php?id_sistem=<?php echo $row['ID_Sistem']; ?>" class="btn btn-primary">Edit</a>
                                         <a href="../crud_regional/delete.php" class="btn btn-danger delete-btn" data-id="<?php echo $row['ID_Sistem']; ?>">Delete</a>
