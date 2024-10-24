@@ -32,6 +32,7 @@
                 <div class="card-body">
                     <?php
                     // Koneksi ke database
+
                     $host = "localhost";
                     $user = "root"; // ganti dengan username MySQL Anda
                     $password = ""; // ganti dengan password MySQL Anda
@@ -50,6 +51,7 @@
                     // Cek jika form telah disubmit
                     if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         // Mendapatkan data dari form
+                        $ID_Sistem = $_POST['ID_Sistem'] ?? '';
                         $ZonaAsal = $_POST['ZonaAsal'] ?? '';
                         $Nama_Kantor_Asal = $_POST['Nama_Kantor_Asal'] ?? '';
                         $Kantor_Asal = $_POST['Kantor_Asal'] ?? '';
@@ -77,7 +79,7 @@
                                     Uraian_Berita_Acara = '$Uraian_Berita_Acara'
                                     WHERE id_sistem='$id_sistem'";
 
-                        $sql2 = "UPDATE newtab SET
+                        $sql2 = "UPDATE newreport SET
                                     Rincian_Root_Cause = '$rincian_root_cause',
                                     Referensi_Root_Cause = '$referensi_root_cause',
                                     Tindakan_Pencegahan = '$tindakan_pencegahan',
@@ -129,6 +131,14 @@
                         <form action="" method="POST">
                             <input type="hidden" name="ID_Sistem" value="<?php echo $row1['ID_Sistem']; ?>">
 
+                            <!-- ID_Sistem -->
+                            <div class="mb-3">
+                                <label for="ID_Sistem" class="form-label">ID Sistem</label>
+                                <input type="text" class="form-control" id="ID_Sistem" name="ID_Sistem_display" value="<?php echo $row1['ID_Sistem']; ?>" disabled>
+                                <input type="hidden" name="ID_Sistem" value="<?php echo $row1['ID_Sistem']; ?>">
+                            </div>
+
+
                             <!-- Zona Asal -->
                             <div class="mb-3">
                                 <label for="ZonaAsal" class="form-label">Reg Asal P6</label>
@@ -150,8 +160,9 @@
                             <!-- Tanggal Berita Acara -->
                             <div class="mb-3">
                                 <label for="Tanggal_Berita_Acara" class="form-label">Tanggal Berita Acara</label>
-                                <input type="date" class="form-control" id="Tanggal_Berita_Acara" name="Tanggal_Berita_Acara" value="<?php echo $row1['Tanggal_Berita_Acara']; ?>">
+                                <input type="date" class="form-control" id="Tanggal_Berita_Acara" name="Tanggal_Berita_Acara" value="<?php echo date('Y-m-d', strtotime($row1['Tanggal_Berita_Acara'])); ?>" required>
                             </div>
+
 
                             <!-- Kantor Tujuan -->
                             <div class="mb-3">
@@ -182,7 +193,7 @@
                     }
 
                     // Query untuk rincian_root_cause dan referensi_root_cause
-                    $sql2 = "SELECT Rincian_Root_Cause, Referensi_Root_Cause, Tindakan_Pencegahan, Corrective_Action, Locus, Nama_NIK_Pegawai, No_Evidence, Validasi_Regional, Validasi_Pusat FROM newtab WHERE id_sistem='$id_sistem'";
+                    $sql2 = "SELECT Rincian_Root_Cause, Referensi_Root_Cause, Tindakan_Pencegahan, Corrective_Action, Locus, Nama_NIK_Pegawai, No_Evidence, Validasi_Regional, Validasi_Pusat FROM newreport WHERE id_sistem='$id_sistem'";
                     $result2 = $koneksi->query($sql2);
 
                     if ($result2 && $result2->num_rows > 0) {
@@ -274,6 +285,7 @@
 
 
                             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                            <a href="../html/pages-regional settings-reg11.php" class="btn btn-secondary">Cancel</a>
                         </form>
                     <?php
                     } else {

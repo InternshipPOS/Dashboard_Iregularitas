@@ -54,6 +54,7 @@
                     <table class="table">
                         <thead>
                             <tr>
+                                <th class="aksi">Aksi</th>
                                 <th>ID Sistem</th>
                                 <th>Reg Asal P6</th>
                                 <th>Kantor Asal P6</th>
@@ -78,7 +79,6 @@
                                 <th>No Evidence</th> <!-- New column -->
                                 <th>Validasi Regional</th> <!-- New column -->
                                 <th>Validasi Pusat</th> <!-- New column -->
-                                <th class="aksi">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -106,32 +106,36 @@
                             $total_records = $total_row['total'];
                             $total_pages = ceil($total_records / $limit); 
 
-                            // Get total records for newtab
-                            $total_sql_newtab = "SELECT COUNT(*) AS total FROM newtab";
-                            $total_result_newtab = $koneksi->query($total_sql_newtab);
-                            $total_row_newtab = $total_result_newtab->fetch_assoc();
-                            $total_records_newtab = $total_row_newtab['total'];
+                            // Get total records for newreport
+                            $total_sql_newreport = "SELECT COUNT(*) AS total FROM newreport";
+                            $total_result_newreport = $koneksi->query($total_sql_newreport);
+                            $total_row_newreport = $total_result_newreport->fetch_assoc();
+                            $total_records_newreport = $total_row_newreport['total'];
 
                             // Total records for pagination
-                            $total_records = $total_records + $total_records_newtab; // Adjusted line
+                            $total_records = $total_records + $total_records_newreport; // Adjusted line
                             $total_pages = ceil($total_records / $limit); 
 
                             // Initialize query for report_agung
                             $sql = "SELECT ID_Sistem, ZonaAsal, Nama_Kantor_Asal, Kantor_Asal, Tanggal_Berita_Acara, ZonaTujuan, Nama_Kantor_Tujuan, Kantor_Tujuan, Deskripsi, DNLN, Nomor_Kiriman, Uraian_Berita_Acara, Deskripsi_Iregularitas, Bulan_BA, Week, month_name FROM report_agung LIMIT $limit OFFSET $offset";
                             $result = $koneksi->query($sql);
 
-                            // Initialize query for newtab
-                            $sql_newtab = "SELECT Rincian_Root_Cause, Referensi_Root_Cause, Tindakan_Pencegahan, Corrective_Action, Locus, Nama_NIK_Pegawai, No_Evidence, Validasi_Regional, Validasi_Pusat FROM newtab LIMIT $limit OFFSET $offset";
-                            $result_newtab = $koneksi->query($sql_newtab);
+                            // Initialize query for newreport
+                            $sql_newreport = "SELECT Rincian_Root_Cause, Referensi_Root_Cause, Tindakan_Pencegahan, Corrective_Action, Locus, Nama_NIK_Pegawai, No_Evidence, Validasi_Regional, Validasi_Pusat FROM newreport LIMIT $limit OFFSET $offset";
+                            $result_newreport = $koneksi->query($sql_newreport);
 
                             // Check if both queries return data
-                            if ($result->num_rows > 0 || $result_newtab->num_rows > 0) :
+                            if ($result->num_rows > 0 || $result_newreport->num_rows > 0) :
                                 // Loop for report_agung data
                                 while ($row = $result->fetch_assoc()) :
-                                    // Fetch newtab data for the corresponding row
-                                    $row_newtab = $result_newtab->fetch_assoc();
+                                    // Fetch newreport data for the corresponding row
+                                    $row_newreport = $result_newreport->fetch_assoc();
                             ?>
                                 <tr>
+                                    <td class="aksi">
+                                        <a href="../crud_user_reg11/update.php?id_sistem=<?php echo $row['ID_Sistem']; ?>" class="btn btn-primary">Edit</a>
+                                        <a href="../crud_regional/delete.php" class="btn btn-danger delete-btn" data-id="<?php echo $row['ID_Sistem']; ?>">Delete</a>
+                                    </td>
                                     <td><?php echo $row['ID_Sistem']; ?></td>
                                     <td><?php echo $row['ZonaAsal']; ?></td>
                                     <td><?php echo $row['Nama_Kantor_Asal']; ?></td>
@@ -147,19 +151,15 @@
                                     <td><?php echo $row['Deskripsi_Iregularitas']; ?></td>
                                     <td><?php echo $row['Bulan_BA']; ?></td>
                                     <td><?php echo $row['Week']; ?></td>
-                                    <td><?php echo isset($row_newtab['Rincian_Root_Cause']) ? $row_newtab['Rincian_Root_Cause'] : ''; ?></td>
-                                    <td><?php echo isset($row_newtab['Referensi_Root_Cause']) ? $row_newtab['Referensi_Root_Cause'] : ''; ?></td>
-                                    <td><?php echo isset($row_newtab['Tindakan_Pencegahan']) ? $row_newtab['Tindakan_Pencegahan'] : ''; ?></td>
-                                    <td><?php echo isset($row_newtab['Corrective_Action']) ? $row_newtab['Corrective_Action'] : ''; ?></td>
-                                    <td><?php echo isset($row_newtab['Locus']) ? $row_newtab['Locus'] : ''; ?></td>
-                                    <td><?php echo isset($row_newtab['Nama_NIK_Pegawai']) ? $row_newtab['Nama_NIK_Pegawai'] : ''; ?></td>
-                                    <td><?php echo isset($row_newtab['No_Evidence']) ? $row_newtab['No_Evidence'] : ''; ?></td>
-                                    <td><?php echo isset($row_newtab['Validasi_Regional']) ? $row_newtab['Validasi_Regional'] : ''; ?></td>
-                                    <td><?php echo isset($row_newtab['Validasi_Pusat']) ? $row_newtab['Validasi_Pusat'] : ''; ?></td>
-                                    <td class="aksi">
-                                        <a href="../crud_user_reg11/update.php?id_sistem=<?php echo $row['ID_Sistem']; ?>" class="btn btn-primary">Edit</a>
-                                        <a href="../crud_regional/delete.php" class="btn btn-danger delete-btn" data-id="<?php echo $row['ID_Sistem']; ?>">Delete</a>
-                                    </td>
+                                    <td><?php echo isset($row_newreport['Rincian_Root_Cause']) ? $row_newreport['Rincian_Root_Cause'] : ''; ?></td>
+                                    <td><?php echo isset($row_newreport['Referensi_Root_Cause']) ? $row_newreport['Referensi_Root_Cause'] : ''; ?></td>
+                                    <td><?php echo isset($row_newreport['Tindakan_Pencegahan']) ? $row_newreport['Tindakan_Pencegahan'] : ''; ?></td>
+                                    <td><?php echo isset($row_newreport['Corrective_Action']) ? $row_newreport['Corrective_Action'] : ''; ?></td>
+                                    <td><?php echo isset($row_newreport['Locus']) ? $row_newreport['Locus'] : ''; ?></td>
+                                    <td><?php echo isset($row_newreport['Nama_NIK_Pegawai']) ? $row_newreport['Nama_NIK_Pegawai'] : ''; ?></td>
+                                    <td><?php echo isset($row_newreport['No_Evidence']) ? $row_newreport['No_Evidence'] : ''; ?></td>
+                                    <td><?php echo isset($row_newreport['Validasi_Regional']) ? $row_newreport['Validasi_Regional'] : ''; ?></td>
+                                    <td><?php echo isset($row_newreport['Validasi_Pusat']) ? $row_newreport['Validasi_Pusat'] : ''; ?></td>
                                 </tr>
                             <?php
                                 endwhile;
