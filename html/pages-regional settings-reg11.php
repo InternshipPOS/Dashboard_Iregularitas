@@ -55,19 +55,19 @@
                         <thead>
                             <tr>
                                 <th>ID Sistem</th>
-                                <th>Zona Asal</th>
-                                <th>Nama Kantor Asal</th>
-                                <th>Kantor Asal</th>
+                                <th>Reg Asal P6</th>
+                                <th>Kantor Asal P6</th>
+                                <th>Nopend Asal P6</th>
                                 <th>Tanggal Berita Acara</th>
-                                <th>Zona Tujuan</th>
-                                <th>Nama Kantor Tujuan</th>
-                                <th>Kantor Tujuan</th>
+                                <th>Reg Tujuan P6</th>
+                                <th>Kantor Tujuan P6</th>
+                                <th>Nopend Tujuan P6</th>
                                 <th>Deskripsi</th>
                                 <th>DN/LN</th>
                                 <th>Nomor Kiriman</th>
                                 <th>Uraian Berita Acara</th>
                                 <th>Deskripsi Iregularitas</th>
-                                <th>Bulan Berita Acara</th>
+                                <th>Bulan</th>
                                 <th>Week</th>
                                 <th>Rincian Root Cause</th> <!-- New column -->
                                 <th>Referensi Root Cause</th> <!-- New column -->

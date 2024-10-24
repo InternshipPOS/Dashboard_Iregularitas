@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template-free">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
@@ -75,133 +76,103 @@
                                     Nomor_Kiriman = '$Nomor_Kiriman',
                                     Uraian_Berita_Acara = '$Uraian_Berita_Acara'
                                     WHERE id_sistem='$id_sistem'";
-                                
-                                if ($koneksi->query($sql1) === TRUE) {
-                                    // Query untuk insert data ke newtab
-                                    $sql2 = "INSERT INTO newtab (Rincian_Root_Cause, Referensi_Root_Cause, Tindakan_Pencegahan, Corrective_Action, Locus, Nama_NIK_Pegawai, No_Evidence, Validasi_Regional, Validasi_Pusat) 
-                                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                                
-                                    // Mempersiapkan statement
-                                    if ($stmt = $koneksi->prepare($sql2)) {
-                                        // Mengikat parameter ke statement
-                                        $stmt->bind_param("sssssssss", $rincian_root_cause, $referensi_root_cause, $tindakan_pencegahan, $corrective_action, $locus, $nama_nik_pegawai, $no_evidence, $validasi_regional, $validasi_pusat); 
-                                
-                                        // Menjalankan statement
-                                        if ($stmt->execute()) {
-                                            echo "<script>
-                                                Swal.fire({
-                                                    icon: 'success',
-                                                    title: 'Data berhasil diperbarui!',
-                                                    showConfirmButton: true
-                                                }).then(function() {
-                                                    window.location.href = '../user/user-setting-reg11.php';
-                                                });
-                                            </script>";
-                                        } else {
-                                            // Log error eksekusi
-                                            error_log("Error executing query: " . $stmt->error);
-                                            echo "<script>
-                                                Swal.fire({
-                                                    icon: 'error',
-                                                    title: 'Gagal memperbarui data pada newtab!',
-                                                    text: 'Terjadi kesalahan: " . $stmt->error . "',
-                                                });
-                                            </script>";
-                                        }
-                                        // Menutup statement
-                                        $stmt->close();
-                                    } else {
-                                        // Log error persiapan statement
-                                        error_log("Error preparing statement: " . $koneksi->error);
-                                        echo "<script>
-                                            Swal.fire({
-                                                icon: 'error',
-                                                title: 'Error dalam persiapan statement!',
-                                                text: 'Terjadi kesalahan: " . $koneksi->error . "',
-                                            });
-                                        </script>";
-                                    }
-                                } else {
-                                    // Log error update
-                                    error_log("Error updating report_agung: " . $koneksi->error);
-                                    echo "<script>
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: 'Gagal memperbarui data pada report_agung!',
-                                            text: 'Terjadi kesalahan: " . $koneksi->error . "',
-                                        });
-                                    </script>";
-                                }
+
+                        $sql2 = "UPDATE newtab SET
+                                    Rincian_Root_Cause = '$rincian_root_cause',
+                                    Referensi_Root_Cause = '$referensi_root_cause',
+                                    Tindakan_Pencegahan = '$tindakan_pencegahan',
+                                    Corrective_Action = '$corrective_action',
+                                    Locus = '$locus',
+                                    Nama_NIK_Pegawai = '$nama_nik_pegawai',
+                                    No_Evidence = '$no_evidence',
+                                    Validasi_Regional = '$validasi_regional',
+                                    Validasi_Pusat = '$validasi_pusat'
+                                    WHERE id_sistem='$id_sistem'";
+                                              
+                        // Eksekusi query
+                        $koneksi->query($sql1);
+                        $koneksi->query($sql2);
                     }
 
                     // Query untuk mendapatkan data yang ingin diedit
                     $sql1 = "SELECT * FROM report_agung WHERE id_sistem='$id_sistem'";
-                    $result1 = $koneksi->query($sql1); // Menggunakan $result1 untuk query pertama
+                    $result1 = $koneksi->query($sql1);
 
                     if ($result1 && $result1->num_rows > 0) {
-                        $row = $result1->fetch_assoc();
+                        $row1 = $result1->fetch_assoc();
                     ?>
+
                         <form action="" method="POST">
-                            <input type="hidden" name="ID_Sistem" value="<?php echo $row['ID_Sistem']; ?>">
+                            <input type="hidden" name="ID_Sistem" value="<?php echo $row1['ID_Sistem']; ?>">
 
                             <!-- Zona Asal -->
                             <div class="mb-3">
                                 <label for="ZonaAsal" class="form-label">Zona Asal</label>
-                                <input type="text" class="form-control" id="ZonaAsal" name="ZonaAsal" value="<?php echo $row['ZonaAsal']; ?>">
+                                <input type="text" class="form-control" id="ZonaAsal" name="ZonaAsal" value="<?php echo $row1['ZonaAsal']; ?>">
                             </div>
 
                             <!-- Nama Kantor Asal -->
                             <div class="mb-3">
                                 <label for="Nama_Kantor_Asal" class="form-label">Nama Kantor Asal</label>
-                                <input type="text" class="form-control" id="Nama_Kantor_Asal" name="Nama_Kantor_Asal" value="<?php echo $row['Nama_Kantor_Asal']; ?>">
+                                <input type="text" class="form-control" id="Nama_Kantor_Asal" name="Nama_Kantor_Asal" value="<?php echo $row1['Nama_Kantor_Asal']; ?>">
                             </div>
 
                             <!-- Kantor Asal -->
                             <div class="mb-3">
                                 <label for="Kantor_Asal" class="form-label">Kantor Asal</label>
-                                <input type="text" class="form-control" id="Kantor_Asal" name="Kantor_Asal" value="<?php echo $row['Kantor_Asal']; ?>">
+                                <input type="text" class="form-control" id="Kantor_Asal" name="Kantor_Asal" value="<?php echo $row1['Kantor_Asal']; ?>">
                             </div>
 
                             <!-- Tanggal Berita Acara -->
                             <div class="mb-3">
                                 <label for="Tanggal_Berita_Acara" class="form-label">Tanggal Berita Acara</label>
-                                <input type="date" class="form-control" id="Tanggal_Berita_Acara" name="Tanggal_Berita_Acara" value="<?php echo $row['Tanggal_Berita_Acara']; ?>">
+                                <input type="date" class="form-control" id="Tanggal_Berita_Acara" name="Tanggal_Berita_Acara" value="<?php echo $row1['Tanggal_Berita_Acara']; ?>">
                             </div>
 
                             <!-- Kantor Tujuan -->
                             <div class="mb-3">
                                 <label for="Kantor_Tujuan" class="form-label">Kantor Tujuan</label>
-                                <input type="text" class="form-control" id="Kantor_Tujuan" name="Kantor_Tujuan" value="<?php echo $row['Kantor_Tujuan']; ?>">
+                                <input type="text" class="form-control" id="Kantor_Tujuan" name="Kantor_Tujuan" value="<?php echo $row1['Kantor_Tujuan']; ?>">
                             </div>
 
                             <!-- Nomor Kiriman -->
                             <div class="mb-3">
                                 <label for="Nomor_Kiriman" class="form-label">Nomor Kiriman</label>
-                                <input type="text" class="form-control" id="Nomor_Kiriman" name="Nomor_Kiriman" value="<?php echo $row['Nomor_Kiriman']; ?>">
+                                <input type="text" class="form-control" id="Nomor_Kiriman" name="Nomor_Kiriman" value="<?php echo $row1['Nomor_Kiriman']; ?>">
                             </div>
 
                             <!-- Uraian Berita Acara -->
                             <div class="mb-3">
                                 <label for="Uraian_Berita_Acara" class="form-label">Uraian Berita Acara</label>
-                                <textarea class="form-control" id="Uraian_Berita_Acara" name="Uraian_Berita_Acara"><?php echo $row['Uraian_Berita_Acara']; ?></textarea>
+                                <textarea class="form-control" id="Uraian_Berita_Acara" name="Uraian_Berita_Acara"><?php echo $row1['Uraian_Berita_Acara']; ?></textarea>
                             </div>
 
                             <!-- Deskripsi Iregularitas -->
                             <div class="mb-3">
                                 <label for="Deskripsi_Iregularitas" class="form-label">Deskripsi Iregularitas</label>
-                                <textarea class="form-control" id="Deskripsi_Iregularitas" name="Deskripsi_Iregularitas"><?php echo $row['Deskripsi_Iregularitas']; ?></textarea>
+                                <textarea class="form-control" id="Deskripsi_Iregularitas" name="Deskripsi_Iregularitas"><?php echo $row1['Deskripsi_Iregularitas']; ?></textarea>
                             </div>
 
+                        <?php
+                    }
+
+                    // Query untuk rincian_root_cause dan referensi_root_cause
+                    $sql2 = "SELECT Rincian_Root_Cause, Referensi_Root_Cause FROM newtab WHERE id_sistem='$id_sistem'";
+                    $result2 = $koneksi->query($sql2);
+
+                    if ($result2 && $result2->num_rows > 0) {
+                        $row2 = $result2->fetch_assoc();
+                        ?>
                             <!-- Rincian Root Cause -->
                             <div class="mb-3">
                                 <label for="rincian_root_cause" class="form-label">Rincian Root Cause</label>
-                                <input type="text" class="form-control" id="rincian_root_cause" name="rincian_root_cause">
+                                <input type="text" class="form-control" id="rincian_root_cause" name="rincian_root_cause" value="<?php echo $row2['Rincian_Root_Cause']; ?>">
                             </div>
 
                             <!-- Referensi Root Cause -->
                             <div class="mb-3">
                                 <label for="referensi_root_cause" class="form-label">Referensi Root Cause</label>
-                                <input type="text" class="form-control" id="referensi_root_cause" name="referensi_root_cause">
+                                <input type="text" class="form-control" id="referensi_root_cause" name="referensi_root_cause" value="<?php echo $row2['Referensi_Root_Cause']; ?>">
                             </div>
 
                             <!-- Tindakan Pencegahan -->
@@ -265,4 +236,5 @@
     <script src="../assets/vendor/js/sidenav.js"></script>
     <script src="../assets/vendor/js/main.js"></script>
 </body>
+
 </html>
