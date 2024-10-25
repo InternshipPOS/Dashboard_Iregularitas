@@ -1,12 +1,36 @@
+<?php
+session_start(); 
+if (!isset($_SESSION['admin_nama'])) {
+    echo "<script>
+            alert('Anda harus login terlebih dahulu!');
+            window.location.href = 'auth-login-admin.php';
+          </script>";
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template-free">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>Regional 1 | Iregularitas</title>
-    <link rel="stylesheet" href="../assets/vendor/css/core.css" />
-    <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" />
+    <title>Manage Regional|Iregularitas</title>
+    <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../assets/css/demo.css" />
+    <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="../assets/vendor/js/helpers.js"></script>
+    <script src="../assets/js/config.js"></script>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/img/favicon/pos-favicon.png" />
     <style>
         .table {
             height: 600px;
@@ -36,66 +60,192 @@
             align-items: center;
         }
 
-        /* Styling untuk container tombol kembali dan pencarian */
-        .back-search-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .filter-container input[type="text"] {
-            width: 300px;
-            padding: 8px 12px;
-            font-size: 1rem;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .filter-container input[type="text"]:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-            outline: none;
-        }
-
-        /* Optional: Styling untuk tombol */
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
-
         .no-results {
             display: none;
             color: red;
             text-align: center;
             margin-top: 10px;
         }
+
+        /* CSS untuk memberikan jarak antar tombol dan efek hover */
+        .aksi .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            padding: 0.375rem 0.75rem;
+        }
+
+        .aksi .btn-primary:hover {
+            background-color: #004085;
+            border-color: #003765;
+        }
+
+        .aksi .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+        /* Efek shadow */
+        .aksi .btn:hover {
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+        }
     </style>
 </head>
 
 <body>
-    <div class="content-wrapper">
-        <div class="container-xxl flex-grow-1 container-p-y">
-            <h4 class="py-3 breadcrumb-wrapper mb-4"><span class="text-muted fw-light">Regional 1</span></h4>
+<!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <!-- Menu -->
 
-            <!-- Container tombol kembali dan pencarian -->
-            <div class="back-search-container">
-                <a href="index.php" class="btn btn-primary">Back</a>
-                <div class="filter-container">
-                    <input type="text" id="searchInput" placeholder="Search by ID_Sistem, Tahun_BA, Week, or ZonaTujuan" oninput="filterTable()">
+      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+        <div class="app-brand demo">
+          <a href="index.php" class="app-brand-link d-flex align-items-center">
+            <img src="../assets/img/favicon/pos-logo.png" alt="Logo" width="40" height="45" class="me-2">
+            <span class="app-brand-text menu-text fw-bolder ms-2" style="font-size: 1.5rem;">ReguTrack</span>
+          </a>
+
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+          </a>
+        </div>
+
+        <div class="menu-inner-shadow"></div>
+
+        <ul class="menu-inner py-1">
+          <!-- Index -->
+          <li class="menu-item active">
+            <a href="index.php" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Dashboard</div>
+            </a>
+          </li>
+
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Pages</span>
+          </li>
+          <li class="menu-item">
+            <a href="../html/pages-regional.php" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-dock-top"></i>
+              <div data-i18n="Account Settings">Manage Regional</div>
+            </a>
+          </li>
+        </li>
+        </ul>
+      </aside>
+      <!-- / Menu -->
+
+    <!-- Layout container -->
+      <div class="layout-page">
+        <!-- Navbar -->
+
+        <nav
+          class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+          id="layout-navbar">
+          <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+              <i class="bx bx-menu bx-sm"></i>
+            </a>
+          </div>
+
+          <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+            <!-- Search -->
+            <div class="navbar-nav align-items-center">
+                <div class="nav-item d-flex align-items-center">
+                    <i class="bx bx-search fs-4 lh-0"></i>
+                    <input
+                        type="text"
+                        id="searchInput"
+                        class="form-control border-0 shadow-none"
+                        placeholder=""
+                        aria-label="Search..."
+                        oninput="filterTable()"
+                    />
                 </div>
             </div>
+            <!-- /Search -->
+
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+              <!-- Place this tag where you want the button to render. -->
+              <li class="nav-item lh-1 me-3">
+                <a
+                  class="github-button"
+                  href="https://github.com/themeselection/sneat-html-admin-template-free"
+                  data-icon="octicon-star"
+                  data-size="large"
+                  data-show-count="true"
+                  aria-label="Star themeselection/sneat-html-admin-template-free on GitHub">Star</a>
+              </li>
+
+              <!-- User -->
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                  <div class="avatar avatar-online">
+                    <img src="../assets/img/avatars/6.png" alt class="w-px-40 h-auto rounded-circle" />
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="avatar avatar-online">
+                            <img src="../assets/img/avatars/6.png" alt class="w-px-40 h-auto rounded-circle" />
+                          </div>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-semibold d-block">Admin Pusat</span>
+                          <small class="text-muted">Admin</small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="../user/profile.php">
+                      <i class="bx bx-user me-2"></i>
+                      <span class="align-middle">My Profile</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      <i class="bx bx-cog me-2"></i>
+                      <span class="align-middle">Settings</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      <span class="d-flex align-items-center align-middle">
+                        <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
+                        <span class="flex-grow-1 align-middle">Billing</span>
+                        <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
+                      </span>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                      <a class="dropdown-item" href="#" onclick="confirmLogout()">
+                          <i class="bx bx-power-off me-2"></i>
+                          <span class="align-middle">Log Out</span>
+                      </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ User -->
+            </ul>
+          </div>
+        </nav>
+        <!-- / Navbar -->
+    <!-- Content wrapper -->
+    <div class="content-wrapper">
+        <!-- Content -->
+        <div class="container-xxl flex-grow-1 container-p-y">
 
             <!-- Pesan tidak ada hasil pencarian -->
             <div id="noResults" class="no-results">No matching results found</div>
@@ -185,10 +335,16 @@
                                     $row_newreport = $result_newreport->fetch_assoc();
                             ?>
                                 <tr>
-                                    <td class="aksi">
-                                        <a href="../crud_user_reg11/update.php?id_sistem=<?php echo $row['ID_Sistem']; ?>" class="btn btn-primary">Edit</a>
-                                        <a href="../crud_regional/delete.php" class="btn btn-danger delete-btn" data-id="<?php echo $row['ID_Sistem']; ?>">Delete</a>
-                                    </td>
+                                <td class="aksi">
+                                    <a href="../crud_regional/update.php?id_sistem=<?php echo $row['ID_Sistem']; ?>" class="btn btn-primary btn-sm d-flex align-items-center gap-1">
+                                        <i class="bx bx-edit"></i> Edit
+                                    </a>
+                                    <a href="../crud_regional/delete.php" class="btn btn-danger btn-sm delete-btn d-flex align-items-center gap-1" data-id="<?php echo $row['ID_Sistem']; ?>">
+                                        <i class="bx bx-trash"></i> Delete
+                                    </a>
+                                </td>
+
+
                                     <td><?php echo $row['ID_Sistem']; ?></td>
                                     <td><?php echo $row['ZonaAsal']; ?></td>
                                     <td><?php echo $row['Nama_Kantor_Asal']; ?></td>
@@ -361,6 +517,28 @@
                 }
             });
         </script>
+    
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      function confirmLogout() {
+          Swal.fire({
+              title: 'Apakah Anda yakin ingin keluar?',
+              text: "Anda akan keluar dari sesi saat ini!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Ya, Keluar!',
+              cancelButtonText: 'Batal'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  // Redirect ke halaman logout jika pengguna menekan "Ya, Keluar!"
+                  window.location.href = '../html/auth-login-admin.php';
+              }
+          })
+      }
+    </script>
 </body>
 
 </html>
