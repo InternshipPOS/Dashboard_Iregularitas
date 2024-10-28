@@ -67,15 +67,19 @@ if (!isset($_SESSION['admin_nama'])) {
         }
 
         #dataTable thead th:nth-child(21) {
-            background-color: ##FFFFED; /* Warna khusus untuk header "Rincian Root Cause" */
+            background-color: #FFFFED; /* Warna khusus untuk header "Rincian Root Cause" */
         }
 
         #dataTable thead th:nth-child(22) {
-            background-color: #f2f2f2; /* Warna khusus untuk header "Rincian Root Cause" */
+            background-color: #c5e0b3; /* Warna khusus untuk header "Rincian Root Cause" */
         }
 
         #dataTable thead th:nth-child(23) {
-            background-color: #c5e0b3; /* Warna khusus untuk header "Rincian Root Cause" */
+            background-color: #f2f2f2; /* Warna khusus untuk header "Rincian Root Cause" */
+        }
+
+        #dataTable thead th:nth-child(24) {
+            background-color: #FFFFED; /* Warna khusus untuk header "Rincian Root Cause" */
         }
 
         #dataTable thead th:nth-child(24) {
