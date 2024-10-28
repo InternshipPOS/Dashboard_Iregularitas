@@ -104,7 +104,7 @@
                                         confirmButtonText: 'OK'
                                     }).then((result) => {
                                         if (result.isConfirmed) {
-                                            window.location.href = '../html/pages-regional settings-reg11.php'; 
+                                            window.location.href = '../html/pages-regional.php'; 
                                         }
                                     });
                                   </script>";
