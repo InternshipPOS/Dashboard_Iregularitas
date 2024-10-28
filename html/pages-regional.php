@@ -45,6 +45,43 @@ if (!isset($_SESSION['admin_nama'])) {
             white-space: normal;
         }
 
+        #dataTable thead th:nth-child(8) {
+            background-color: #8eaadb;
+        }
+
+        .table tbody td:nth-child(8) {
+            background-color: #8eaadb;
+        }
+
+        /* Mengubah warna latar belakang header kolom "Rincian Root Cause" */
+        #dataTable thead th:nth-child(18) {
+            background-color: #e6b8af; /* Warna khusus untuk header "Rincian Root Cause" */
+        }
+
+        #dataTable thead th:nth-child(19) {
+            background-color: #fbe5d5; /* Warna khusus untuk header "Rincian Root Cause" */
+        }
+
+        #dataTable thead th:nth-child(20) {
+            background-color: #c5e0b3; /* Warna khusus untuk header "Rincian Root Cause" */
+        }
+
+        #dataTable thead th:nth-child(21) {
+            background-color: ##FFFFED; /* Warna khusus untuk header "Rincian Root Cause" */
+        }
+
+        #dataTable thead th:nth-child(22) {
+            background-color: #f2f2f2; /* Warna khusus untuk header "Rincian Root Cause" */
+        }
+
+        #dataTable thead th:nth-child(23) {
+            background-color: #c5e0b3; /* Warna khusus untuk header "Rincian Root Cause" */
+        }
+
+        #dataTable thead th:nth-child(24) {
+            background-color: #8eaadb; /* Warna khusus untuk header "Rincian Root Cause" */
+        }
+
         .aksi {
             min-width: 100px;
         }
@@ -67,7 +104,6 @@ if (!isset($_SESSION['admin_nama'])) {
             margin-top: 10px;
         }
 
-        /* CSS untuk memberikan jarak antar tombol dan efek hover */
         .aksi .btn {
             display: inline-flex;
             align-items: center;
@@ -87,11 +123,11 @@ if (!isset($_SESSION['admin_nama'])) {
             border-color: #bd2130;
         }
 
-        /* Efek shadow */
         .aksi .btn:hover {
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
         }
     </style>
+
 </head>
 
 <body>
