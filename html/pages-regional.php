@@ -67,7 +67,7 @@ if (!isset($_SESSION['admin_nama'])) {
         }
 
         #dataTable thead th:nth-child(21) {
-            background-color: #FFFFED; /* Warna khusus untuk header "Rincian Root Cause" */
+            background-color: #fdd97c; /* Warna khusus untuk header "Rincian Root Cause" */
         }
 
         #dataTable thead th:nth-child(22) {
@@ -79,10 +79,10 @@ if (!isset($_SESSION['admin_nama'])) {
         }
 
         #dataTable thead th:nth-child(24) {
-            background-color: #FFFFED; /* Warna khusus untuk header "Rincian Root Cause" */
+            background-color: #fdd97c; /* Warna khusus untuk header "Rincian Root Cause" */
         }
 
-        #dataTable thead th:nth-child(24) {
+        #dataTable thead th:nth-child(25) {
             background-color: #8eaadb; /* Warna khusus untuk header "Rincian Root Cause" */
         }
 
