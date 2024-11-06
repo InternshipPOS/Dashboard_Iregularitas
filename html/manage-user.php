@@ -349,6 +349,25 @@
             });
         });
     </script>
+    <script>
+      function confirmLogout() {
+          Swal.fire({
+              title: 'Apakah Anda yakin ingin keluar?',
+              text: "Anda akan keluar dari sesi saat ini!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Ya, Keluar!',
+              cancelButtonText: 'Batal'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  // Redirect ke halaman logout jika pengguna menekan "Ya, Keluar!"
+                  window.location.href = '../html/auth-login-admin.php';
+              }
+          })
+      }
+  </script>
 </body>
 
 </html>
