@@ -339,134 +339,130 @@ if (!isset($_SESSION['admin_nama'])) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php
-                                        $host = "localhost";
-                                        $user = "root";
-                                        $password = "";
-                                        $database = "iregularitas";
+                                    <?php
+                                    // Database connection setup
+                                    $host = "localhost";
+                                    $user = "root";
+                                    $password = "";
+                                    $database = "iregularitas";
 
-                                        $koneksi = mysqli_connect($host, $user, $password, $database);
+                                    $koneksi = mysqli_connect($host, $user, $password, $database);
 
-                                        if ($koneksi->connect_error) {
-                                            die("Connection failed: " . $koneksi->connect_error);
-                                        }
+                                    if ($koneksi->connect_error) {
+                                        die("Connection failed: " . $koneksi->connect_error);
+                                    }
 
-                                        // Pagination variables
-                                        $limit = 1000;
-                                        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-                                        $offset = ($page - 1) * $limit;
+                                    // Pagination variables
+                                    $limit = 100; // Mengurangi limit untuk mempercepat loading data
+                                    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                                    $offset = ($page - 1) * $limit;
 
-                                        // Get total records for pagination
-                                        $total_sql = "SELECT COUNT(*) AS total FROM report_agung";
-                                        $total_result = $koneksi->query($total_sql);
-                                        $total_row = $total_result->fetch_assoc();
-                                        $total_records = $total_row['total'];
-                                        $total_pages = ceil($total_records / $limit);
+                                    // Get total records for pagination
+                                    $total_sql = "SELECT COUNT(*) AS total FROM report_agung";
+                                    $total_result = $koneksi->query($total_sql);
+                                    $total_row = $total_result->fetch_assoc();
+                                    $total_records = $total_row['total'];
+                                    $total_pages = ceil($total_records / $limit);
 
-                                        // Get total records for newreport
-                                        $total_sql_newreport = "SELECT COUNT(*) AS total FROM newreport";
-                                        $total_result_newreport = $koneksi->query($total_sql_newreport);
-                                        $total_row_newreport = $total_result_newreport->fetch_assoc();
-                                        $total_records_newreport = $total_row_newreport['total'];
+                                    // Optimized query with subquery for pagination and JOIN
+                                    $sql = "SELECT 
+                                                report_agung.ID_Sistem, report_agung.ZonaAsal, report_agung.Nama_Kantor_Asal, report_agung.Kantor_Asal,
+                                                report_agung.Tanggal_Berita_Acara, report_agung.ZonaTujuan, report_agung.Nama_Kantor_Tujuan, report_agung.Kantor_Tujuan, 
+                                                report_agung.Deskripsi, report_agung.DNLN, report_agung.Nomor_Kiriman, report_agung.Uraian_Berita_Acara, 
+                                                report_agung.Deskripsi_Iregularitas, report_agung.Tahun_BA, report_agung.Bulan_BA, report_agung.Week, report_agung.month_name,
+                                                newreport.Rincian_Root_Cause, newreport.Referensi_Root_Cause, newreport.Tindakan_Pencegahan, newreport.Corrective_Action, 
+                                                newreport.Locus, newreport.Nama_NIK_Pegawai, newreport.No_Evidence, newreport.Validasi_Regional, newreport.Validasi_Pusat
+                                            FROM 
+                                                (SELECT * FROM report_agung LIMIT $limit OFFSET $offset) AS report_agung
+                                            LEFT JOIN 
+                                                newreport 
+                                            ON 
+                                                report_agung.ID_Sistem = newreport.ID_Sistem";
+                                    $result = $koneksi->query($sql);
 
-                                        // Total records for pagination
-                                        $total_records = $total_records + $total_records_newreport; // Adjusted line
-                                        $total_pages = ceil($total_records / $limit);
-
-                                        // Initialize query for report_agung
-                                        $sql = "SELECT ID_Sistem, ZonaAsal, Nama_Kantor_Asal, Kantor_Asal, Tanggal_Berita_Acara, ZonaTujuan, Nama_Kantor_Tujuan, Kantor_Tujuan, Deskripsi, DNLN, Nomor_Kiriman, Uraian_Berita_Acara, Deskripsi_Iregularitas, Tahun_BA, Bulan_BA, Week, month_name FROM report_agung LIMIT $limit OFFSET $offset";
-                                        $result = $koneksi->query($sql);
-
-                                        // Initialize query for newreport
-                                        $sql_newreport = "SELECT Rincian_Root_Cause, Referensi_Root_Cause, Tindakan_Pencegahan, Corrective_Action, Locus, Nama_NIK_Pegawai, No_Evidence, Validasi_Regional, Validasi_Pusat FROM newreport LIMIT $limit OFFSET $offset";
-                                        $result_newreport = $koneksi->query($sql_newreport);
-
-                                        // Check if both queries return data
-                                        if ($result->num_rows > 0 || $result_newreport->num_rows > 0) :
-                                            // Loop for report_agung data
-                                            while ($row = $result->fetch_assoc()) :
-                                                // Fetch newreport data for the corresponding row
-                                                $row_newreport = $result_newreport->fetch_assoc();
-                                        ?>
-                                                <tr>
-                                                    <td class="aksi">
-                                                        <a href="../crud_regional/update.php?id_sistem=<?php echo $row['ID_Sistem']; ?>" class="btn btn-primary btn-sm d-flex align-items-center gap-1">
-                                                            <i class="bx bx-edit"></i> Edit
-                                                        </a>
-                                                        <a href="../crud_regional/delete.php" class="btn btn-danger delete-btn" data-id="<?php echo $row['ID_Sistem']; ?>">Delete</a>
-                                                    </td>
-
-
-                                                    <td><?php echo $row['ID_Sistem']; ?></td>
-                                                    <td><?php echo $row['ZonaAsal']; ?></td>
-                                                    <td><?php echo $row['Nama_Kantor_Asal']; ?></td>
-                                                    <td><?php echo $row['Kantor_Asal']; ?></td>
-                                                    <td><?php echo date('Y-m-d', strtotime($row['Tanggal_Berita_Acara'])); ?></td>
-                                                    <td><?php echo $row['ZonaTujuan']; ?></td>
-                                                    <td><?php echo $row['Nama_Kantor_Tujuan']; ?></td>
-                                                    <td><?php echo $row['Kantor_Tujuan']; ?></td>
-                                                    <td><?php echo $row['Deskripsi']; ?></td>
-                                                    <td><?php echo $row['DNLN']; ?></td>
-                                                    <td>
-                                                        <?php
-                                                        $uraian = $row['Nomor_Kiriman'];
-                                                        if (strlen($uraian) > 28) {
-                                                            $short_text = substr($uraian, 0, 28);
-                                                            $full_text = substr($uraian, 28);
-                                                        } else {
-                                                            $short_text = $uraian;
-                                                            $full_text = '';
-                                                        }
-                                                        ?>
-                                                        <span class="short-text"><?php echo $short_text; ?></span>
-                                                        <?php if ($full_text): ?>
-                                                            <span class="full-text" style="display: none;"><?php echo $full_text; ?></span>
-                                                            <span class="read-more-btn" style="color: blue; cursor: pointer;">Baca Selengkapnya</span>
-                                                        <?php endif; ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php
-                                                        $uraian = $row['Uraian_Berita_Acara'];
-                                                        if (strlen($uraian) > 100) {
-                                                            $short_text = substr($uraian, 0, 100);
-                                                            $full_text = substr($uraian, 100);
-                                                        } else {
-                                                            $short_text = $uraian;
-                                                            $full_text = '';
-                                                        }
-                                                        ?>
-                                                        <span class="short-text"><?php echo $short_text; ?></span>
-                                                        <?php if ($full_text): ?>
-                                                            <span class="full-text" style="display: none;"><?php echo $full_text; ?></span>
-                                                            <span class="read-more-btn" style="color: blue; cursor: pointer;">Baca Selengkapnya</span>
-                                                        <?php endif; ?>
-                                                    </td>
-                                                    <td><?php echo $row['Deskripsi_Iregularitas']; ?></td>
-                                                    <td><?php echo $row['Tahun_BA']; ?></td>
-                                                    <td><?php echo $row['Bulan_BA']; ?></td>
-                                                    <td><?php echo $row['Week']; ?></td>
-                                                    <td><?php echo isset($row_newreport['Rincian_Root_Cause']) ? $row_newreport['Rincian_Root_Cause'] : ''; ?></td>
-                                                    <td><?php echo isset($row_newreport['Referensi_Root_Cause']) ? $row_newreport['Referensi_Root_Cause'] : ''; ?></td>
-                                                    <td><?php echo isset($row_newreport['Tindakan_Pencegahan']) ? $row_newreport['Tindakan_Pencegahan'] : ''; ?></td>
-                                                    <td><?php echo isset($row_newreport['Corrective_Action']) ? $row_newreport['Corrective_Action'] : ''; ?></td>
-                                                    <td><?php echo isset($row_newreport['Locus']) ? $row_newreport['Locus'] : ''; ?></td>
-                                                    <td><?php echo isset($row_newreport['Nama_NIK_Pegawai']) ? $row_newreport['Nama_NIK_Pegawai'] : ''; ?></td>
-                                                    <td><?php echo isset($row_newreport['No_Evidence']) ? $row_newreport['No_Evidence'] : ''; ?></td>
-                                                    <td><?php echo isset($row_newreport['Validasi_Regional']) ? $row_newreport['Validasi_Regional'] : ''; ?></td>
-                                                    <td><?php echo isset($row_newreport['Validasi_Pusat']) ? $row_newreport['Validasi_Pusat'] : ''; ?></td>
-                                                </tr>
-                                            <?php
-                                            endwhile;
-                                        else :
-                                            ?>
+                                    // Check if query returns data
+                                    if ($result->num_rows > 0) :
+                                        while ($row = $result->fetch_assoc()) :
+                                    ?>
                                             <tr>
-                                                <td colspan="16" class="text-center">No data available</td>
+                                                <td class="aksi">
+                                                    <a href="../crud_regional/update.php?id_sistem=<?php echo $row['ID_Sistem']; ?>" class="btn btn-primary btn-sm d-flex align-items-center gap-1">
+                                                        <i class="bx bx-edit"></i> Edit
+                                                    </a>
+                                                    <a href="../crud_regional/delete.php" class="btn btn-danger delete-btn" data-id="<?php echo $row['ID_Sistem']; ?>">Delete</a>
+                                                </td>
+
+                                                <td><?php echo $row['ID_Sistem']; ?></td>
+                                                <td><?php echo $row['ZonaAsal']; ?></td>
+                                                <td><?php echo $row['Nama_Kantor_Asal']; ?></td>
+                                                <td><?php echo $row['Kantor_Asal']; ?></td>
+                                                <td><?php echo date('Y-m-d', strtotime($row['Tanggal_Berita_Acara'])); ?></td>
+                                                <td><?php echo $row['ZonaTujuan']; ?></td>
+                                                <td><?php echo $row['Nama_Kantor_Tujuan']; ?></td>
+                                                <td><?php echo $row['Kantor_Tujuan']; ?></td>
+                                                <td><?php echo $row['Deskripsi']; ?></td>
+                                                <td><?php echo $row['DNLN']; ?></td>
+                                                <td>
+                                                    <?php
+                                                    $uraian = $row['Nomor_Kiriman'];
+                                                    if (strlen($uraian) > 28) {
+                                                        $short_text = substr($uraian, 0, 28);
+                                                        $full_text = substr($uraian, 28);
+                                                    } else {
+                                                        $short_text = $uraian;
+                                                        $full_text = '';
+                                                    }
+                                                    ?>
+                                                    <span class="short-text"><?php echo $short_text; ?></span>
+                                                    <?php if ($full_text): ?>
+                                                        <span class="full-text" style="display: none;"><?php echo $full_text; ?></span>
+                                                        <span class="read-more-btn" style="color: blue; cursor: pointer;">Baca Selengkapnya</span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <?php
+                                                    $uraian = $row['Uraian_Berita_Acara'];
+                                                    if (strlen($uraian) > 100) {
+                                                        $short_text = substr($uraian, 0, 100);
+                                                        $full_text = substr($uraian, 100);
+                                                    } else {
+                                                        $short_text = $uraian;
+                                                        $full_text = '';
+                                                    }
+                                                    ?>
+                                                    <span class="short-text"><?php echo $short_text; ?></span>
+                                                    <?php if ($full_text): ?>
+                                                        <span class="full-text" style="display: none;"><?php echo $full_text; ?></span>
+                                                        <span class="read-more-btn" style="color: blue; cursor: pointer;">Baca Selengkapnya</span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td><?php echo $row['Deskripsi_Iregularitas']; ?></td>
+                                                <td><?php echo $row['Tahun_BA']; ?></td>
+                                                <td><?php echo $row['Bulan_BA']; ?></td>
+                                                <td><?php echo $row['Week']; ?></td>
+                                                <td><?php echo isset($row['Rincian_Root_Cause']) ? $row['Rincian_Root_Cause'] : ''; ?></td>
+                                                <td><?php echo isset($row['Referensi_Root_Cause']) ? $row['Referensi_Root_Cause'] : ''; ?></td>
+                                                <td><?php echo isset($row['Tindakan_Pencegahan']) ? $row['Tindakan_Pencegahan'] : ''; ?></td>
+                                                <td><?php echo isset($row['Corrective_Action']) ? $row['Corrective_Action'] : ''; ?></td>
+                                                <td><?php echo isset($row['Locus']) ? $row['Locus'] : ''; ?></td>
+                                                <td><?php echo isset($row['Nama_NIK_Pegawai']) ? $row['Nama_NIK_Pegawai'] : ''; ?></td>
+                                                <td><?php echo isset($row['No_Evidence']) ? $row['No_Evidence'] : ''; ?></td>
+                                                <td><?php echo isset($row['Validasi_Regional']) ? $row['Validasi_Regional'] : ''; ?></td>
+                                                <td><?php echo isset($row['Validasi_Pusat']) ? $row['Validasi_Pusat'] : ''; ?></td>
                                             </tr>
                                         <?php
-                                        endif;
+                                        endwhile;
+                                    else :
                                         ?>
+                                        <tr>
+                                            <td colspan="24" class="text-center">No data available</td>
+                                        </tr>
+                                    <?php
+                                    endif;
+                                    ?>
+                                </tbody>
 
-                                    </tbody>
+
                                 </table>
                             </div>
 
@@ -480,11 +476,39 @@ if (!isset($_SESSION['admin_nama'])) {
                                                 <span aria-hidden="true">&laquo;</span>
                                             </a>
                                         </li>
-                                        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+
+                                        <?php 
+                                        // Menentukan batas untuk menampilkan halaman
+                                        $start_page = max(1, $page - 2);
+                                        $end_page = min($total_pages, $page + 2);
+
+                                        // Menampilkan halaman pertama dan sebelum/ setelahnya
+                                        if ($start_page > 1): ?>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page=1">1</a>
+                                            </li>
+                                            <?php if ($start_page > 2): ?>
+                                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+
+                                        <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
                                             <li class="page-item <?php if ($i == $page) echo 'active'; ?>">
                                                 <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
                                             </li>
                                         <?php endfor; ?>
+
+                                        <?php 
+                                        // Menampilkan halaman terakhir dan sebelum/ setelahnya
+                                        if ($end_page < $total_pages): ?>
+                                            <?php if ($end_page < $total_pages - 1): ?>
+                                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                            <?php endif; ?>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page=<?php echo $total_pages; ?>"><?php echo $total_pages; ?></a>
+                                            </li>
+                                        <?php endif; ?>
+
                                         <li class="page-item <?php if ($page >= $total_pages) echo 'disabled'; ?>">
                                             <a class="page-link" href="?page=<?php echo min($total_pages, $page + 1); ?>" aria-label="Next">
                                                 <span aria-hidden="true">&raquo;</span>
@@ -493,6 +517,7 @@ if (!isset($_SESSION['admin_nama'])) {
                                     </ul>
                                 </nav>
                             </div>
+
                         </div>
                     </div>
                 </div>

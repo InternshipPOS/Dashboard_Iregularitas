@@ -3,7 +3,7 @@ session_start();
 if (!isset($_SESSION['nama'])) {
     echo "<script>
             alert('Anda harus login terlebih dahulu!');
-            window.location.href = 'auth-login-basic.php';
+            window.location.href = '../html/auth-login-basic.php';
           </script>";
     exit;
 }
