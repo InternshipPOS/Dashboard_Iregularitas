@@ -353,7 +353,7 @@
       function confirmLogout() {
           Swal.fire({
               title: 'Apakah Anda yakin ingin keluar?',
-              text: "Anda akan keluar dari sesi saat ini!",
+              text: "Anda akan keluar dari sesi ini!",
               icon: 'warning',
               showCancelButton: true,
               confirmButtonColor: '#3085d6',

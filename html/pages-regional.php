@@ -300,6 +300,28 @@ if (!isset($_SESSION['admin_nama'])) {
                 <div class="content-wrapper">
                     <!-- Content -->
                     <div class="container-xxl flex-grow-1 container-p-y">
+                        <!-- Filter Week and Year -->
+                        <form method="GET" action="" class="mb-4">
+                            <label for="week">Week:</label>
+                            <select name="week" id="week">
+                                <option value="">Select Week</option>
+                                <?php for ($i = 1; $i <= 52; $i++): ?>
+                                    <option value="<?php echo $i; ?>" <?php echo isset($_GET['week']) && $_GET['week'] == $i ? 'selected' : ''; ?>>Week <?php echo $i; ?></option>
+                                <?php endfor; ?>
+                            </select>
+
+                            <label for="year">Year:</label>
+                            <select name="year" id="year">
+                                <option value="">Select Year</option>
+                                <?php 
+                                $currentYear = date("Y");
+                                for ($year = 2018; $year <= $currentYear; $year++): ?>
+                                    <option value="<?php echo $year; ?>" <?php echo isset($_GET['year']) && $_GET['year'] == $year ? 'selected' : ''; ?>><?php echo $year; ?></option>
+                                <?php endfor; ?>
+                            </select>
+                            
+                            <button type="submit" class="btn btn-primary">Filter</button>
+                        </form>
 
                         <!-- Pesan tidak ada hasil pencarian -->
                         <div id="noResults" class="no-results">No matching results found</div>
@@ -357,8 +379,26 @@ if (!isset($_SESSION['admin_nama'])) {
                                     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
                                     $offset = ($page - 1) * $limit;
 
+                                    // Ambil nilai week dan year dari form jika ada
+                                    $week = isset($_GET['week']) ? (int)$_GET['week'] : null;
+                                    $year = isset($_GET['year']) ? (int)$_GET['year'] : null;
+
+                                    // Kondisi tambahan untuk filter
+                                    $whereClauses = [];
+                                    if ($week) {
+                                        $whereClauses[] = "report_agung.Week = $week";
+                                    }
+                                    if ($year) {
+                                        $whereClauses[] = "report_agung.Tahun_BA = $year";
+                                    }
+
+                                    $whereSql = '';
+                                    if (!empty($whereClauses)) {
+                                        $whereSql = 'WHERE ' . implode(' AND ', $whereClauses);
+                                    }
+
                                     // Get total records for pagination
-                                    $total_sql = "SELECT COUNT(*) AS total FROM report_agung";
+                                    $total_sql = "SELECT COUNT(*) AS total FROM report_agung $whereSql";
                                     $total_result = $koneksi->query($total_sql);
                                     $total_row = $total_result->fetch_assoc();
                                     $total_records = $total_row['total'];
@@ -373,7 +413,7 @@ if (!isset($_SESSION['admin_nama'])) {
                                                 newreport.Rincian_Root_Cause, newreport.Referensi_Root_Cause, newreport.Tindakan_Pencegahan, newreport.Corrective_Action, 
                                                 newreport.Locus, newreport.Nama_NIK_Pegawai, newreport.No_Evidence, newreport.Validasi_Regional, newreport.Validasi_Pusat
                                             FROM 
-                                                (SELECT * FROM report_agung LIMIT $limit OFFSET $offset) AS report_agung
+                                                (SELECT * FROM report_agung $whereSql LIMIT $limit OFFSET $offset) AS report_agung
                                             LEFT JOIN 
                                                 newreport 
                                             ON 
