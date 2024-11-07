@@ -1,17 +1,14 @@
-<?php
-session_start(); // Start session
+<?php 
+session_start();
+include 'config.php';
 
-include 'config.php'; // Make sure this file contains the database connection configuration
-
-// Check if session id exists
 if (!isset($_SESSION['id'])) {
-    header("Location: ../html/auth-login-basic.php");  // Redirect to login page if not logged in
+    header("Location: ../html/auth-login-basic.php");
     exit();
 }
 
 $user_id = $_SESSION['id'];
 
-// Fetch user data based on session ID
 $query = "SELECT * FROM user WHERE id = ?";
 $stmt = $koneksi->prepare($query);
 $stmt->bind_param("i", $user_id);
@@ -19,8 +16,6 @@ $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
-// Process update if form is submitted
-// Process update if form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $nama = $_POST['nama'];
@@ -28,28 +23,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $jenis = $_POST['jenis'];
     $regional = $_POST['regional'];
     $kantor_asal = $_POST['kantor_asal'];
-    $password = $_POST['password']; // Get password from form input
+    $password = $_POST['password'];
 
-    // Check if password is provided
     if (!empty($password)) {
-        // Password is provided, hash it
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        // Update query including password
-        $update_query = "UPDATE user SET username = ?, nama = ?, nik = ?, jenis = ?, regional = ?, kantor_asal = ?,  password = ? WHERE id = ?";
+        $update_query = "UPDATE user SET username = ?, nama = ?, nik = ?, jenis = ?, regional = ?, kantor_asal = ?, password = ? WHERE id = ?";
         $stmt = $koneksi->prepare($update_query);
         $stmt->bind_param("sssssssi", $username, $nama, $nik, $jenis, $regional, $kantor_asal, $hashed_password, $user_id);
     } else {
-        // Password is not provided, exclude it from the update query
-        $update_query = "UPDATE user SET username = ?, nama = ?, nik = ?, jenis = ?, regional = ?, kantor_asal  = ? WHERE id = ?";
+        $update_query = "UPDATE user SET username = ?, nama = ?, nik = ?, jenis = ?, regional = ?, kantor_asal = ? WHERE id = ?";
         $stmt = $koneksi->prepare($update_query);
         $stmt->bind_param("ssssssi", $username, $nama, $nik, $jenis, $regional, $kantor_asal, $user_id);
     }
+
     if ($stmt->execute()) {
-        $success = true;
+        // After the data is updated, set a flag for success.
+        $updateSuccess = true;
+    } else {
+        $updateSuccess = false;
+        $errorMessage = $stmt->error;
     }
+
+    $stmt->close();
 }
 
+$koneksi->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -285,23 +285,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
                     </form>
+                    <?php if (isset($updateSuccess)): ?>
+                        <script>
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Data berhasil diperbarui!',
+                                showConfirmButton: true
+                            }).then(function() {
+                                window.location.href = 'profile.php'; // Redirect after success
+                            });
+                        </script>
+                    <?php elseif (isset($updateSuccess) && !$updateSuccess): ?>
+                        <script>
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal memperbarui data!',
+                                text: 'Terjadi kesalahan: <?= $errorMessage ?>',
+                            });
+                        </script>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <?php if ($success): ?>
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Profile Updated!',
-            text: 'Data berhasil diperbarui!',
-            confirmButtonText: 'OK'
-        }).then(() => {
-            window.location.href = 'profile.php';
-        });
-    </script>
-    <?php endif; ?>
 </body>
 </html>

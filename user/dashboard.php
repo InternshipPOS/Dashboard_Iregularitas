@@ -1,5 +1,8 @@
 <?php
-session_start(); 
+session_start();
+include 'config.php';  // Pastikan koneksi database di-include dengan benar
+
+// Cek apakah user sudah login
 if (!isset($_SESSION['nama'])) {
     echo "<script>
             alert('Anda harus login terlebih dahulu!');
@@ -7,7 +10,28 @@ if (!isset($_SESSION['nama'])) {
           </script>";
     exit;
 }
+
+// Asumsi: koneksi database sudah ada melalui $koneksi
+$user_id = $_SESSION['id']; // ID user yang sudah login
+
+// Query untuk mengambil data jenis dari database
+$query = "SELECT jenis FROM user WHERE id = ?";
+$stmt = $koneksi->prepare($query);  // Menggunakan $koneksi sesuai yang ada di config.php
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$stmt->bind_result($jenis);
+$stmt->fetch();
+
+// Menyimpan jenis ke dalam session
+$_SESSION['jenis'] = $jenis; 
+
+$stmt->close();
+
+// Menutup koneksi database
+$koneksi->close();
 ?>
+
+
 
 <!DOCTYPE html>
 <html
@@ -193,10 +217,10 @@ if (!isset($_SESSION['nama'])) {
                         </div>
                         <div class="flex-grow-1">
                           <span class="fw-semibold d-block">
-                            <?php echo isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User'; ?>
+                              <?php echo isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User'; ?>
                           </span>
                           <small class="text-muted">
-                            <?php echo $_SESSION['jenis']; ?>
+                              <?php echo isset($_SESSION['jenis']) ? $_SESSION['jenis'] : 'Jenis tidak ditemukan'; ?>
                           </small>
                         </div>
                       </div>

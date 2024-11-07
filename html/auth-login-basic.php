@@ -28,8 +28,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Verify password
         if (password_verify($password, $row['password'])) {
-            // If password is correct, start session
-            $_SESSION['nama'] = $row['nama']; // Set session with nama
+            // If password is correct, start session and set session ID
+            $_SESSION['id'] = $row['id'];    // Store user ID for profile access
+            $_SESSION['nama'] = $row['nama']; // Set session with user data
+            $_SESSION['nik'] = $row['nik'];   // Store user's NIK for profile updates
+
             $alert_script = "<script>
                     Swal.fire({
                         icon: 'success',
@@ -43,7 +46,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     });
                   </script>";
         } else {
-            // If password is incorrect
             $alert_script = "<script>
                     Swal.fire({
                         icon: 'error',
@@ -58,7 +60,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   </script>";
         }
     } else {
-        // If NIK not found
         $alert_script = "<script>
                 Swal.fire({
                     icon: 'error',
