@@ -90,12 +90,13 @@
                                     Validasi_Regional = '$validasi_regional',
                                     Validasi_Pusat = '$validasi_pusat'
                                     WHERE id_sistem='$id_sistem'";
-                                              
+
                         // Eksekusi query
                         //$koneksi->query($sql1);
                         //$koneksi->query($sql2);
-                     
+
                         if ($koneksi->query($sql1) === TRUE && $koneksi->query($sql2) === TRUE) {
+                            // Pastikan $selected_regional memiliki nilai
                             echo "<script>
                                     Swal.fire({
                                         title: 'Sukses!',
@@ -118,6 +119,7 @@
                                     });
                                   </script>";
                         }
+                        
                     }
 
                     // Query untuk mendapatkan data yang ingin diedit
@@ -202,7 +204,7 @@
                             <!-- Rincian Root Cause -->
                             <div class="mb-3">
                                 <label for="rincian_root_cause" class="form-label">Rincian Root Cause</label>
-                                <textarea class="form-control" id="rincian_root_cause" name="rincian_root_cause" ><?php echo $row2['Rincian_Root_Cause']; ?></textarea>
+                                <textarea class="form-control" id="rincian_root_cause" name="rincian_root_cause"><?php echo $row2['Rincian_Root_Cause']; ?></textarea>
                             </div>
 
                             <!-- Referensi Root Cause -->
