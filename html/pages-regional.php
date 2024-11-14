@@ -296,169 +296,185 @@ if (!isset($_SESSION['admin_nama'])) {
                     </div>
                 </nav>
                 <!-- / Navbar -->
-                <!-- Content wrapper -->
                 <div class="content-wrapper">
-                    <!-- Content -->
-                    <div class="container-xxl flex-grow-1 container-p-y">
-                        <?php
-                        // Database connection setup
-                        $host = "localhost";
-                        $user = "root";
-                        $password = "";
-                        $database = "iregularitas";
-                        $koneksi = mysqli_connect($host, $user, $password, $database);
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <?php
+                    // Database connection setup
+                    $host = "localhost";
+                    $user = "root";
+                    $password = "";
+                    $database = "iregularitas";
+                    $koneksi = mysqli_connect($host, $user, $password, $database);
 
-                        if ($koneksi->connect_error) {
-                            die("Connection failed: " . $koneksi->connect_error);
-                        }
+                    if ($koneksi->connect_error) {
+                        die("Connection failed: " . $koneksi->connect_error);
+                    }
 
-                        // Ambil data Regional dari ref_kcu_kc
-                        $regional_query = "SELECT DISTINCT Regional FROM ref_kcu_kc";
-                        $regional_result = $koneksi->query($regional_query);
-                        ?>
+                    // Ambil data Regional dari ref_kcu_kc
+                    $regional_query = "SELECT DISTINCT Regional FROM ref_kcu_kc";
+                    $regional_result = $koneksi->query($regional_query);
+                    ?>
 
-                        <!-- Form untuk memilih Regional -->
-                        <form method="GET" action="" class="mb-4 p-3 bg-light rounded shadow-sm">
-                            <div class="row">
-                                <!-- Filter Regional -->
-                                <div class="col-md-4 mb-3">
-                                    <label for="regional" class="form-label fw-bold">Pilih Regional:</label>
-                                    <select name="regional" id="regional" class="form-select">
-                                        <option value="">--Pilih Regional--</option>
-                                        <?php
-                                        while ($regional = $regional_result->fetch_assoc()) {
-                                            echo "<option value='{$regional['Regional']}'>{$regional['Regional']}</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-
-                                <!-- Filter Year -->
-                                <div class="col-md-4 mb-3">
-                                    <label for="year" class="form-label fw-bold">Pilih Tahun:</label>
-                                    <select name="year" id="year" class="form-select">
-                                        <option value="">--Pilih Tahun--</option>
-                                        <?php
-                                        $currentYear = date("Y");
-                                        for ($i = $currentYear; $i >= $currentYear - 6; $i--) {
-                                            echo "<option value='$i'>$i</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-
-                                <!-- Filter Week -->
-                                <div class="col-md-4 mb-3">
-                                    <label for="week" class="form-label fw-bold">Pilih Minggu (Week):</label>
-                                    <select name="week" id="week" class="form-select">
-                                        <option value="">--Pilih Minggu--</option>
-                                        <?php
-                                        for ($i = 1; $i <= 52; $i++) {
-                                            echo "<option value='$i'>Minggu $i</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
+                    <!-- Form untuk memilih Regional -->
+                    <form method="GET" action="" class="mb-4 p-3 bg-light rounded shadow-sm">
+                        <div class="row">
+                            <!-- Filter Regional -->
+                            <div class="col-md-4 mb-3">
+                                <label for="regional" class="form-label fw-bold">Pilih Regional:</label>
+                                <select name="regional" id="regional" class="form-select">
+                                    <option value="">--Pilih Regional--</option>
+                                    <?php
+                                    while ($regional = $regional_result->fetch_assoc()) {
+                                        $selected = ($regional['Regional'] == $selected_regional) ? 'selected' : '';
+                                        echo "<option value='{$regional['Regional']}' $selected>{$regional['Regional']}</option>";
+                                    }
+                                    ?>
+                                </select>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100">Tampilkan Data</button>
-                        </form>
 
-                        <?php
-                        // Menangani inputan filter yang dipilih
-                        $conditions = [];
-                        if (isset($_GET['regional']) && $_GET['regional'] != '') {
-                            $selected_regional = $_GET['regional'];
-                            $conditions[] = "report_agung.ZonaTujuan = '$selected_regional'";
+                            <!-- Filter Year -->
+                            <div class="col-md-4 mb-3">
+                                <label for="year" class="form-label fw-bold">Pilih Tahun:</label>
+                                <select name="year" id="year" class="form-select">
+                                    <option value="">--Pilih Tahun--</option>
+                                    <?php
+                                    $currentYear = date("Y");
+                                    for ($i = $currentYear; $i >= $currentYear - 6; $i--) {
+                                        $selected = ($i == $selected_year) ? 'selected' : '';
+                                        echo "<option value='$i' $selected>$i</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <!-- Filter Week -->
+                            <div class="col-md-4 mb-3">
+                                <label for="week" class="form-label fw-bold">Pilih Minggu (Week):</label>
+                                <select name="week" id="week" class="form-select">
+                                    <option value="">--Pilih Minggu--</option>
+                                    <?php
+                                    for ($i = 1; $i <= 52; $i++) {
+                                        $selected = ($i == $selected_week) ? 'selected' : '';
+                                        echo "<option value='$i' $selected>Minggu $i</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Tampilkan Data</button>
+                    </form>
+
+                    <?php
+                    // Definisikan variabel default untuk year dan week
+                    $selected_regional = $selected_year = $selected_week = '';
+
+                    // Menangani inputan filter yang dipilih
+                    $conditions = [];
+                    if (isset($_GET['regional']) && $_GET['regional'] != '') {
+                        $selected_regional = $_GET['regional'];
+                        $conditions[] = "report_agung.ZonaTujuan = '$selected_regional'";
+                    }
+                    if (isset($_GET['year']) && $_GET['year'] != '') {
+                        $selected_year = $_GET['year'];
+                        $conditions[] = "report_agung.Tahun_BA = '$selected_year'";
+                    }
+                    if (isset($_GET['week']) && $_GET['week'] != '') {
+                        $selected_week = $_GET['week'];
+                        $conditions[] = "report_agung.Week = '$selected_week'";
+                    }
+
+                    // Mengecek apakah ada filter yang dipilih
+                    if (empty($conditions)) {
+                        echo '<p class="text-center">Silakan pilih filter untuk menampilkan data.</p>';
+                    } else {
+                        // Menyusun query dinamis berdasarkan kondisi yang ada
+                        $sql = "SELECT 
+                            report_agung.ID_Sistem, report_agung.ZonaAsal, report_agung.Nama_Kantor_Asal, report_agung.Kantor_Asal,
+                            report_agung.Tanggal_Berita_Acara, report_agung.ZonaTujuan, report_agung.Nama_Kantor_Tujuan, report_agung.Kantor_Tujuan, 
+                            report_agung.Deskripsi, report_agung.DNLN, report_agung.Nomor_Kiriman, report_agung.Uraian_Berita_Acara, 
+                            report_agung.Deskripsi_Iregularitas, report_agung.Tahun_BA, report_agung.Bulan_BA, report_agung.Week, report_agung.month_name,
+                            newreport.Rincian_Root_Cause, newreport.Referensi_Root_Cause, newreport.Tindakan_Pencegahan, newreport.Corrective_Action, 
+                            newreport.Locus, newreport.Nama_NIK_Pegawai, newreport.No_Evidence, newreport.Validasi_Regional, newreport.Validasi_Pusat
+                        FROM 
+                            report_agung
+                        LEFT JOIN 
+                            newreport ON report_agung.ID_Sistem = newreport.ID_Sistem";
+
+                        if (!empty($conditions)) {
+                            $sql .= " WHERE " . implode(" AND ", $conditions);
                         }
-                        if (isset($_GET['year']) && $_GET['year'] != '') {
-                            $selected_year = $_GET['year'];
-                            $conditions[] = "report_agung.Tahun_BA = '$selected_year'";
-                        }
-                        if (isset($_GET['week']) && $_GET['week'] != '') {
-                            $selected_week = $_GET['week'];
-                            $conditions[] = "report_agung.Week = '$selected_week'";
-                        }
 
-                        // Mengecek apakah ada filter yang dipilih
-                        if (empty($conditions)) {
-                            echo '<p class="text-center">Silakan pilih filter untuk menampilkan data.</p>';
-                        } else {
-                            // Menyusun query dinamis berdasarkan kondisi yang ada
-                            $sql = "SELECT 
-                                report_agung.ID_Sistem, report_agung.ZonaAsal, report_agung.Nama_Kantor_Asal, report_agung.Kantor_Asal,
-                                report_agung.Tanggal_Berita_Acara, report_agung.ZonaTujuan, report_agung.Nama_Kantor_Tujuan, report_agung.Kantor_Tujuan, 
-                                report_agung.Deskripsi, report_agung.DNLN, report_agung.Nomor_Kiriman, report_agung.Uraian_Berita_Acara, 
-                                report_agung.Deskripsi_Iregularitas, report_agung.Tahun_BA, report_agung.Bulan_BA, report_agung.Week, report_agung.month_name,
-                                newreport.Rincian_Root_Cause, newreport.Referensi_Root_Cause, newreport.Tindakan_Pencegahan, newreport.Corrective_Action, 
-                                newreport.Locus, newreport.Nama_NIK_Pegawai, newreport.No_Evidence, newreport.Validasi_Regional, newreport.Validasi_Pusat
-                            FROM 
-                                report_agung
-                            LEFT JOIN 
-                                newreport ON report_agung.ID_Sistem = newreport.ID_Sistem";
+                        // Hitung total data yang sesuai filter
+                        $result = $koneksi->query($sql);
+                        $totalData = $result->num_rows;
 
-                            if (!empty($conditions)) {
-                                $sql .= " WHERE " . implode(" AND ", $conditions);
-                            }
+                        // Konfigurasi paginasi
+                        $dataPerPage = 100;
+                        $totalPages = ceil($totalData / $dataPerPage);
+                        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                        $startIndex = ($currentPage - 1) * $dataPerPage;
 
-                            $result = $koneksi->query($sql);
+                        // Query dengan paginasi
+                        $sql .= " LIMIT $startIndex, $dataPerPage";
+                        $paginatedResult = $koneksi->query($sql);
 
-                            if ($result->num_rows > 0) {
-                                echo '<div class="card"><div class="table-responsive text-nowrap"><table class="table" id="dataTable">';
-                                echo '
-                                <thead>
-                                    <tr>
-                                        <th class="aksi">Aksi</th>
-                                        <th>ID Sistem</th>
-                                        <th>Reg Asal P6</th>
-                                        <th>Kantor Asal P6</th>
-                                        <th>Nopend Asal P6</th>
-                                        <th>Tanggal Berita Acara</th>
-                                        <th>Reg Tujuan P6</th>
-                                        <th>Kantor Tujuan P6</th>
-                                        <th>Nopend Tujuan P6</th>
-                                        <th>Deskripsi</th>
-                                        <th>DN/LN</th>
-                                        <th>Nomor Kiriman</th>
-                                        <th>Uraian Berita Acara</th>
-                                        <th>Deskripsi Iregularitas</th>
-                                        <th>Tahun</th>
-                                        <th>Bulan</th>
-                                        <th>Week</th>
-                                        <th>Rincian Root Cause</th>
-                                        <th>Referensi Root Cause</th>
-                                        <th>Tindakan Pencegahan</th>
-                                        <th>Corrective Action</th>
-                                        <th>Locus</th>
-                                        <th>Nama NIK Pegawai</th>
-                                        <th>No Evidence</th>
-                                        <th>Validasi Regional</th>
-                                        <th>Validasi Pusat</th>
-                                    </tr>
-                                </thead>';
-                                echo '<tbody>';
-                                while ($row = $result->fetch_assoc()) {
-                                    echo '<tr>';
-                                    echo '<td class="aksi">
-                                        <a href="../crud_regional/update.php?id_sistem=' . $row['ID_Sistem'] . '" class="btn btn-primary btn-sm d-flex align-items-center gap-1">
-                                                <i class="bx bx-edit"></i> Edit
-                                        </a>
-                                        <a href="../crud_regional/delete.php" class="btn btn-danger delete-btn" data-id="' . $row['ID_Sistem'] . '">Delete</a>
-                                    </td>';
-                                    echo '<td>' . $row['ID_Sistem'] . '</td>';
-                                    echo '<td>' . $row['ZonaAsal'] . '</td>';
-                                    echo '<td>' . $row['Nama_Kantor_Asal'] . '</td>';
-                                    echo '<td>' . $row['Kantor_Asal'] . '</td>';
-                                    echo '<td>' . date('Y-m-d', strtotime($row['Tanggal_Berita_Acara'])) . '</td>';
-                                    echo '<td>' . $row['ZonaTujuan'] . '</td>';
-                                    echo '<td>' . $row['Nama_Kantor_Tujuan'] . '</td>';
-                                    echo '<td>' . $row['Kantor_Tujuan'] . '</td>';
-                                    echo '<td>' . $row['Deskripsi'] . '</td>';
-                                    echo '<td>' . $row['DNLN'] . '</td>';
-                                    echo '<td>';
-                                    $nomorKiriman = $row['Nomor_Kiriman'];
+                        if ($totalData > 0) {
+                            echo '<div class="card"><div class="table-responsive text-nowrap"><table class="table" id="dataTable">';
+                            echo '
+                            <thead>
+                                <tr>
+                                    <th class="aksi">Aksi</th>
+                                    <th>ID Sistem</th>
+                                    <th>Reg Asal P6</th>
+                                    <th>Kantor Asal P6</th>
+                                    <th>Nopend Asal P6</th>
+                                    <th>Tanggal Berita Acara</th>
+                                    <th>Reg Tujuan P6</th>
+                                    <th>Kantor Tujuan P6</th>
+                                    <th>Nopend Tujuan P6</th>
+                                    <th>Deskripsi</th>
+                                    <th>DN/LN</th>
+                                    <th>Nomor Kiriman</th>
+                                    <th>Uraian Berita Acara</th>
+                                    <th>Deskripsi Iregularitas</th>
+                                    <th>Tahun</th>
+                                    <th>Bulan</th>
+                                    <th>Week</th>
+                                    <th>Rincian Root Cause</th>
+                                    <th>Referensi Root Cause</th>
+                                    <th>Tindakan Pencegahan</th>
+                                    <th>Corrective Action</th>
+                                    <th>Locus</th>
+                                    <th>Nama NIK Pegawai</th>
+                                    <th>No Evidence</th>
+                                    <th>Validasi Regional</th>
+                                    <th>Validasi Pusat</th>
+                                </tr>
+                            </thead>';
+                            echo '<tbody>';
+                            while ($row = $paginatedResult->fetch_assoc()) {
+                                echo '<tr>';
+                                echo '<td class="aksi">
+                                    <a href="../crud_regional/update.php?id_sistem=' . $row['ID_Sistem'] . '" class="btn btn-primary btn-sm d-flex align-items-center gap-1">
+                                            <i class="bx bx-edit"></i> Edit
+                                    </a>
+                                    <a href="../crud_regional/delete.php" class="btn btn-danger delete-btn" data-id="' . $row['ID_Sistem'] . '">Delete</a>
+                                </td>';
+                                echo '<td>' . $row['ID_Sistem'] . '</td>';
+                                echo '<td>' . $row['ZonaAsal'] . '</td>';
+                                echo '<td>' . $row['Nama_Kantor_Asal'] . '</td>';
+                                echo '<td>' . $row['Kantor_Asal'] . '</td>';
+                                echo '<td>' . date('Y-m-d', strtotime($row['Tanggal_Berita_Acara'])) . '</td>';
+                                echo '<td>' . $row['ZonaTujuan'] . '</td>';
+                                echo '<td>' . $row['Nama_Kantor_Tujuan'] . '</td>';
+                                echo '<td>' . $row['Kantor_Tujuan'] . '</td>';
+                                echo '<td>' . $row['Deskripsi'] . '</td>';
+                                echo '<td>' . $row['DNLN'] . '</td>';
+                                echo '<td>';
+                                $nomorKiriman = $row['Nomor_Kiriman'];
                                     if (strlen($nomorKiriman) > 28) {
-                                        $short_text_nomor = substr($nomorKiriman, 0, 28);
-                                        $full_text_nomor = substr($nomorKiriman, 28);
+                                        $short_text_nomor = substr($nomorKiriman, 0, 24);
+                                        $full_text_nomor = substr($nomorKiriman, 24);
                                         echo '<span class="short-text">' . $short_text_nomor . '</span>';
                                         echo '<span class="full-text" style="display: none;">' . $full_text_nomor . '</span>';
                                         echo '<span class="read-more-btn" style="color: blue; cursor: pointer;">Baca Selengkapnya</span>';
@@ -466,8 +482,8 @@ if (!isset($_SESSION['admin_nama'])) {
                                         echo $nomorKiriman;
                                     }
                                     echo '</td>';
-                                    echo '<td>';
-                                    $uraian = $row['Uraian_Berita_Acara'];
+                                echo '<td>';
+                                $uraian = $row['Uraian_Berita_Acara'];
                                     if (strlen($uraian) > 100) {
                                         $short_text_uraian = substr($uraian, 0, 100);
                                         $full_text_uraian = substr($uraian, 100);
@@ -477,159 +493,191 @@ if (!isset($_SESSION['admin_nama'])) {
                                     } else {
                                         echo $uraian;
                                     }
-                                    echo '</td>';
-                                    echo '<td>' . $row['Deskripsi_Iregularitas'] . '</td>';
-                                    echo '<td>' . $row['Tahun_BA'] . '</td>';
-                                    echo '<td>' . $row['month_name'] . '</td>';
-                                    echo '<td>' . $row['Week'] . '</td>';
-                                    echo '<td>' . $row['Rincian_Root_Cause'] . '</td>';
-                                    echo '<td>' . $row['Referensi_Root_Cause'] . '</td>';
-                                    echo '<td>' . $row['Tindakan_Pencegahan'] . '</td>';
-                                    echo '<td>' . $row['Corrective_Action'] . '</td>';
-                                    echo '<td>' . $row['Locus'] . '</td>';
-                                    echo '<td>' . $row['Nama_NIK_Pegawai'] . '</td>';
-                                    echo '<td>' . $row['No_Evidence'] . '</td>';
-                                    echo '<td>' . $row['Validasi_Regional'] . '</td>';
-                                    echo '<td>' . $row['Validasi_Pusat'] . '</td>';
-                                    echo '</tr>';
-                                }
-                                echo '</tbody></table></div></div>';
+                                echo '<td>' . $row['Deskripsi_Iregularitas'] . '</td>';
+                                echo '<td>' . $row['Tahun_BA'] . '</td>';
+                                echo '<td>' . $row['month_name'] . '</td>';
+                                echo '<td>' . $row['Week'] . '</td>';
+                                echo '<td>' . $row['Rincian_Root_Cause'] . '</td>';
+                                echo '<td>' . $row['Referensi_Root_Cause'] . '</td>';
+                                echo '<td>' . $row['Tindakan_Pencegahan'] . '</td>';
+                                echo '<td>' . $row['Corrective_Action'] . '</td>';
+                                echo '<td>' . $row['Locus'] . '</td>';
+                                echo '<td>' . $row['Nama_NIK_Pegawai'] . '</td>';
+                                echo '<td>' . $row['No_Evidence'] . '</td>';
+                                echo '<td>' . $row['Validasi_Regional'] . '</td>';
+                                echo '<td>' . $row['Validasi_Pusat'] . '</td>';
+                                echo '</tr>';
+                            }
+                            echo '</tbody>';
+                            echo '</table></div></div>';
+                            
+                            // Pagination message
+                            $startResult = $startIndex + 1;
+                            $endResult = min($startIndex + $dataPerPage, $totalData);
+                            echo "<div class='pagination-wrapper'>
+                                    <small class='text-muted'>Menampilkan $startResult-$endResult dari total $totalData hasil</small>
+                                    <nav aria-label='Page navigation'>
+                                        <ul class='pagination justify-content-end'>";
+
+                            // Prev button
+                            echo '<li class="page-item ' . ($currentPage <= 1 ? 'disabled' : '') . '">
+                                    <a class="page-link" href="?page=' . max(1, $currentPage - 1) . '&regional=' . $selected_regional . '&year=' . $selected_year . '&week=' . $selected_week . '" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>';
+
+                            // Page numbers
+                            for ($i = 1; $i <= $totalPages; $i++) {
+                                echo '<li class="page-item ' . ($i == $currentPage ? 'active' : '') . '">
+                                        <a class="page-link" href="?page=' . $i . '&regional=' . $selected_regional . '&year=' . $selected_year . '&week=' . $selected_week . '">' . $i . '</a>
+                                    </li>';
+                            }
+
+                            // Next button
+                            echo '<li class="page-item ' . ($currentPage >= $totalPages ? 'disabled' : '') . '">
+                                    <a class="page-link" href="?page=' . min($totalPages, $currentPage + 1) . '&regional=' . $selected_regional . '&year=' . $selected_year . '&week=' . $selected_week . '" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>';
+
+                            // Close pagination list and navigation
+                            echo '</ul></nav></div>';
+
                             } else {
-                                echo '<p class="text-center">No data available</p>';
+                                echo '<p class="text-center">Tidak ada data yang sesuai dengan filter yang dipilih.</p>';
                             }
                         }
-                        ?>
-                    </div>
-
-
-
+                    ?>
                 </div>
+            </div>
+        </div>
+    </div>
+        <!-- External Scripts -->
+        <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+        <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+        <script src="../assets/vendor/js/bootstrap.js"></script>
+        <script src="../assets/vendor/js/menu.js"></script>
+        <script src="../assets/js/main.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-                <!-- Scripts -->
-                <script src="../assets/vendor/libs/jquery/jquery.js"></script>
-                <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-                <script src="../assets/vendor/js/bootstrap.js"></script>
-                <script src="../assets/vendor/js/menu.js"></script>
-                <script src="../assets/js/main.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <!-- Delete Confirmation Script -->
+        <script>
+            $(document).ready(function() {
+                $('.delete-btn').click(function(e) {
+                    e.preventDefault();
+                    var id = $(this).data('id'); // ambil id dari atribut data-id
 
-                <script>
-                    $(document).ready(function() {
-                        $('.delete-btn').click(function(e) {
-                            e.preventDefault();
-                            var id = $(this).data('id'); // ambil id dari atribut data-id
-
-                            Swal.fire({
-                                title: 'Apakah Anda yakin?',
-                                text: "Data ini akan dihapus!",
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonColor: '#d33',
-                                cancelButtonColor: '#3085d6',
-                                confirmButtonText: 'Hapus'
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    $.ajax({
-                                        url: '../crud_regional/delete.php',
-                                        type: 'POST',
-                                        data: {
-                                            id_sistem: id
-                                        },
-                                        success: function(response) {
-                                            if (response == 'success') {
-                                                Swal.fire(
-                                                    'Dihapus!',
-                                                    'Data telah berhasil dihapus.',
-                                                    'success'
-                                                );
-                                                // Menghapus baris dari tabel
-                                                $('a.delete-btn[data-id="' + id + '"]').closest('tr').fadeOut();
-                                            } else {
-                                                Swal.fire(
-                                                    'Gagal!',
-                                                    'Data gagal dihapus.',
-                                                    'error'
-                                                );
-                                            }
-                                        }
-                                    });
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: "Data ini akan dihapus!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Hapus'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: '../crud_regional/delete.php',
+                                type: 'POST',
+                                data: {
+                                    id_sistem: id
+                                },
+                                success: function(response) {
+                                    if (response == 'success') {
+                                        Swal.fire(
+                                            'Dihapus!',
+                                            'Data telah berhasil dihapus.',
+                                            'success'
+                                        );
+                                        // Menghapus baris dari tabel
+                                        $('a.delete-btn[data-id="' + id + '"]').closest('tr').fadeOut();
+                                    } else {
+                                        Swal.fire(
+                                            'Gagal!',
+                                            'Data gagal dihapus.',
+                                            'error'
+                                        );
+                                    }
                                 }
                             });
-                        });
-                    });
-                </script>
-
-                <!-- JavaScript untuk Filter -->
-                <script>
-                    function filterTable() {
-                        let input = document.getElementById('searchInput').value.toLowerCase();
-                        let table = document.getElementById("dataTable");
-                        let tr = table.getElementsByTagName("tr");
-                        let noResults = document.getElementById("noResults");
-                        let found = false;
-
-                        // Menyembunyikan seluruh baris tabel kecuali header
-                        for (let i = 1; i < tr.length; i++) {
-                            tr[i].style.display = "none"; // Sembunyikan semua baris
-                        }
-
-                        // Menampilkan baris yang sesuai dengan hasil pencarian
-                        for (let i = 1; i < tr.length; i++) {
-                            let idSistem = tr[i].getElementsByTagName("td")[1]?.textContent.toLowerCase();
-                            let tahunBA = tr[i].getElementsByTagName("td")[14]?.textContent.toLowerCase(); // Kolom Tahun_BA
-                            let week = tr[i].getElementsByTagName("td")[15]?.textContent.toLowerCase(); // Kolom Week
-                            let zonaTujuan = tr[i].getElementsByTagName("td")[6]?.textContent.toLowerCase(); // Kolom ZonaTujuan
-
-                            // Cek apakah input ada di salah satu kolom
-                            if (idSistem.includes(input) || tahunBA.includes(input) || week.includes(input) || zonaTujuan.includes(input)) {
-                                tr[i].style.display = ""; // Tampilkan baris yang sesuai
-                                found = true;
-                            }
-                        }
-
-                        // Tampilkan atau sembunyikan pesan jika tidak ada hasil
-                        noResults.style.display = found ? "none" : "block";
-                    }
-                </script>
-
-                <script>
-                    // Toggle full text display on click
-                    $(document).on('click', '.read-more-btn', function() {
-                        var $shortText = $(this).siblings('.short-text');
-                        var $fullText = $(this).siblings('.full-text');
-                        if ($fullText.is(':visible')) {
-                            $shortText.show();
-                            $fullText.hide();
-                            $(this).text('Baca Selengkapnya');
-                        } else {
-                            $shortText.hide();
-                            $fullText.show();
-                            $(this).text('Tutup');
                         }
                     });
-                </script>
+                });
+            });
+        </script>
 
-                <!-- SweetAlert2 JS -->
-                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                <script>
-                    function confirmLogout() {
-                        Swal.fire({
-                            title: 'Apakah Anda yakin ingin keluar?',
-                            text: "Anda akan keluar dari sesi saat ini!",
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Ya, Keluar!',
-                            cancelButtonText: 'Batal'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                // Redirect ke halaman logout jika pengguna menekan "Ya, Keluar!"
-                                window.location.href = '../html/auth-login-admin.php';
-                            }
-                        })
+        <!-- Table Filter Script -->
+        <script>
+            function filterTable() {
+                let input = document.getElementById('searchInput').value.toLowerCase();
+                let table = document.getElementById("dataTable");
+                let tr = table.getElementsByTagName("tr");
+                let noResults = document.getElementById("noResults");
+                let found = false;
+
+                // Menyembunyikan seluruh baris tabel kecuali header
+                for (let i = 1; i < tr.length; i++) {
+                    tr[i].style.display = "none"; // Sembunyikan semua baris
+                }
+
+                // Menampilkan baris yang sesuai dengan hasil pencarian
+                for (let i = 1; i < tr.length; i++) {
+                    let idSistem = tr[i].getElementsByTagName("td")[1]?.textContent.toLowerCase();
+                    let tahunBA = tr[i].getElementsByTagName("td")[14]?.textContent.toLowerCase(); // Kolom Tahun_BA
+                    let week = tr[i].getElementsByTagName("td")[15]?.textContent.toLowerCase(); // Kolom Week
+                    let zonaTujuan = tr[i].getElementsByTagName("td")[6]?.textContent.toLowerCase(); // Kolom ZonaTujuan
+
+                    // Cek apakah input ada di salah satu kolom
+                    if (idSistem.includes(input) || tahunBA.includes(input) || week.includes(input) || zonaTujuan.includes(input)) {
+                        tr[i].style.display = ""; // Tampilkan baris yang sesuai
+                        found = true;
                     }
-                </script>
-</body>
+                }
+
+                // Tampilkan atau sembunyikan pesan jika tidak ada hasil
+                noResults.style.display = found ? "none" : "block";
+            }
+        </script>
+
+        <!-- Toggle Full Text Display -->
+        <script>
+            $(document).on('click', '.read-more-btn', function() {
+                var $shortText = $(this).siblings('.short-text');
+                var $fullText = $(this).siblings('.full-text');
+                if ($fullText.is(':visible')) {
+                    $shortText.show();
+                    $fullText.hide();
+                    $(this).text('Baca Selengkapnya');
+                } else {
+                    $shortText.hide();
+                    $fullText.show();
+                    $(this).text('Tutup');
+                }
+            });
+        </script>
+
+        <!-- Logout Confirmation -->
+        <script>
+            function confirmLogout() {
+                Swal.fire({
+                    title: 'Apakah Anda yakin ingin keluar?',
+                    text: "Anda akan keluar dari sesi saat ini!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Keluar!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redirect ke halaman logout jika pengguna menekan "Ya, Keluar!"
+                        window.location.href = '../html/auth-login-admin.php';
+                    }
+                })
+            }
+        </script>
+
+    </body>
 
 </html>

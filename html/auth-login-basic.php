@@ -32,6 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['id'] = $row['id'];    // Store user ID for profile access
             $_SESSION['nama'] = $row['nama']; // Set session with user data
             $_SESSION['nik'] = $row['nik'];   // Store user's NIK for profile updates
+            $_SESSION['regional'] = $row['regional']; 
 
             $alert_script = "<script>
                     Swal.fire({

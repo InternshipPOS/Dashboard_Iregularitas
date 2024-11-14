@@ -11,6 +11,9 @@ if (!isset($_SESSION['nama'])) {
     exit;
 }
 
+// Get user's regional information from session
+$regional = $_SESSION['regional'];
+
 // Asumsi: koneksi database sudah ada melalui $koneksi
 $user_id = $_SESSION['id']; // ID user yang sudah login
 
@@ -281,6 +284,7 @@ $koneksi->close();
                       <div class="card-body">
                         <h5 class="card-title text-primary">
                           Hello <?php echo isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User'; ?>!
+                          <p><strong><?php echo $regional; ?></strong></p>
                         </h5>
                         <p class="mb-4">
                           Selamat datang di <span class="fw-bold">dashboard iregularitas</span>, kelola data dengan efisien dan pantau kinerja secara real-time dengan lebih cepat dan tepat.
