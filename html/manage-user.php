@@ -79,7 +79,7 @@
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="../user/monitoring_regional.php" class="menu-link">
+                        <a href="../html/monitoring.php" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-line-chart"></i>
                             <div data-i18n="Account Settings">Monitoring Regional</div>
                         </a>
