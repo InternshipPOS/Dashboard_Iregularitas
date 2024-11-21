@@ -79,6 +79,12 @@
                         </a>
                     </li>
                     <li class="menu-item">
+                        <a href="../user/monitoring_regional.php" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-line-chart"></i>
+                            <div data-i18n="Account Settings">Monitoring Regional</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
                         <a href="../html/manage-user.php" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-user"></i>
                             <div data-i18n="Account Settings">Manage User</div>

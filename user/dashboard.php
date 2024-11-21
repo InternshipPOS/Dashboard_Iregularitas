@@ -1,15 +1,21 @@
 <?php
 session_start();
-include 'config.php';  // Pastikan koneksi database di-include dengan benar
+include('config.php');  // Pastikan koneksi ke database sudah dilakukan
 
-// Cek apakah user sudah login
-if (!isset($_SESSION['nama'])) {
-    echo "<script>
-            alert('Anda harus login terlebih dahulu!');
-            window.location.href = '../html/auth-login-basic.php';
-          </script>";
-    exit;
+// Ambil NIK pengguna yang sudah login
+$nik_user = $_SESSION['nik'];
+
+// Query untuk mendapatkan regional pengguna
+$query = "SELECT regional FROM loginreg WHERE nik = '$nik_user'";
+$result = $koneksi->query($query);
+
+if ($result->num_rows > 0) {
+  $row = $result->fetch_assoc();
+  $user_regional = $row['regional'];
+} else {
+  echo "Regional tidak ditemukan.";
 }
+
 
 // Get user's regional information from session
 $regional = $_SESSION['regional'];
@@ -123,41 +129,16 @@ $koneksi->close();
             <span class="menu-header-text">Pages</span>
           </li>
           <li class="menu-item">
-                <a href="javascript:void(0);" class="menu-link">
-                    <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                    <div data-i18n="Account Settings">Manage Regional</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="../user/user-setting-reg1.php" class="menu-link">
-                    <div data-i18n="Regional 1">Regional 1</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="../user/user-setting-reg2.php" class="menu-link">
-                    <div data-i18n="Regional 2">Regional 2</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="../user/user-setting-reg3.php" class="menu-link">
-                    <div data-i18n="Regional 3">Regional 3</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="../user/user-setting-reg4.php" class="menu-link">
-                    <div data-i18n="Regional 4">Regional 4</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="../user/user-setting-reg5.php" class="menu-link">
-                    <div data-i18n="Regional 5">Regional 5</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="../user/user-setting-reg6.php" class="menu-link">
-                    <div data-i18n="Regional 6">Regional 6</div>
-                </a>
-            </li>
+            <a href="user-setting-reg.php?regional=<?php echo $user_regional; ?>" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-dock-top"></i>
+              <div data-i18n="Account Settings">Manage Regional</div>
+            </a>
+          </li>
+          <li class="menu-item">
+              <a href="../user/monitoring_regional.php" class="menu-link">
+                  <i class="menu-icon tf-icons bx bx-line-chart"></i>
+                  <div data-i18n="Account Settings">Monitoring</div>
+              </a>
           </li>
         </ul>
       </aside>

@@ -18,56 +18,75 @@
 </head>
 
 <body>
-    <div class="content-wrapper">
-        <div class="container-xxl flex-grow-1 container-p-y">
-            <h4 class="py-3 breadcrumb-wrapper mb-4"><span class="text-muted fw-light">Monitoring Regional</span></h4>
+<?php
+session_start();
+include('config.php');  // Pastikan koneksi ke database sudah dilakukan
 
-            <!-- Back Button -->
-            <div class="mb-3">
-                <a href="pages-regional.php" class="btn btn-primary btn-back">Back</a>
-            </div>
+// Cek apakah pengguna sudah login
+if (!isset($_SESSION['nik'])) {
+    header("Location: auth-login-basic.html");
+    exit;
+}
 
-            <!-- Data Monitoring Table -->
-            <div class="card">
-                <div class="card-body">
-                    <?php
-                    // Koneksi ke database
-                    $host = "localhost";
-                    $user = "root";
-                    $password = "";
-                    $database = "iregularitas";
+// Ambil NIK pengguna yang sudah login
+$nik_user = $_SESSION['nik'];
 
-                    $koneksi = new mysqli($host, $user, $password, $database);
+// Query untuk mendapatkan regional pengguna
+$query = "SELECT regional FROM loginreg WHERE nik = '$nik_user'";
+$result = $koneksi->query($query);
 
-                    // Cek koneksi
-                    if ($koneksi->connect_error) {
-                        die("Connection failed: " . $koneksi->connect_error);
-                    }
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $user_regional = $row['regional'];
+} else {
+    echo "Regional tidak ditemukan.";
+    exit;
+}
 
-                    // Query untuk mengambil data dari dua tabel dalam satu database
-                    $sql_data = "
-                        SELECT 
-                            r.Nama_Kantor_Tujuan, 
-                            SUM(CASE WHEN r.validasi_pusat = 'ok' THEN 1 ELSE 0 END) AS total_ok,
-                            SUM(CASE WHEN r.validasi_pusat = 'belum entri evaluasi' THEN 1 ELSE 0 END) AS total_belum_antri,
-                            SUM(CASE WHEN r.validasi_pusat = 'evidence belum upload' THEN 1 ELSE 0 END) AS total_evidence_belum_upload
-                        FROM `iregularitas`.`report_agung` r  -- Menggunakan view report_agung di database iregularitas
-                        GROUP BY r.Nama_Kantor_Tujuan
-                    ";
+// Query untuk mendapatkan data berdasarkan regional
+$sql_data = "
+    SELECT 
+        r.Nama_Kantor_Tujuan, 
+        SUM(CASE WHEN r.validasi_pusat = 'ok' THEN 1 ELSE 0 END) AS total_ok,
+        SUM(CASE WHEN r.validasi_pusat = 'belum entri evaluasi' THEN 1 ELSE 0 END) AS total_belum_antri,
+        SUM(CASE WHEN r.validasi_pusat = 'evidence belum upload' THEN 1 ELSE 0 END) AS total_evidence_belum_upload
+    FROM `iregularitas`.`report_agung` r
+    LEFT JOIN `iregularitas`.`newreport` nr ON r.ID_Sistem = nr.ID_Sistem
+    WHERE r.ZonaTujuan = '$user_regional'
+    GROUP BY r.Nama_Kantor_Tujuan
+";
 
-                    // Menjalankan query
-                    $result_data = $koneksi->query($sql_data);
+// Menjalankan query
+$result_data = $koneksi->query($sql_data);
 
-                    // Cek apakah query berhasil dijalankan
-                    if (!$result_data) {
-                        die("Error: " . $koneksi->error);
-                    }
+// Cek apakah query berhasil dijalankan
+if (!$result_data) {
+    die("Error: " . $koneksi->error);
+}
+?>
+<div class="content-wrapper">
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="py-3 breadcrumb-wrapper mb-4"><span class="text-muted fw-light">Monitoring Regional</span></h4>
 
-                    // Menampilkan hasil
-                    echo '<table class="table table-bordered table-striped">';
-                    echo '<thead><tr><th>Kantor Tujuan</th><th>Total OK</th><th>Total Belum Antri</th><th>Total Evidence Belum Upload</th></tr></thead>';
-                    echo '<tbody>';
+        <!-- Back Button -->
+        <div class="mb-3">
+            <a href="../user/dashboard.php" class="btn btn-primary btn-back">Back</a>
+        </div>
 
+        <!-- Data Monitoring Table -->
+        <div class="card">
+            <div class="card-body">
+                <?php
+                // Menampilkan hasil
+                echo '<table class="table table-bordered table-striped">';
+                echo '<thead><tr><th>Kantor Tujuan</th><th>Total OK</th><th>Total Belum Antri</th><th>Total Evidence Belum Upload</th></tr></thead>';
+                echo '<tbody>';
+
+                $grand_total_ok = 0;
+                $grand_total_belum_antri = 0;
+                $grand_total_evidence_belum_upload = 0;
+
+                if ($result_data->num_rows > 0) {
                     while ($row = $result_data->fetch_assoc()) {
                         echo "<tr>";
                         echo "<td>" . htmlspecialchars($row['Nama_Kantor_Tujuan']) . "</td>";
@@ -75,34 +94,35 @@
                         echo "<td>" . htmlspecialchars($row['total_belum_antri']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['total_evidence_belum_upload']) . "</td>";
                         echo "</tr>";
-                    }
 
-                    // Menampilkan grand total
-                    $grand_total_ok = 0;
-                    $grand_total_belum_antri = 0;
-                    $grand_total_evidence_belum_upload = 0;
-
-                    // Reset result pointer for grand total calculation
-                    $result_data->data_seek(0);
-                    while ($row = $result_data->fetch_assoc()) {
+                        // Tambah nilai ke grand total
                         $grand_total_ok += $row['total_ok'];
                         $grand_total_belum_antri += $row['total_belum_antri'];
                         $grand_total_evidence_belum_upload += $row['total_evidence_belum_upload'];
                     }
 
-                    echo "<tr class='grand-total'><td><strong>Grand Total</strong></td><td><strong>$grand_total_ok</strong></td><td><strong>$grand_total_belum_antri</strong></td><td><strong>$grand_total_evidence_belum_upload</strong></td></tr>";
-                    echo '</tbody>';
-                    echo '</table>';
+                    // Menampilkan grand total
+                    echo "<tr class='grand-total'>";
+                    echo "<td><strong>Grand Total</strong></td>";
+                    echo "<td><strong>$grand_total_ok</strong></td>";
+                    echo "<td><strong>$grand_total_belum_antri</strong></td>";
+                    echo "<td><strong>$grand_total_evidence_belum_upload</strong></td>";
+                    echo "</tr>";
+                } else {
+                    echo "<tr><td colspan='4'>Tidak ada data untuk regional Anda.</td></tr>";
+                }
 
-                    $koneksi->close();
-                    ?>
+                echo '</tbody>';
+                echo '</table>';
 
-                </div>
+                $koneksi->close();
+                ?>
             </div>
         </div>
-        
-         <!-- Footer -->
-         <footer class="content-footer footer bg-footer-theme">
+    </div>
+
+    <!-- Footer -->
+    <footer class="content-footer footer bg-footer-theme">
             <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
               <div class="mb-2 mb-md-0">
                 ©
@@ -126,13 +146,10 @@
                   class="footer-link me-4">Support</a>
               </div> -->
             </div>
-          </footer>
-          <!-- / Footer -->
-                    <div class="content-backdrop fade"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+    </footer>
+    <div class="content-backdrop fade"></div>
+</div>
+
 
     <!-- JS Scripts -->
     <script src="../assets/vendor/libs/jquery/jquery.js"></script>

@@ -1,6 +1,7 @@
 <?php
 session_start(); // Start the session for login
 
+
 include 'config.php'; // Include database configuration
 
 // Activate error display for debugging
