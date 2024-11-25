@@ -43,7 +43,28 @@ if ($result->num_rows > 0) {
     exit;
 }
 
-// Query untuk mendapatkan data berdasarkan regional
+// Inisialisasi variabel filter
+$selected_year = $_GET['year'] ?? '';
+$selected_week = $_GET['week'] ?? '';
+$conditions = [];
+
+// Filter berdasarkan Regional
+$conditions[] = "r.ZonaTujuan = '$user_regional'";
+
+// Filter berdasarkan Year
+if (!empty($selected_year)) {
+    $conditions[] = "r.Tahun_BA = '$selected_year'";
+}
+
+// Filter berdasarkan Week
+if (!empty($selected_week)) {
+    $conditions[] = "r.Week = '$selected_week'";
+}
+
+// Gabungkan kondisi menjadi string SQL
+$where_clause = implode(' AND ', $conditions);
+
+// Query untuk mendapatkan data berdasarkan filter
 $sql_data = "
     SELECT 
         r.Nama_Kantor_Tujuan, 
@@ -52,7 +73,7 @@ $sql_data = "
         SUM(CASE WHEN r.validasi_pusat = 'evidence belum upload' THEN 1 ELSE 0 END) AS total_evidence_belum_upload
     FROM `iregularitas`.`report_agung` r
     LEFT JOIN `iregularitas`.`newreport` nr ON r.ID_Sistem = nr.ID_Sistem
-    WHERE r.ZonaTujuan = '$user_regional'
+    WHERE $where_clause
     GROUP BY r.Nama_Kantor_Tujuan
 ";
 
@@ -64,6 +85,7 @@ if (!$result_data) {
     die("Error: " . $koneksi->error);
 }
 ?>
+
 <div class="content-wrapper">
     <div class="container-xxl flex-grow-1 container-p-y">
         <h4 class="py-3 breadcrumb-wrapper mb-4"><span class="text-muted fw-light">Monitoring Regional</span></h4>
@@ -73,11 +95,45 @@ if (!$result_data) {
             <a href="../user/dashboard.php" class="btn btn-primary btn-back">Back</a>
         </div>
 
+        <!-- Form Filter -->
+        <form method="GET" action="" class="mb-4 p-3 bg-light rounded shadow-sm">
+            <div class="row">
+                <!-- Filter Year -->
+                <div class="col-md-6 mb-5">
+                    <label for="year" class="form-label fw-bold">Pilih Tahun:</label>
+                    <select name="year" id="year" class="form-select">
+                        <option value="">--Pilih Tahun--</option>
+                        <?php
+                        $currentYear = date("Y");
+                        for ($i = $currentYear; $i >= $currentYear - 6; $i--) {
+                            $selected = ($i == $selected_year) ? 'selected' : '';
+                            echo "<option value='$i' $selected>$i</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+
+                <!-- Filter Week -->
+                <div class="col-md-6 mb-5">
+                    <label for="week" class="form-label fw-bold">Pilih Minggu (Week):</label>
+                    <select name="week" id="week" class="form-select">
+                        <option value="">--Pilih Minggu--</option>
+                        <?php
+                        for ($i = 1; $i <= 52; $i++) {
+                            $selected = ($i == $selected_week) ? 'selected' : '';
+                            echo "<option value='$i' $selected>Minggu $i</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Tampilkan Data</button>
+        </form>
+
         <!-- Data Monitoring Table -->
         <div class="card">
             <div class="card-body">
                 <?php
-                // Menampilkan hasil
                 echo '<table class="table table-bordered table-striped">';
                 echo '<thead><tr><th>Kantor Tujuan</th><th>Total OK</th><th>Total Belum Antri</th><th>Total Evidence Belum Upload</th></tr></thead>';
                 echo '<tbody>';
@@ -109,7 +165,7 @@ if (!$result_data) {
                     echo "<td><strong>$grand_total_evidence_belum_upload</strong></td>";
                     echo "</tr>";
                 } else {
-                    echo "<tr><td colspan='4'>Tidak ada data untuk regional Anda.</td></tr>";
+                    echo "<tr><td colspan='4'>Tidak ada data untuk filter yang dipilih.</td></tr>";
                 }
 
                 echo '</tbody>';
@@ -120,6 +176,7 @@ if (!$result_data) {
             </div>
         </div>
     </div>
+</div>
 
     <!-- Footer -->
     <footer class="content-footer footer bg-footer-theme">
@@ -146,7 +203,7 @@ if (!$result_data) {
                   class="footer-link me-4">Support</a>
               </div> -->
             </div>
-    </footer>
+          </footer>
     <div class="content-backdrop fade"></div>
 </div>
 
