@@ -23,16 +23,16 @@ $regional = $_SESSION['regional'];
 // Asumsi: koneksi database sudah ada melalui $koneksi
 $user_id = $_SESSION['id']; // ID user yang sudah login
 
-// Query untuk mengambil data jenis dari database
-$query = "SELECT jenis FROM user WHERE id = ?";
+// Query untuk mengambil data kantor_asal dari database
+$query = "SELECT kantor_asal FROM user WHERE id = ?";
 $stmt = $koneksi->prepare($query);  // Menggunakan $koneksi sesuai yang ada di config.php
 $stmt->bind_param('i', $user_id);
 $stmt->execute();
-$stmt->bind_result($jenis);
+$stmt->bind_result($kantor_asal);
 $stmt->fetch();
 
-// Menyimpan jenis ke dalam session
-$_SESSION['jenis'] = $jenis; 
+// Menyimpan kantor_asal ke dalam session
+$_SESSION['kantor_asal'] = $kantor_asal; 
 
 $stmt->close();
 
@@ -204,7 +204,7 @@ $koneksi->close();
                               <?php echo isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User'; ?>
                           </span>
                           <small class="text-muted">
-                              <?php echo isset($_SESSION['jenis']) ? $_SESSION['jenis'] : 'Jenis tidak ditemukan'; ?>
+                              <?php echo isset($_SESSION['kantor_asal']) ? $_SESSION['kantor_asal'] : 'kantor_asal tidak ditemukan'; ?>
                           </small>
                         </div>
                       </div>
@@ -265,7 +265,7 @@ $koneksi->close();
                       <div class="card-body">
                         <h5 class="card-title text-primary">
                           Hello <?php echo isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User'; ?>!
-                          <p><strong><?php echo $regional; ?></strong></p>
+                          <p><strong><?php echo $kantor_asal; ?></strong></p>
                         </h5>
                         <p class="mb-4">
                           Selamat datang di <span class="fw-bold">dashboard iregularitas</span>, kelola data dengan efisien dan pantau kinerja secara real-time dengan lebih cepat dan tepat.
