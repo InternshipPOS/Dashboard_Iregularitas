@@ -80,6 +80,14 @@
                         $validasi_pusat = $_POST['validasi_pusat'] ?? '';
 
                         // Query untuk mengupdate data report_agung
+                        // Mendapatkan data dari form dan escape untuk menghindari error
+                        $Kantor_Asal = $koneksi->real_escape_string($_POST['Kantor_Asal'] ?? '');
+                        $Tanggal_Berita_Acara = $koneksi->real_escape_string($_POST['Tanggal_Berita_Acara'] ?? '');
+                        $Kantor_Tujuan = $koneksi->real_escape_string($_POST['Kantor_Tujuan'] ?? '');
+                        $Nomor_Kiriman = $koneksi->real_escape_string($_POST['Nomor_Kiriman'] ?? '');
+                        $Uraian_Berita_Acara = $koneksi->real_escape_string($_POST['Uraian_Berita_Acara'] ?? '');
+
+                        // Query untuk mengupdate data report_agung
                         $sql1 = "UPDATE ireg_p6_entri SET 
                                     Kantor_Asal = '$Kantor_Asal',
                                     Tanggal_Berita_Acara = '$Tanggal_Berita_Acara',
@@ -88,6 +96,27 @@
                                     Uraian_Berita_Acara = '$Uraian_Berita_Acara'
                                     WHERE id_sistem='$id_sistem'";
 
+                        // Eksekusi query
+                        if ($koneksi->query($sql1) === TRUE) {
+                            // Query pertama berhasil
+                        } else {
+                            echo "Error updating record in report_agung: " . $koneksi->error;
+                        }
+
+                        // Lakukan hal yang sama untuk sql2
+
+                        // Mendapatkan data dari form dan escape untuk menghindari error
+                        $rincian_root_cause = $koneksi->real_escape_string($_POST['rincian_root_cause'] ?? '');
+                        $referensi_root_cause = $koneksi->real_escape_string($_POST['referensi_root_cause'] ?? '');
+                        $tindakan_pencegahan = $koneksi->real_escape_string($_POST['tindakan_pencegahan'] ?? '');
+                        $corrective_action = $koneksi->real_escape_string($_POST['corrective_action'] ?? '');
+                        $locus = $koneksi->real_escape_string($_POST['locus'] ?? '');
+                        $nama_nik_pegawai = $koneksi->real_escape_string($_POST['nama_nik_pegawai'] ?? '');
+                        $no_evidence = $koneksi->real_escape_string($_POST['no_evidence'] ?? '');
+                        $validasi_regional = $koneksi->real_escape_string($_POST['validasi_regional'] ?? '');
+                        $validasi_pusat = $koneksi->real_escape_string($_POST['validasi_pusat'] ?? '');
+
+                        // Query untuk mengupdate data newreport
                         $sql2 = "UPDATE newreport SET
                                     Rincian_Root_Cause = '$rincian_root_cause',
                                     Referensi_Root_Cause = '$referensi_root_cause',
@@ -98,11 +127,19 @@
                                     No_Evidence = '$no_evidence',
                                     Validasi_Regional = '$validasi_regional',
                                     Validasi_Pusat = '$validasi_pusat'
-                                    WHERE id_sistem='$id_sistem'";
+                                    WHERE id_sistem='$ID_Sistem'"; // Pastikan menggunakan ID_Sistem yang benar
+
+                        // Eksekusi query
+                        if ($koneksi->query($sql2) === TRUE) {
+                            // Query kedua berhasil
+                        } else {
+                            echo "Error updating record in newreport: " . $koneksi->error;
+                        }
 
                         // Eksekusi query
                         //$koneksi->query($sql1);
                         //$koneksi->query($sql2);
+                       // Eksekusi query
                         $nik_user = $_SESSION['nik']; // Pastikan Anda memiliki sesi NIK pengguna
                         $query = "SELECT regional FROM loginreg WHERE nik = '$nik_user'";
                         $result = $koneksi->query($query);
@@ -112,6 +149,7 @@
                             $user_regional = $row['regional']; // Ambil nilai regional pengguna
                             
                             // Proses Update Data
+                            // Eksekusi query
                             if ($koneksi->query($sql1) === TRUE && $koneksi->query($sql2) === TRUE) {
                                 echo "<script>
                                         Swal.fire({
@@ -122,7 +160,7 @@
                                         }).then((result) => {
                                             if (result.isConfirmed) {
                                                 // Redirect ke halaman sesuai regional
-                                                window.location.href = '../user/user-setting-reg.php?regional=$user_regional';
+                                                window.location.href = '../user/user-setting-reg.php?regional=' + '$user_regional';
                                             }
                                         });
                                     </script>";
@@ -130,7 +168,7 @@
                                 echo "<script>
                                         Swal.fire({
                                             title: 'Error!',
-                                            text: 'Gagal memperbarui data.',
+                                            text: 'Gagal memperbarui data. Silakan coba lagi.',
                                             icon: 'error',
                                             confirmButtonText: 'OK'
                                         });
@@ -139,6 +177,7 @@
                         } else {
                             echo "Regional tidak ditemukan.";
                         }
+
                     }
 
                     // Query untuk mendapatkan data yang ingin diedit
@@ -163,50 +202,49 @@
                             <!-- Zona Asal -->
                             <div class="mb-3">
                                 <label for="ZonaAsal" class="form-label">Reg Asal P6</label>
-                                <input type="text" class="form-control" id="ZonaAsal" name="ZonaAsal" value="<?php echo $row1['ZonaAsal']; ?>" disabled>
+                                <input type="text" class="form-control" id="ZonaAsal" name="ZonaAsal" value="<?php echo $row1['ZonaAsal']; ?>" required readonly>
                             </div>
 
                             <!-- Nama Kantor Asal -->
                             <div class="mb-3">
                                 <label for="Nama_Kantor_Asal" class="form-label">Kantor Asal P6</label>
-                                <input type="text" class="form-control" id="Nama_Kantor_Asal" name="Nama_Kantor_Asal" value="<?php echo $row1['Nama_Kantor_Asal']; ?>"disabled>
+                                <input type="text" class="form-control" id="Nama_Kantor_Asal" name="Nama_Kantor_Asal" value="<?php echo $row1['Nama_Kantor_Asal']; ?>" required readonly>
                             </div>
 
                             <!-- Kantor Asal -->
                             <div class="mb-3">
                                 <label for="Kantor_Asal" class="form-label">Nopend Asal P6</label>
-                                <input type="text" class="form-control" id="Kantor_Asal" name="Kantor_Asal" value="<?php echo $row1['Kantor_Asal']; ?>"disabled>
+                                <input type="text" class="form-control" id="Kantor_Asal" name="Kantor_Asal" value="<?php echo $row1['Kantor_Asal']; ?>" required readonly>
                             </div>
 
                             <!-- Tanggal Berita Acara -->
                             <div class="mb-3">
                                 <label for="Tanggal_Berita_Acara" class="form-label">Tanggal Berita Acara</label>
-                                <input type="date" class="form-control" id="Tanggal_Berita_Acara" name="Tanggal_Berita_Acara" value="<?php echo date('Y-m-d', strtotime($row1['Tanggal_Berita_Acara'])); ?>" required disabled>
+                                <input type="date" class="form-control" id="Tanggal_Berita_Acara" name="Tanggal_Berita_Acara" value="<?php echo date('Y-m-d', strtotime($row1['Tanggal_Berita_Acara'])); ?>" required readonly>
                             </div>
-
 
                             <!-- Kantor Tujuan -->
                             <div class="mb-3">
                                 <label for="Kantor_Tujuan" class="form-label">Nopend Tujuan P6</label>
-                                <input type="text" class="form-control" id="Kantor_Tujuan" name="Kantor_Tujuan" value="<?php echo $row1['Kantor_Tujuan']; ?>"disabled>
+                                <input type="text" class="form-control" id="Kantor_Tujuan" name="Kantor_Tujuan" value="<?php echo $row1['Kantor_Tujuan']; ?>" required readonly>
                             </div>
 
                             <!-- Nomor Kiriman -->
                             <div class="mb-3">
                                 <label for="Nomor_Kiriman" class="form-label">Nomor Kiriman</label>
-                                <input type="text" class="form-control" id="Nomor_Kiriman" name="Nomor_Kiriman" value="<?php echo $row1['Nomor_Kiriman']; ?>"disabled>
+                                <input type="text" class="form-control" id="Nomor_Kiriman" name="Nomor_Kiriman" value="<?php echo $row1['Nomor_Kiriman']; ?>" required readonly>
                             </div>
 
                             <!-- Uraian Berita Acara -->
                             <div class="mb-3">
                                 <label for="Uraian_Berita_Acara" class="form-label">Uraian Berita Acara</label>
-                                <textarea class="form-control" id="Uraian_Berita_Acara" name="Uraian_Berita_Acara" disabled><?php echo $row1['Uraian_Berita_Acara']; ?></textarea>
+                                <textarea class="form-control" id="Uraian_Berita_Acara" name="Uraian_Berita_Acara" required readonly><?php echo $row1['Uraian_Berita_Acara']; ?></textarea>
                             </div>
 
                             <!-- Deskripsi Iregularitas -->
                             <div class="mb-3">
                                 <label for="Deskripsi_Iregularitas" class="form-label">Deskripsi Iregularitas</label>
-                                <input type="text" class="form-control" id="Deskripsi_Iregularitas" name="Deskripsi_Iregularitas" value="<?php echo htmlspecialchars($row1['Deskripsi_Iregularitas']); ?>"disabled>
+                                <input type="text" class="form-control" id="Deskripsi_Iregularitas" name="Deskripsi_Iregularitas" value="<?php echo htmlspecialchars($row1['Deskripsi_Iregularitas']); ?>" required readonly>
                             </div>
 
 
@@ -302,6 +340,7 @@
                                     <option value="belum entri evaluasi" <?php echo ($row2['Validasi_Pusat'] == 'belum entri evaluasi') ? 'selected' : ''; ?>>Belum Entri Evaluasi</option>
                                     <option value="evidence belum upload" <?php echo ($row2['Validasi_Pusat'] == 'evidence belum upload') ? 'selected' : ''; ?>>Evidence Belum Upload</option>
                                 </select>
+                                <input type="hidden" name="validasi_pusat" value="<?php echo htmlspecialchars($row2['Validasi_Pusat']); ?>">
                             </div>
 
 
