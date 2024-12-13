@@ -268,7 +268,7 @@
                             <div class="mb-3">
                                 <label for="referensi_root_cause" class="form-label">Referensi Root Cause</label>
                                 <select class="form-select" id="referensi_root_cause" name="referensi_root_cause">
-                                    <option value="" disabled <?php echo empty($row2['Referensi_Root_Cause']) ? 'selected' : ''; ?>>Pilih referensi root cause</option>
+                                    <option value="" <?php echo empty($row2['Referensi_Root_Cause']) ? 'selected' : ''; ?>>Pilih referensi root cause</option>
                                     <option value="gagal x-ray kiriman import" <?php echo ($row2['Referensi_Root_Cause'] == 'gagal x-ray kiriman import') ? 'selected' : ''; ?>>Gagal x-ray kiriman import</option>
                                     <option value="incoming ln" <?php echo ($row2['Referensi_Root_Cause'] == 'incoming ln') ? 'selected' : ''; ?>>Incoming LN</option>
                                     <option value="pengirim tidak menginfokan isi kiriman yang benar" <?php echo ($row2['Referensi_Root_Cause'] == 'pengirim tidak menginfokan isi kiriman yang benar') ? 'selected' : ''; ?>>Pengirim tidak menginfokan isi kiriman yang benar</option>
@@ -297,7 +297,7 @@
                             <div class="mb-3">
                                 <label for="corrective_action" class="form-label">Corrective Action</label>
                                 <select class="form-select" id="corrective_action" name="corrective_action">
-                                    <option value="" disabled <?php echo empty($row2['Corrective_Action']) ? 'selected' : ''; ?>>Pilih corrective action</option>
+                                    <option value="" <?php echo empty($row2['Corrective_Action']) ? 'selected' : ''; ?>>Pilih corrective action</option>
                                     <option value="surat pemanggilan pegawai organik" <?php echo ($row2['Corrective_Action'] == 'surat pemanggilan pegawai organik') ? 'selected' : ''; ?>>Surat pemanggilan pegawai organik</option>
                                     <option value="sp2 + denda (kemitraan/agenpos)" <?php echo ($row2['Corrective_Action'] == 'sp2 + denda (kemitraan/agenpos)') ? 'selected' : ''; ?>>SP2 + denda (kemitraan/agenpos)</option>
                                     <option value="sp3 + denda tingkat berat/phk/penghentian kerjasama" <?php echo ($row2['Corrective_Action'] == 'sp3 + denda tingkat berat/phk/penghentian kerjasama') ? 'selected' : ''; ?>>SP3 + denda tingkat berat/PHK/penghentian kerjasama</option>
@@ -328,13 +328,13 @@
                             <!-- Validasi Regional -->
                             <div class="mb-3">
                                 <label for="validasi_regional" class="form-label">Validasi Regional</label>
-                                <input type="text" class="form-control" id="validasi_regional" name="validasi_regional" value="<?php echo $row2['Validasi_Regional']; ?>">
+                                <input type="text" class="form-control" id="validasi_regional" name="validasi_regional" required readonly value="<?php echo $row2['Validasi_Regional']; ?>">
                             </div>
 
                             <!-- Validasi Pusat -->
                             <div class="mb-3">
                                 <label for="validasi_pusat" class="form-label">Validasi Pusat</label>
-                                <select class="form-select" id="validasi_pusat" name="validasi_pusat" disabled>
+                                <select class="form-select" id="validasi_pusat" name="validasi_pusat" required readonly  disabled>
                                     <option value="" disabled <?php echo empty($row2['Validasi_Pusat']) ? 'selected' : ''; ?>>Pilih status validasi</option>
                                     <option value="ok" <?php echo ($row2['Validasi_Pusat'] == 'ok') ? 'selected' : ''; ?>>OK</option>
                                     <option value="belum entri evaluasi" <?php echo ($row2['Validasi_Pusat'] == 'belum entri evaluasi') ? 'selected' : ''; ?>>Belum Entri Evaluasi</option>

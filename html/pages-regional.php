@@ -139,6 +139,36 @@ if (!isset($_SESSION['admin_nama'])) {
         .aksi .btn:hover {
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
         }
+
+         /* Gaya untuk membuat header tetap di atas */
+         .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000; /* Pastikan header berada di atas elemen lain */
+            background-color: white; /* Warna latar belakang untuk header */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Bayangan untuk efek visual */
+        }
+
+        /* Gaya untuk tabel agar tidak mengganggu tampilan */
+        .table-responsive {
+            overflow-y: auto; /* Memungkinkan scroll pada tabel */
+            max-height: 600px; /* Atur tinggi maksimum tabel */
+        }
+
+        /* Gaya untuk membuat header tabel sticky */
+        .table thead th {
+            position: sticky;
+            top: 0; /* Jarak dari atas */
+            z-index: 10; /* Pastikan header berada di atas konten lainnya */
+            background-color: white; /* Warna latar belakang untuk header */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Bayangan untuk efek visual */
+        }
+
+        .table-responsive {
+            overflow-y: auto; /* Memungkinkan scroll pada tabel */
+            max-height: 600px; /* Atur tinggi maksimum tabel */
+        }
+
     </style>
 
 </head>
@@ -305,7 +335,7 @@ if (!isset($_SESSION['admin_nama'])) {
                     ?>
 
                     <!-- Form untuk memilih Regional -->
-                    <form method="GET" action="" class="mb-4 p-3 bg-light rounded shadow-sm">
+                    <form method="GET" action="" class="mb-4 p-3 bg-light rounded shadow-sm sticky-header">
                         <div class="row">
                             <!-- Filter Regional -->
                             <div class="col-md-4 mb-3">
