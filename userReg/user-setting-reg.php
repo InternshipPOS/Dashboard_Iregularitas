@@ -168,7 +168,7 @@ $result = $koneksi->query($query);
 
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                 <div class="app-brand demo">
-                    <a href="dashboard.php" class="app-brand-link d-flex align-items-center">
+                    <a href="index.php" class="app-brand-link d-flex align-items-center">
                         <img src="../assets/img/favicon/pos-logo.png" alt="Logo" width="40" height="45" class="me-2">
                         <span class="app-brand-text menu-text fw-bolder ms-2" style="font-size: 1.5rem;">ReguTrack</span>
                     </a>
@@ -183,7 +183,7 @@ $result = $koneksi->query($query);
                 <ul class="menu-inner py-1">
                     <!-- Dashboard -->
                     <li class="menu-item active">
-                        <a href="dashboard.php" class="menu-link">
+                        <a href="index.php" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-home-circle"></i>
                             <div data-i18n="Analytics">Dashboard</div>
                         </a>
@@ -245,6 +245,7 @@ $result = $koneksi->query($query);
                         <!-- /Search -->
 
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
+
                             <!-- User -->
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
@@ -281,7 +282,6 @@ $result = $koneksi->query($query);
                                             <span class="align-middle">My Profile</span>
                                         </a>
                                     </li>
-
                                     <li>
                                         <div class="dropdown-divider"></div>
                                     </li>
@@ -338,7 +338,6 @@ $result = $koneksi->query($query);
                                     </select>
                                 </div>
 
-                                <!-- Filter Year -->
                                 <!-- Filter Year -->
                                 <div class="col-md-4 mb-3">
                                     <label for="year" class="form-label fw-bold">Pilih Tahun:</label>
@@ -404,16 +403,16 @@ $result = $koneksi->query($query);
                         } else {
                             // Menyusun query dinamis berdasarkan kondisi yang ada
                             $sql = "SELECT 
-                report_agung.ID_Sistem, report_agung.ZonaAsal, report_agung.Nama_Kantor_Asal, report_agung.Kantor_Asal,
-                report_agung.Tanggal_Berita_Acara, report_agung.ZonaTujuan, report_agung.Nama_Kantor_Tujuan, report_agung.Kantor_Tujuan, 
-                report_agung.Deskripsi, report_agung.DNLN, report_agung.Nomor_Kiriman, report_agung.Uraian_Berita_Acara, 
-                report_agung.Deskripsi_Iregularitas, report_agung.Tahun_BA, report_agung.Bulan_BA, report_agung.Week, report_agung.month_name,
-                newreport.Rincian_Root_Cause, newreport.Referensi_Root_Cause, newreport.Tindakan_Pencegahan, newreport.Corrective_Action, 
-                newreport.Locus, newreport.Nama_NIK_Pegawai, newreport.No_Evidence, newreport.Validasi_Regional, newreport.Validasi_Pusat
-            FROM 
-                report_agung
-            LEFT JOIN 
-                newreport ON report_agung.ID_Sistem = newreport.ID_Sistem";
+                                report_agung.ID_Sistem, report_agung.ZonaAsal, report_agung.Nama_Kantor_Asal, report_agung.Kantor_Asal,
+                                report_agung.Tanggal_Berita_Acara, report_agung.ZonaTujuan, report_agung.Nama_Kantor_Tujuan, report_agung.Kantor_Tujuan, 
+                                report_agung.Deskripsi, report_agung.DNLN, report_agung.Nomor_Kiriman, report_agung.Uraian_Berita_Acara, 
+                                report_agung.Deskripsi_Iregularitas, report_agung.Tahun_BA, report_agung.Bulan_BA, report_agung.Week, report_agung.month_name,
+                                newreport.Rincian_Root_Cause, newreport.Referensi_Root_Cause, newreport.Tindakan_Pencegahan, newreport.Corrective_Action, 
+                                newreport.Locus, newreport.Nama_NIK_Pegawai, newreport.No_Evidence, newreport.Validasi_Regional, newreport.Validasi_Pusat
+                            FROM 
+                                report_agung
+                            LEFT JOIN 
+                                newreport ON report_agung.ID_Sistem = newreport.ID_Sistem";
 
                             if (!empty($conditions)) {
                                 $sql .= " WHERE " . implode(" AND ", $conditions);
@@ -436,44 +435,44 @@ $result = $koneksi->query($query);
                             if ($totalData > 0) {
                                 echo '<div class="card"><div class="table-responsive text-nowrap"><table class="table" id="dataTable">';
                                 echo '
-                <thead>
-                    <tr>
-                        <th class="aksi">Aksi</th>
-                        <th>ID Sistem</th>
-                        <th>Reg Asal P6</th>
-                        <th>Kantor Asal P6</th>
-                        <th>Nopend Asal P6</th>
-                        <th>Tanggal Berita Acara</th>
-                        <th>Reg Tujuan P6</th>
-                        <th>Kantor Tujuan P6</th>
-                        <th>Nopend Tujuan P6</th>
-                        <th>Deskripsi</th>
-                        <th>DN/LN</th>
-                        <th>Nomor Kiriman</th>
-                        <th>Uraian Berita Acara</th>
-                        <th>Deskripsi Iregularitas</th>
-                        <th>Tahun</th>
-                        <th>Bulan</th>
-                        <th>Week</th>
-                        <th>Rincian Root Cause</th>
-                        <th>Referensi Root Cause</th>
-                        <th>Tindakan Pencegahan</th>
-                        <th>Corrective Action</th>
-                        <th>Locus</th>
-                        <th>Nama NIK Pegawai</th>
-                        <th>No Evidence</th>
-                        <th>Validasi Regional</th>
-                        <th>Validasi Pusat</th>
-                    </tr>
-                </thead>';
+                                    <thead>
+                                        <tr>
+                                            <th class="aksi">Aksi</th>
+                                            <th>ID Sistem</th>
+                                            <th>Reg Asal P6</th>
+                                            <th>Kantor Asal P6</th>
+                                            <th>Nopend Asal P6</th>
+                                            <th>Tanggal Berita Acara</th>
+                                            <th>Reg Tujuan P6</th>
+                                            <th>Kantor Tujuan P6</th>
+                                            <th>Nopend Tujuan P6</th>
+                                            <th>Deskripsi</th>
+                                            <th>DN/LN</th>
+                                            <th>Nomor Kiriman</th>
+                                            <th>Uraian Berita Acara</th>
+                                            <th>Deskripsi Iregularitas</th>
+                                            <th>Tahun</th>
+                                            <th>Bulan</th>
+                                            <th>Week</th>
+                                            <th>Rincian Root Cause</th>
+                                            <th>Referensi Root Cause</th>
+                                            <th>Tindakan Pencegahan</th>
+                                            <th>Corrective Action</th>
+                                            <th>Locus</th>
+                                            <th>Nama NIK Pegawai</th>
+                                            <th>No Evidence</th>
+                                            <th>Validasi Regional</th>
+                                            <th>Validasi Pusat</th>
+                                        </tr>
+                                    </thead>';
                                 echo '<tbody>';
                                 while ($row = $paginatedResult->fetch_assoc()) {
                                     echo '<tr>';
                                     echo '<td class="aksi">
-                        <a href="../crud_user_setting_reg/update.php?id_sistem=' . $row['ID_Sistem'] . '" class="btn btn-primary btn-sm d-flex align-items-center gap-1">
-                                <i class="bx bx-edit"></i> Edit
-                        </a>
-                    </td>';
+                                            <a href="../crud_userreg/update.php?id_sistem=' . $row['ID_Sistem'] . '" class="btn btn-primary btn-sm d-flex align-items-center gap-1">
+                                                    <i class="bx bx-edit"></i> Edit
+                                            </a>
+                                        </td>';
                                     echo '<td>' . $row['ID_Sistem'] . '</td>';
                                     echo '<td>' . $row['ZonaAsal'] . '</td>';
                                     echo '<td>' . $row['Nama_Kantor_Asal'] . '</td>';
@@ -529,30 +528,30 @@ $result = $koneksi->query($query);
                                 $startResult = $startIndex + 1;
                                 $endResult = min($startIndex + $dataPerPage, $totalData);
                                 echo "<div class='pagination-wrapper'>
-                        <small class='text-muted'>Menampilkan $startResult-$endResult dari total $totalData hasil</small>
-                        <nav aria-label='Page navigation'>
-                            <ul class='pagination justify-content-end'>";
+                                    <small class='text-muted'>Menampilkan $startResult-$endResult dari total $totalData hasil</small>
+                                    <nav aria-label='Page navigation'>
+                                        <ul class='pagination justify-content-end'>";
 
                                 // Prev button
                                 echo '<li class="page-item ' . ($currentPage <= 1 ? 'disabled' : '') . '">
-                        <a class="page-link" href="?page=' . max(1, $currentPage - 1) . '&regional=' . $selected_regional . '&year=' . $selected_year . '&week=' . $selected_week . '" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>';
+                                        <a class="page-link" href="?page=' . max(1, $currentPage - 1) . '&regional=' . $selected_regional . '&year=' . $selected_year . '&week=' . $selected_week . '" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>';
 
                                 // Page numbers
                                 for ($i = 1; $i <= $totalPages; $i++) {
                                     echo '<li class="page-item ' . ($i == $currentPage ? 'active' : '') . '">
-                            <a class="page-link" href="?page=' . $i . '&regional=' . $selected_regional . '&year=' . $selected_year . '&week=' . $selected_week . '">' . $i . '</a>
-                        </li>';
+                                        <a class="page-link" href="?page=' . $i . '&regional=' . $selected_regional . '&year=' . $selected_year . '&week=' . $selected_week . '">' . $i . '</a>
+                                    </li>';
                                 }
 
                                 // Next button
                                 echo '<li class="page-item ' . ($currentPage >= $totalPages ? 'disabled' : '') . '">
-                        <a class="page-link" href="?page=' . min($totalPages, $currentPage + 1) . '&regional=' . $selected_regional . '&year=' . $selected_year . '&week=' . $selected_week . '" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>';
+                                        <a class="page-link" href="?page=' . min($totalPages, $currentPage + 1) . '&regional=' . $selected_regional . '&year=' . $selected_year . '&week=' . $selected_week . '" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>';
 
                                 // Close pagination list and navigation
                                 echo '</ul></nav></div>';
@@ -573,53 +572,6 @@ $result = $koneksi->query($query);
             <script src="../assets/vendor/js/menu.js"></script>
             <script src="../assets/js/main.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-            <!-- Delete Confirmation Script -->
-            <script>
-                $(document).ready(function() {
-                    $('.delete-btn').click(function(e) {
-                        e.preventDefault();
-                        var id = $(this).data('id'); // ambil id dari atribut data-id
-
-                        Swal.fire({
-                            title: 'Apakah Anda yakin?',
-                            text: "Data ini akan dihapus!",
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#d33',
-                            cancelButtonColor: '#3085d6',
-                            confirmButtonText: 'Hapus'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                $.ajax({
-                                    url: '../crud_regional/delete.php',
-                                    type: 'POST',
-                                    data: {
-                                        id_sistem: id
-                                    },
-                                    success: function(response) {
-                                        if (response == 'success') {
-                                            Swal.fire(
-                                                'Dihapus!',
-                                                'Data telah berhasil dihapus.',
-                                                'success'
-                                            );
-                                            // Menghapus baris dari tabel
-                                            $('a.delete-btn[data-id="' + id + '"]').closest('tr').fadeOut();
-                                        } else {
-                                            Swal.fire(
-                                                'Gagal!',
-                                                'Data gagal dihapus.',
-                                                'error'
-                                            );
-                                        }
-                                    }
-                                });
-                            }
-                        });
-                    });
-                });
-            </script>
 
             <!-- Table Filter Script -->
             <script>

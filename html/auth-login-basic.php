@@ -1,7 +1,6 @@
 <?php
 session_start(); // Start the session for login
 
-
 include 'config.php'; // Include database configuration
 
 // Activate error display for debugging
@@ -29,11 +28,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Verify password
         if (password_verify($password, $row['password'])) {
-            // If password is correct, start session and set session ID
-            $_SESSION['id'] = $row['id'];    // Store user ID for profile access
-            $_SESSION['nama'] = $row['nama']; // Set session with user data
-            $_SESSION['nik'] = $row['nik'];   // Store user's NIK for profile updates
-            $_SESSION['regional'] = $row['regional']; 
+            // If password is correct, start session and set session variables
+            $_SESSION['id'] = $row['id'];
+            $_SESSION['nama'] = $row['nama'];
+            $_SESSION['nik'] = $row['nik'];
+            $_SESSION['regional'] = $row['regional'];
+            $_SESSION['jenis'] = $row['jenis']; // Simpan jenis pengguna (KCU atau Regional)
+
+            // Determine the redirect URL based on user type
+            $redirect_url = ($row['jenis'] == 'KCU') ? '../user/dashboard.php' : '../userReg/index.php';
 
             $alert_script = "<script>
                     Swal.fire({
@@ -43,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         confirmButtonText: 'OK'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = '../user/dashboard.php';
+                            window.location.href = '$redirect_url';
                         }
                     });
                   </script>";
@@ -85,6 +88,7 @@ $koneksi->close(); // Close database connection
 
 <!DOCTYPE html>
 <html lang="en" class="light-style customizer-hide" dir="ltr" data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template-free">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
@@ -113,6 +117,7 @@ $koneksi->close(); // Close database connection
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
+
 <body style="background-color: #f8f9fa;">
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
@@ -129,7 +134,7 @@ $koneksi->close(); // Close database connection
                         <p class="mb-4">Please sign-in to your account</p>
 
                         <!-- Error message if login failed -->
-                        <?php if(isset($error)): ?>
+                        <?php if (isset($error)): ?>
                             <div class="alert alert-danger"><?= $error ?></div>
                         <?php endif; ?>
 
@@ -173,10 +178,11 @@ $koneksi->close(); // Close database connection
     <script src="../assets/js/main.js"></script>
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     <!-- Print alert script if it exists -->
     <?php if ($alert_script): ?>
         <?= $alert_script; ?>
     <?php endif; ?>
 </body>
+
 </html>

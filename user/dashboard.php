@@ -5,41 +5,44 @@ include('config.php');  // Pastikan koneksi ke database sudah dilakukan
 // Ambil NIK pengguna yang sudah login
 $nik_user = $_SESSION['nik'];
 
-// Query untuk mendapatkan regional pengguna
-$query = "SELECT regional FROM loginreg WHERE nik = '$nik_user'";
-$result = $koneksi->query($query);
+// Query untuk mendapatkan regional dan regional pengguna
+$query = "SELECT regional, kantorasal FROM loginreg WHERE nik = ?";
+$stmt = $koneksi->prepare($query);
+$stmt->bind_param('s', $nik_user);
+$stmt->execute();
+$stmt->bind_result($user_regional, $kantorasal);
 
-if ($result->num_rows > 0) {
-  $row = $result->fetch_assoc();
-  $user_regional = $row['regional'];
+if ($stmt->fetch()) {
+  // Simpan regional dan kantor asal ke dalam session
+  $_SESSION['regional'] = $user_regional;
+  $_SESSION['kantorasal'] = $kantorasal;
 } else {
-  echo "Regional tidak ditemukan.";
+  echo "Data regional atau kantor asal tidak ditemukan.";
+  exit; // Menghentikan eksekusi jika data tidak ditemukan
 }
 
 
-// Get user's regional information from session
-$regional = $_SESSION['regional'];
+$stmt->close();
 
 // Asumsi: koneksi database sudah ada melalui $koneksi
 $user_id = $_SESSION['id']; // ID user yang sudah login
 
-// Query untuk mengambil data kantor_asal dari database
-$query = "SELECT kantor_asal FROM user WHERE id = ?";
+// Query untuk mengambil data jenis dari database
+$query = "SELECT jenis FROM user WHERE id = ?";
 $stmt = $koneksi->prepare($query);  // Menggunakan $koneksi sesuai yang ada di config.php
 $stmt->bind_param('i', $user_id);
 $stmt->execute();
-$stmt->bind_result($kantor_asal);
+$stmt->bind_result($jenis);
 $stmt->fetch();
 
-// Menyimpan kantor_asal ke dalam session
-$_SESSION['kantor_asal'] = $kantor_asal; 
+// Menyimpan jenis ke dalam session
+$_SESSION['jenis'] = $jenis;
 
 $stmt->close();
 
 // Menutup koneksi database
 $koneksi->close();
 ?>
-
 
 
 <!DOCTYPE html>
@@ -129,16 +132,25 @@ $koneksi->close();
             <span class="menu-header-text">Pages</span>
           </li>
           <li class="menu-item">
-            <a href="user-setting-reg.php?regional=<?php echo $user_regional; ?>" class="menu-link">
+            <a href="../user/user-setting-reg.php?regional=<?php echo $user_regional; ?>" class="menu-link">
               <i class="menu-icon tf-icons bx bx-dock-top"></i>
               <div data-i18n="Account Settings">Manage Regional</div>
             </a>
           </li>
           <li class="menu-item">
-              <a href="../user/monitoring_regional.php" class="menu-link">
-                  <i class="menu-icon tf-icons bx bx-line-chart"></i>
-                  <div data-i18n="Account Settings">Monitoring</div>
-              </a>
+            <a href="../user/monitoring_regional.php" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-line-chart"></i>
+              <div data-i18n="Account Settings">Monitoring</div>
+            </a>
+          </li>
+        </ul>
+        <ul>
+          <!-- Logout - Item ditempatkan di luar ul utama -->
+          <li class="menu-item">
+            <a class="menu-link" href="#" onclick="confirmLogout()">
+              <i class="menu-icon tf-icons bx bx-exit"></i>
+              <div data-i18n="Log Out">Log Out</div>
+            </a>
           </li>
         </ul>
       </aside>
@@ -172,17 +184,6 @@ $koneksi->close();
             <!-- /Search -->
 
             <ul class="navbar-nav flex-row align-items-center ms-auto">
-              <!-- Place this tag where you want the button to render. -->
-              <li class="nav-item lh-1 me-3">
-                <a
-                  class="github-button"
-                  href="https://github.com/themeselection/sneat-html-admin-template-free"
-                  data-icon="octicon-star"
-                  data-size="large"
-                  data-show-count="true"
-                  aria-label="Star themeselection/sneat-html-admin-template-free on GitHub">Star</a>
-              </li>
-
               <!-- User -->
               <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
@@ -201,10 +202,10 @@ $koneksi->close();
                         </div>
                         <div class="flex-grow-1">
                           <span class="fw-semibold d-block">
-                              <?php echo isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User'; ?>
+                            <?php echo isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User'; ?>
                           </span>
                           <small class="text-muted">
-                              <?php echo isset($_SESSION['kantor_asal']) ? $_SESSION['kantor_asal'] : 'kantor_asal tidak ditemukan'; ?>
+                            <?php echo isset($_SESSION['jenis']) ? $_SESSION['jenis'] : 'Jenis tidak ditemukan'; ?>
                           </small>
                         </div>
                       </div>
@@ -220,28 +221,13 @@ $koneksi->close();
                     </a>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="#">
-                      <i class="bx bx-cog me-2"></i>
-                      <span class="align-middle">Settings</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#">
-                      <span class="d-flex align-items-center align-middle">
-                        <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
-                        <span class="flex-grow-1 align-middle">Billing</span>
-                        <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
-                      </span>
-                    </a>
-                  </li>
-                  <li>
                     <div class="dropdown-divider"></div>
                   </li>
                   <li>
-                      <a class="dropdown-item" href="#" onclick="confirmLogout()">
-                          <i class="bx bx-power-off me-2"></i>
-                          <span class="align-middle">Log Out</span>
-                      </a>
+                    <a class="dropdown-item" href="#" onclick="confirmLogout()">
+                      <i class="bx bx-power-off me-2"></i>
+                      <span class="align-middle">Log Out</span>
+                    </a>
                   </li>
                 </ul>
               </li>
@@ -265,7 +251,7 @@ $koneksi->close();
                       <div class="card-body">
                         <h5 class="card-title text-primary">
                           Hello <?php echo isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User'; ?>!
-                          <p><strong><?php echo $kantor_asal; ?></strong></p>
+                          <p><strong><?php echo isset($_SESSION['kantorasal']) ? $_SESSION['kantorasal'] : 'Tidak Ditemukan'; ?></strong></p>
                         </h5>
                         <p class="mb-4">
                           Selamat datang di <span class="fw-bold">dashboard iregularitas</span>, kelola data dengan efisien dan pantau kinerja secara real-time dengan lebih cepat dan tepat.
@@ -848,23 +834,23 @@ $koneksi->close();
   <!-- SweetAlert2 JS -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-      function confirmLogout() {
-          Swal.fire({
-              title: 'Apakah Anda yakin ingin keluar?',
-              text: "Anda akan keluar dari sesi saat ini!",
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
-              confirmButtonText: 'Ya, Keluar!',
-              cancelButtonText: 'Batal'
-          }).then((result) => {
-              if (result.isConfirmed) {
-                  // Redirect ke halaman logout jika pengguna menekan "Ya, Keluar!"
-                  window.location.href = '../html/auth-login-basic.php';
-              }
-          })
-      }
+    function confirmLogout() {
+      Swal.fire({
+        title: 'Apakah Anda yakin ingin keluar?',
+        text: "Anda akan keluar dari sesi saat ini!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, Keluar!',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Redirect ke halaman logout jika pengguna menekan "Ya, Keluar!"
+          window.location.href = '../html/auth-login-basic.php';
+        }
+      })
+    }
   </script>
 </body>
 

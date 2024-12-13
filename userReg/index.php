@@ -1,3 +1,48 @@
+<?php
+session_start();
+include('config.php');  // Pastikan koneksi ke database sudah dilakukan
+
+// Ambil NIK pengguna yang sudah login
+$nik_user = $_SESSION['nik'];
+
+// Query untuk mendapatkan regional dan kantorasal pengguna
+$query = "SELECT regional, kantorasal FROM loginreg WHERE nik = ?";
+$stmt = $koneksi->prepare($query);
+$stmt->bind_param('s', $nik_user);
+$stmt->execute();
+$stmt->bind_result($user_regional, $kantorasal);
+$stmt->fetch();
+
+if ($user_regional) {
+  $_SESSION['regional'] = $user_regional; // Simpan regional ke dalam session
+  $_SESSION['kantorasal'] = $kantorasal; // Simpan kantorasal ke dalam session
+} else {
+  echo "Data regional atau kantor asal tidak ditemukan.";
+}
+
+$stmt->close();
+
+// Asumsi: koneksi database sudah ada melalui $koneksi
+$user_id = $_SESSION['id']; // ID user yang sudah login
+
+// Query untuk mengambil data jenis dari database
+$query = "SELECT jenis FROM user WHERE id = ?";
+$stmt = $koneksi->prepare($query);  // Menggunakan $koneksi sesuai yang ada di config.php
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$stmt->bind_result($jenis);
+$stmt->fetch();
+
+// Menyimpan jenis ke dalam session
+$_SESSION['jenis'] = $jenis;
+
+$stmt->close();
+
+// Menutup koneksi database
+$koneksi->close();
+?>
+
+
 <!DOCTYPE html>
 <html
   lang="en"
@@ -15,7 +60,7 @@
 
   <title>Dashboard Iregularitas</title>
 
-  <meta name="description" content="" /> 
+  <meta name="description" content="" />
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="../assets/img/favicon/pos-favicon.png" />
@@ -85,21 +130,15 @@
             <span class="menu-header-text">Pages</span>
           </li>
           <li class="menu-item">
-            <a href="../html/pages-regional.php" class="menu-link">
+            <a href="../userReg/user-setting-reg.php?regional=<?php echo $user_regional; ?>" class="menu-link">
               <i class="menu-icon tf-icons bx bx-dock-top"></i>
               <div data-i18n="Account Settings">Manage Regional</div>
             </a>
           </li>
           <li class="menu-item">
-            <a href="../html/monitoring.php" class="menu-link">
+            <a href="../userReg/monitoring_regional.php" class="menu-link">
               <i class="menu-icon tf-icons bx bx-line-chart"></i>
-              <div data-i18n="Account Settings">Monitoring Regional</div>
-            </a>
-          </li>
-          <li class="menu-item">
-            <a href="../html/manage-user.php" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-user"></i>
-              <div data-i18n="Account Settings">Manage User</div>
+              <div data-i18n="Account Settings">Monitoring</div>
             </a>
           </li>
         </ul>
@@ -147,7 +186,7 @@
               <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                   <div class="avatar avatar-online">
-                    <img src="../assets/img/avatars/6.png" alt class="w-px-40 h-auto rounded-circle" />
+                    <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
                   </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
@@ -156,12 +195,16 @@
                       <div class="d-flex">
                         <div class="flex-shrink-0 me-3">
                           <div class="avatar avatar-online">
-                            <img src="../assets/img/avatars/6.png" alt class="w-px-40 h-auto rounded-circle" />
+                            <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
                           </div>
                         </div>
                         <div class="flex-grow-1">
-                          <span class="fw-semibold d-block">Admin Pusat</span>
-                          <small class="text-muted">Admin</small>
+                          <span class="fw-semibold d-block">
+                            <?php echo isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User'; ?>
+                          </span>
+                          <small class="text-muted">
+                            <?php echo isset($_SESSION['jenis']) ? $_SESSION['jenis'] : 'Jenis tidak ditemukan'; ?>
+                          </small>
                         </div>
                       </div>
                     </a>
@@ -170,7 +213,7 @@
                     <div class="dropdown-divider"></div>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="../user/profile.php">
                       <i class="bx bx-user me-2"></i>
                       <span class="align-middle">My Profile</span>
                     </a>
@@ -204,7 +247,10 @@
                   <div class="d-flex align-items-end row">
                     <div class="col-sm-7">
                       <div class="card-body">
-                        <h5 class="card-title text-primary">Hello Admin Pusat! </h5>
+                        <h5 class="card-title text-primary">
+                          Hello <?php echo isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User'; ?>!
+                          <p><strong><?php echo isset($_SESSION['regional']) ? $_SESSION['regional'] : 'Tidak Ditemukan'; ?></strong></p>
+                        </h5>
                         <p class="mb-4">
                           Selamat datang di <span class="fw-bold">dashboard iregularitas</span>, kelola data dengan efisien dan pantau kinerja secara real-time dengan lebih cepat dan tepat.
                         </p>
@@ -799,12 +845,11 @@
       }).then((result) => {
         if (result.isConfirmed) {
           // Redirect ke halaman logout jika pengguna menekan "Ya, Keluar!"
-          window.location.href = 'auth-login-admin.php';
+          window.location.href = '../html/auth-login-basic.php';
         }
       })
     }
   </script>
-
 </body>
 
 </html>

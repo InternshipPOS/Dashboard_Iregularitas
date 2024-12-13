@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>Edit Regional 11 | Iregularitas</title>
+    <title>Edit Regional | Iregularitas</title>
     <link rel="icon" type="image/x-icon" href="../assets/img/favicon/pos-favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -31,6 +31,15 @@
             <div class="card">
                 <div class="card-body">
                     <?php
+                    // Start the session to access session variables
+                    session_start();
+
+                    // Check if the session variable 'nik' is set
+                    if (!isset($_SESSION['nik'])) {
+                        // If 'nik' is not set, handle the error or redirect
+                        echo "NIK tidak ditemukan. Silakan login terlebih dahulu.";
+                        exit(); // Stop script execution
+                    }
                     // Koneksi ke database
 
                     $host = "localhost";
@@ -71,6 +80,14 @@
                         $validasi_pusat = $_POST['validasi_pusat'] ?? '';
 
                         // Query untuk mengupdate data report_agung
+                        // Mendapatkan data dari form dan escape untuk menghindari error
+                        $Kantor_Asal = $koneksi->real_escape_string($_POST['Kantor_Asal'] ?? '');
+                        $Tanggal_Berita_Acara = $koneksi->real_escape_string($_POST['Tanggal_Berita_Acara'] ?? '');
+                        $Kantor_Tujuan = $koneksi->real_escape_string($_POST['Kantor_Tujuan'] ?? '');
+                        $Nomor_Kiriman = $koneksi->real_escape_string($_POST['Nomor_Kiriman'] ?? '');
+                        $Uraian_Berita_Acara = $koneksi->real_escape_string($_POST['Uraian_Berita_Acara'] ?? '');
+
+                        // Query untuk mengupdate data report_agung
                         $sql1 = "UPDATE ireg_p6_entri SET 
                                     Kantor_Asal = '$Kantor_Asal',
                                     Tanggal_Berita_Acara = '$Tanggal_Berita_Acara',
@@ -79,6 +96,27 @@
                                     Uraian_Berita_Acara = '$Uraian_Berita_Acara'
                                     WHERE id_sistem='$id_sistem'";
 
+                        // Eksekusi query
+                        if ($koneksi->query($sql1) === TRUE) {
+                            // Query pertama berhasil
+                        } else {
+                            echo "Error updating record in report_agung: " . $koneksi->error;
+                        }
+
+                        // Lakukan hal yang sama untuk sql2
+
+                        // Mendapatkan data dari form dan escape untuk menghindari error
+                        $rincian_root_cause = $koneksi->real_escape_string($_POST['rincian_root_cause'] ?? '');
+                        $referensi_root_cause = $koneksi->real_escape_string($_POST['referensi_root_cause'] ?? '');
+                        $tindakan_pencegahan = $koneksi->real_escape_string($_POST['tindakan_pencegahan'] ?? '');
+                        $corrective_action = $koneksi->real_escape_string($_POST['corrective_action'] ?? '');
+                        $locus = $koneksi->real_escape_string($_POST['locus'] ?? '');
+                        $nama_nik_pegawai = $koneksi->real_escape_string($_POST['nama_nik_pegawai'] ?? '');
+                        $no_evidence = $koneksi->real_escape_string($_POST['no_evidence'] ?? '');
+                        $validasi_regional = $koneksi->real_escape_string($_POST['validasi_regional'] ?? '');
+                        $validasi_pusat = $koneksi->real_escape_string($_POST['validasi_pusat'] ?? '');
+
+                        // Query untuk mengupdate data newreport
                         $sql2 = "UPDATE newreport SET
                                     Rincian_Root_Cause = '$rincian_root_cause',
                                     Referensi_Root_Cause = '$referensi_root_cause',
@@ -89,34 +127,55 @@
                                     No_Evidence = '$no_evidence',
                                     Validasi_Regional = '$validasi_regional',
                                     Validasi_Pusat = '$validasi_pusat'
-                                    WHERE id_sistem='$id_sistem'";
-                                              
+                                    WHERE id_sistem='$ID_Sistem'"; // Pastikan menggunakan ID_Sistem yang benar
+
+                        // Eksekusi query
+                        if ($koneksi->query($sql2) === TRUE) {
+                            // Query kedua berhasil
+                        } else {
+                            echo "Error updating record in newreport: " . $koneksi->error;
+                        }
+
                         // Eksekusi query
                         //$koneksi->query($sql1);
                         //$koneksi->query($sql2);
-                     
-                        if ($koneksi->query($sql1) === TRUE && $koneksi->query($sql2) === TRUE) {
-                            echo "<script>
-                                    Swal.fire({
-                                        title: 'Sukses!',
-                                        text: 'Data berhasil diperbarui.',
-                                        icon: 'success',
-                                        confirmButtonText: 'OK'
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            window.location.href = '../html/pages-regional settings-reg11.php'; 
-                                        }
-                                    });
-                                  </script>";
+                        // Eksekusi query
+                        $nik_user = $_SESSION['nik']; // Pastikan Anda memiliki sesi NIK pengguna
+                        $query = "SELECT regional FROM loginreg WHERE nik = '$nik_user'";
+                        $result = $koneksi->query($query);
+
+                        if ($result->num_rows > 0) {
+                            $row = $result->fetch_assoc();
+                            $user_regional = $row['regional']; // Ambil nilai regional pengguna
+
+                            // Proses Update Data
+                            // Eksekusi query
+                            if ($koneksi->query($sql1) === TRUE && $koneksi->query($sql2) === TRUE) {
+                                echo "<script>
+                                        Swal.fire({
+                                            title: 'Sukses!',
+                                            text: 'Data berhasil diperbarui.',
+                                            icon: 'success',
+                                            confirmButtonText: 'OK'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                // Redirect ke halaman sesuai regional
+                                                window.location.href = '../userReg/user-setting-reg.php?regional=' + '$user_regional';
+                                            }
+                                        });
+                                    </script>";
+                            } else {
+                                echo "<script>
+                                        Swal.fire({
+                                            title: 'Error!',
+                                            text: 'Gagal memperbarui data. Silakan coba lagi.',
+                                            icon: 'error',
+                                            confirmButtonText: 'OK'
+                                        });
+                                    </script>";
+                            }
                         } else {
-                            echo "<script>
-                                    Swal.fire({
-                                        title: 'Error!',
-                                        text: 'Gagal memperbarui data.',
-                                        icon: 'error',
-                                        confirmButtonText: 'OK'
-                                    });
-                                  </script>";
+                            echo "Regional tidak ditemukan.";
                         }
                     }
 
@@ -142,50 +201,49 @@
                             <!-- Zona Asal -->
                             <div class="mb-3">
                                 <label for="ZonaAsal" class="form-label">Reg Asal P6</label>
-                                <input type="text" class="form-control" id="ZonaAsal" name="ZonaAsal" value="<?php echo $row1['ZonaAsal']; ?>">
+                                <input type="text" class="form-control" id="ZonaAsal" name="ZonaAsal" value="<?php echo $row1['ZonaAsal']; ?>" required readonly>
                             </div>
 
                             <!-- Nama Kantor Asal -->
                             <div class="mb-3">
                                 <label for="Nama_Kantor_Asal" class="form-label">Kantor Asal P6</label>
-                                <input type="text" class="form-control" id="Nama_Kantor_Asal" name="Nama_Kantor_Asal" value="<?php echo $row1['Nama_Kantor_Asal']; ?>">
+                                <input type="text" class="form-control" id="Nama_Kantor_Asal" name="Nama_Kantor_Asal" value="<?php echo $row1['Nama_Kantor_Asal']; ?>" required readonly>
                             </div>
 
                             <!-- Kantor Asal -->
                             <div class="mb-3">
                                 <label for="Kantor_Asal" class="form-label">Nopend Asal P6</label>
-                                <input type="text" class="form-control" id="Kantor_Asal" name="Kantor_Asal" value="<?php echo $row1['Kantor_Asal']; ?>">
+                                <input type="text" class="form-control" id="Kantor_Asal" name="Kantor_Asal" value="<?php echo $row1['Kantor_Asal']; ?>" required readonly>
                             </div>
 
                             <!-- Tanggal Berita Acara -->
                             <div class="mb-3">
                                 <label for="Tanggal_Berita_Acara" class="form-label">Tanggal Berita Acara</label>
-                                <input type="date" class="form-control" id="Tanggal_Berita_Acara" name="Tanggal_Berita_Acara" value="<?php echo date('Y-m-d', strtotime($row1['Tanggal_Berita_Acara'])); ?>" required>
+                                <input type="date" class="form-control" id="Tanggal_Berita_Acara" name="Tanggal_Berita_Acara" value="<?php echo date('Y-m-d', strtotime($row1['Tanggal_Berita_Acara'])); ?>" required readonly>
                             </div>
-
 
                             <!-- Kantor Tujuan -->
                             <div class="mb-3">
                                 <label for="Kantor_Tujuan" class="form-label">Nopend Tujuan P6</label>
-                                <input type="text" class="form-control" id="Kantor_Tujuan" name="Kantor_Tujuan" value="<?php echo $row1['Kantor_Tujuan']; ?>">
+                                <input type="text" class="form-control" id="Kantor_Tujuan" name="Kantor_Tujuan" value="<?php echo $row1['Kantor_Tujuan']; ?>" required readonly>
                             </div>
 
                             <!-- Nomor Kiriman -->
                             <div class="mb-3">
                                 <label for="Nomor_Kiriman" class="form-label">Nomor Kiriman</label>
-                                <input type="text" class="form-control" id="Nomor_Kiriman" name="Nomor_Kiriman" value="<?php echo $row1['Nomor_Kiriman']; ?>">
+                                <input type="text" class="form-control" id="Nomor_Kiriman" name="Nomor_Kiriman" value="<?php echo $row1['Nomor_Kiriman']; ?>" required readonly>
                             </div>
 
                             <!-- Uraian Berita Acara -->
                             <div class="mb-3">
                                 <label for="Uraian_Berita_Acara" class="form-label">Uraian Berita Acara</label>
-                                <textarea class="form-control" id="Uraian_Berita_Acara" name="Uraian_Berita_Acara"><?php echo $row1['Uraian_Berita_Acara']; ?></textarea>
+                                <textarea class="form-control" id="Uraian_Berita_Acara" name="Uraian_Berita_Acara" required readonly><?php echo $row1['Uraian_Berita_Acara']; ?></textarea>
                             </div>
 
                             <!-- Deskripsi Iregularitas -->
                             <div class="mb-3">
                                 <label for="Deskripsi_Iregularitas" class="form-label">Deskripsi Iregularitas</label>
-                                <input type="text" class="form-control" id="Deskripsi_Iregularitas" name="Deskripsi_Iregularitas" value="<?php echo htmlspecialchars($row1['Deskripsi_Iregularitas']); ?>">
+                                <input type="text" class="form-control" id="Deskripsi_Iregularitas" name="Deskripsi_Iregularitas" value="<?php echo htmlspecialchars($row1['Deskripsi_Iregularitas']); ?>" required readonly>
                             </div>
 
 
@@ -202,13 +260,13 @@
                             <!-- Rincian Root Cause -->
                             <div class="mb-3">
                                 <label for="rincian_root_cause" class="form-label">Rincian Root Cause</label>
-                                <textarea class="form-control" id="rincian_root_cause" name="rincian_root_cause" ><?php echo $row2['Rincian_Root_Cause']; ?></textarea>
+                                <textarea class="form-control" id="rincian_root_cause" name="rincian_root_cause" readonly required><?php echo $row2['Rincian_Root_Cause']; ?></textarea>
                             </div>
 
                             <!-- Referensi Root Cause -->
                             <div class="mb-3">
                                 <label for="referensi_root_cause" class="form-label">Referensi Root Cause</label>
-                                <select class="form-select" id="referensi_root_cause" name="referensi_root_cause">
+                                <select class="form-select" id="referensi_root_cause" name="referensi_root_cause" disabled>
                                     <option value="" disabled <?php echo empty($row2['Referensi_Root_Cause']) ? 'selected' : ''; ?>>Pilih referensi root cause</option>
                                     <option value="gagal x-ray kiriman import" <?php echo ($row2['Referensi_Root_Cause'] == 'gagal x-ray kiriman import') ? 'selected' : ''; ?>>Gagal x-ray kiriman import</option>
                                     <option value="incoming ln" <?php echo ($row2['Referensi_Root_Cause'] == 'incoming ln') ? 'selected' : ''; ?>>Incoming LN</option>
@@ -226,18 +284,17 @@
                                     <option value="lain-lain" <?php echo ($row2['Referensi_Root_Cause'] == 'lain-lain') ? 'selected' : ''; ?>>Lain-lain</option>
                                 </select>
                             </div>
-
                             <!-- Tindakan Pencegahan -->
                             <div class="mb-3">
                                 <label for="tindakan_pencegahan" class="form-label">Tindakan Pencegahan</label>
-                                <input type="text" class="form-control" id="tindakan_pencegahan" name="tindakan_pencegahan" value="<?php echo $row2['Tindakan_Pencegahan']; ?>">
+                                <input type="text" class="form-control" id="tindakan_pencegahan" name="tindakan_pencegahan" value="<?php echo $row2['Tindakan_Pencegahan']; ?>" readonly required>
                             </div>
 
 
                             <!-- Corrective Action -->
                             <div class="mb-3">
                                 <label for="corrective_action" class="form-label">Corrective Action</label>
-                                <select class="form-select" id="corrective_action" name="corrective_action">
+                                <select class="form-select" id="corrective_action" name="corrective_action" disabled>
                                     <option value="" disabled <?php echo empty($row2['Corrective_Action']) ? 'selected' : ''; ?>>Pilih corrective action</option>
                                     <option value="surat pemanggilan pegawai organik" <?php echo ($row2['Corrective_Action'] == 'surat pemanggilan pegawai organik') ? 'selected' : ''; ?>>Surat pemanggilan pegawai organik</option>
                                     <option value="sp2 + denda (kemitraan/agenpos)" <?php echo ($row2['Corrective_Action'] == 'sp2 + denda (kemitraan/agenpos)') ? 'selected' : ''; ?>>SP2 + denda (kemitraan/agenpos)</option>
@@ -251,19 +308,19 @@
                             <!-- Locus -->
                             <div class="mb-3">
                                 <label for="locus" class="form-label">Locus</label>
-                                <input type="text" class="form-control" id="locus" name="locus" value="<?php echo $row2['Locus']; ?>">
+                                <input type="text" class="form-control" id="locus" name="locus" value="<?php echo $row2['Locus']; ?>" readonly required>
                             </div>
 
                             <!-- Nama NIK Pegawai -->
                             <div class="mb-3">
                                 <label for="nama_nik_pegawai" class="form-label">Nama NIK Pegawai</label>
-                                <input type="text" class="form-control" id="nama_nik_pegawai" name="nama_nik_pegawai" value="<?php echo $row2['Nama_NIK_Pegawai']; ?>">
+                                <input type="text" class="form-control" id="nama_nik_pegawai" name="nama_nik_pegawai" value="<?php echo $row2['Nama_NIK_Pegawai']; ?>" readonly required>
                             </div>
 
                             <!-- No Evidence -->
                             <div class="mb-3">
                                 <label for="no_evidence" class="form-label">No Evidence</label>
-                                <input type="text" class="form-control" id="no_evidence" name="no_evidence" value="<?php echo $row2['No_Evidence']; ?>">
+                                <input type="text" class="form-control" id="no_evidence" name="no_evidence" value="<?php echo $row2['No_Evidence']; ?>" readonly required>
                             </div>
 
                             <!-- Validasi Regional -->
@@ -275,17 +332,32 @@
                             <!-- Validasi Pusat -->
                             <div class="mb-3">
                                 <label for="validasi_pusat" class="form-label">Validasi Pusat</label>
-                                <select class="form-select" id="validasi_pusat" name="validasi_pusat">
+                                <select class="form-select" id="validasi_pusat" name="validasi_pusat" disabled>
                                     <option value="" disabled <?php echo empty($row2['Validasi_Pusat']) ? 'selected' : ''; ?>>Pilih status validasi</option>
                                     <option value="ok" <?php echo ($row2['Validasi_Pusat'] == 'ok') ? 'selected' : ''; ?>>OK</option>
                                     <option value="belum entri evaluasi" <?php echo ($row2['Validasi_Pusat'] == 'belum entri evaluasi') ? 'selected' : ''; ?>>Belum Entri Evaluasi</option>
                                     <option value="evidence belum upload" <?php echo ($row2['Validasi_Pusat'] == 'evidence belum upload') ? 'selected' : ''; ?>>Evidence Belum Upload</option>
                                 </select>
+                                <input type="hidden" name="validasi_pusat" value="<?php echo htmlspecialchars($row2['Validasi_Pusat']); ?>">
                             </div>
 
 
                             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                            <a href="../html/pages-regional settings-reg11.php" class="btn btn-secondary">Cancel</a>
+                            <?php
+                            // Ambil NIK pengguna yang sudah login
+                            $nik_user = $_SESSION['nik'];
+
+                            // Query untuk mendapatkan regional pengguna
+                            $query = "SELECT regional FROM loginreg WHERE nik = '$nik_user'";
+                            $result = $koneksi->query($query);
+
+                            if ($result->num_rows > 0) {
+                                $row = $result->fetch_assoc();
+                                $user_regional = $row['regional'];
+                            } else {
+                                echo "Regional tidak ditemukan.";
+                            } ?>
+                            <a href="../userReg/user-setting-reg.php?regional=<?php echo $user_regional; ?>" class="btn btn-secondary">Cancel</a>
                         </form>
                     <?php
                     } else {
