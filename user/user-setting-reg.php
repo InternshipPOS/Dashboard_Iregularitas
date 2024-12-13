@@ -409,7 +409,7 @@ $result = $koneksi->query($query);
                 report_agung.Deskripsi, report_agung.DNLN, report_agung.Nomor_Kiriman, report_agung.Uraian_Berita_Acara, 
                 report_agung.Deskripsi_Iregularitas, report_agung.Tahun_BA, report_agung.Bulan_BA, report_agung.Week, report_agung.month_name,
                 newreport.Rincian_Root_Cause, newreport.Referensi_Root_Cause, newreport.Tindakan_Pencegahan, newreport.Corrective_Action, 
-                newreport.Locus, newreport.Nama_NIK_Pegawai, newreport.No_Evidence, newreport.Validasi_Regional, newreport.Validasi_Pusat
+                newreport.Locus, newreport.Nama_NIK_Pegawai, newreport.No_Evidence, newreport.Validasi_Regional, newreport.Validasi_Pusat, newreport.File_Path
             FROM 
                 report_agung
             LEFT JOIN 
@@ -464,16 +464,21 @@ $result = $koneksi->query($query);
                         <th>No Evidence</th>
                         <th>Validasi Regional</th>
                         <th>Validasi Pusat</th>
+                        <th>File Evidence</th>
                     </tr>
                 </thead>';
                                 echo '<tbody>';
                                 while ($row = $paginatedResult->fetch_assoc()) {
                                     echo '<tr>';
                                     echo '<td class="aksi">
-                        <a href="../crud_user_setting_reg/update.php?id_sistem=' . $row['ID_Sistem'] . '" class="btn btn-primary btn-sm d-flex align-items-center gap-1">
-                                <i class="bx bx-edit"></i> Edit
-                        </a>
-                    </td>';
+                                    <a href="../crud_user_setting_reg/update.php?id_sistem=' . $row['ID_Sistem'] . '" class="btn btn-primary btn-sm d-flex align-items-center gap-1">
+                                            <i class="bx bx-edit"></i> Edit
+                                    </a>
+                                                            <br>
+                                    <a href="../crud_user_setting_reg/upload.php?id_sistem='. $row['ID_Sistem'] . '" class="btn btn-success btn-sm d-flex align-items-center gap-2">
+                                            <i class="bx bx-upload"></i> Upload Evidence
+                                    </a>
+                                 </td>';
                                     echo '<td>' . $row['ID_Sistem'] . '</td>';
                                     echo '<td>' . $row['ZonaAsal'] . '</td>';
                                     echo '<td>' . $row['Nama_Kantor_Asal'] . '</td>';
@@ -519,6 +524,15 @@ $result = $koneksi->query($query);
                                     echo '<td>' . $row['No_Evidence'] . '</td>';
                                     echo '<td>' . $row['Validasi_Regional'] . '</td>';
                                     echo '<td>' . $row['Validasi_Pusat'] . '</td>';
+                                    // Kolom untuk menampilkan link file jika ada    
+                                    echo '<td>';
+                                    if (!empty($row['File_Path'])) {
+                                        // Tampilkan link file jika ada
+                                        echo '<a href="../crud_user_setting_reg/uploads/' . basename($row['File_Path']) . '" target="_blank">Download File</a>';
+                                    } else {
+                                        echo 'Belum Ada File';
+                                    }
+                                    echo '</td>';
                                     echo '</tr>';
                                 }
                                 echo '</tbody>';

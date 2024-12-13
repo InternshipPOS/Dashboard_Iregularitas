@@ -1,77 +1,3 @@
-<?php
-include 'config.php'; // Include your database configuration
-
-// Fetch regional and kantor data from the database
-$regionalQuery = "SELECT DISTINCT regional FROM ref_kcu_kc";
-$kantorQuery = "SELECT DISTINCT Nama_Kantor FROM ref_kcu_kc";
-$jenisKantorQuery = "SELECT DISTINCT Jenis_Kantor FROM ref_kcu_kc";
-
-// Execute queries
-$regionalResult = $koneksi->query($regionalQuery);
-$Nama_KantorResult = $koneksi->query($kantorQuery);
-$jenisKantorResult = $koneksi->query($jenisKantorQuery);
-
-// Check if form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Capture form data
-    $username = $_POST['username'];
-    $nama = $_POST['nama'];
-    $nik = $_POST['nik'];
-    $jenis = $_POST['jenis'];
-    $regional = $_POST['regional'];
-    $Nama_Kantor = $_POST['Nama_Kantor'];
-    $password = $_POST['password'];
-
-    // Validate form data (basic validation example)
-    if (empty($username) || empty($nama) || empty($nik) || empty($jenis) || empty($regional) || empty($Nama_Kantor) || empty($password)) {
-        echo "All fields are required!";
-        exit;
-    }
-
-    // Check if NIK already exists
-    $stmt = $koneksi->prepare("SELECT * FROM user WHERE nik = ?");
-    $stmt->bind_param("s", $nik);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        // NIK already exists
-        echo "<script>alert('NIK sudah terdaftar! Silakan gunakan NIK lain.'); window.location.href='auth-register-basic.php';</script>";
-    } else {
-        // Hash the password for security
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-        // Prepare the SQL statement
-        $stmt = $koneksi->prepare("INSERT INTO user (username, nama, nik, jenis, regional, kantor_asal, password) 
-                                    VALUES (?, ?, ?, ?, ?, ?, ?)");
-
-        // Bind parameters
-        $stmt->bind_param("sssssss", $username, $nama, $nik, $jenis, $regional, $Nama_Kantor, $hashed_password);
-
-        // Password validation
-        if (!preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/', $password)) {
-            echo "<script>
-                  alert('Password minimal harus 6 karakter, mengandung minimal satu huruf dan satu angka.');
-                  window.location.href = 'auth-register-basic.php'; 
-                </script>";
-            exit;
-        }
-
-        // Execute the query
-        if ($stmt->execute()) {
-            // Successful registration alert and redirect
-            echo "<script>
-                  alert('Registration successful!');
-                  window.location.href = 'auth-login-basic.php'; 
-                </script>";
-            exit();
-        } else {
-            echo "Error: " . $stmt->error;
-        }
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,13 +10,103 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="../assets/vendor/css/core.css" />
     <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" />
     <link rel="stylesheet" href="../assets/css/demo.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-
 <body style="background-color: #f8f9fa;">
     <div class="container-xxl">
         <div class="authentication-basic container-p-y">
             <div class="card shadow-lg border-0 rounded-lg" style="max-width: 900px; margin: 0 auto;">
                 <div class="card-body p-4">
+                    <?php
+                    include 'config.php'; // Include your database configuration
+
+                    // Fetch regional and kantor data from the database
+                    $regionalQuery = "SELECT DISTINCT regional FROM ref_kcu_kc";
+                    $kantorQuery = "SELECT DISTINCT Nama_Kantor FROM ref_kcu_kc";
+                    $jenisKantorQuery = "SELECT DISTINCT Jenis_Kantor FROM ref_kcu_kc";
+
+                    $regionalResult = $koneksi->query($regionalQuery);
+                    $Nama_KantorResult = $koneksi->query($kantorQuery);
+                    $jenisKantorResult = $koneksi->query($jenisKantorQuery);
+
+                    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                        $username = $_POST['username'];
+                        $nama = $_POST['nama'];
+                        $nik = $_POST['nik'];
+                        $jenis = $_POST['jenis'];
+                        $regional = $_POST['regional'];
+                        $Nama_Kantor = $_POST['Nama_Kantor'];
+                        $password = $_POST['password'];
+
+                        if (empty($username) || empty($nama) || empty($nik) || empty($jenis) || empty($regional) || empty($Nama_Kantor) || empty($password)) {
+                            echo "<script>
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'All fields are required!'
+                                });
+                            </script>";
+                        } else {
+                            $stmt = $koneksi->prepare("SELECT * FROM user WHERE nik = ?");
+                            $stmt->bind_param("s", $nik);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+
+                            if ($result->num_rows > 0) {
+                                echo "<script>
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'NIK sudah terdaftar!',
+                                        text: 'Silakan gunakan NIK lain.',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    }).then(() => {
+                                        window.location.href = 'auth-register-basic.php';
+                                    });
+                                </script>";
+                            } else {
+                                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+                                if (!preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/', $password)) {
+                                    echo "<script>
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Password tidak valid!',
+                                            text: 'Password minimal harus 6 karakter, mengandung minimal satu huruf dan satu angka.'
+                                        }).then(() => {
+                                            window.location.href = 'auth-register-basic.php';
+                                        });
+                                    </script>";
+                                } else {
+                                    $stmt = $koneksi->prepare("INSERT INTO user (username, nama, nik, jenis, regional, kantor_asal, password) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                                    $stmt->bind_param("sssssss", $username, $nama, $nik, $jenis, $regional, $Nama_Kantor, $hashed_password);
+
+                                    if ($stmt->execute()) {
+                                        echo "<script>
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Registration successful!',
+                                                showConfirmButton: false,
+                                                timer: 2000
+                                            }).then(() => {
+                                                window.location.href = 'auth-login-basic.php';
+                                            });
+                                        </script>";
+                                    } else {
+                                        echo "<script>
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Oops...',
+                                                text: 'Something went wrong. Please try again.'
+                                            });
+                                        </script>";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    ?>
+
                     <div class="app-brand justify-content-center mb-3">
                         <a href="auth-register-basic.php" class="app-brand-link d-flex align-items-center">
                             <img src="../assets/img/favicon/pos-logo.png" alt="Logo" width="40" height="45" class="me-2">
@@ -111,7 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <input type="text" class="form-control shadow-sm" id="nama" name="nama" required />
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="nik" class="form-label">NIPPos</label>

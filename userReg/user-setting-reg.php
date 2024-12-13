@@ -408,7 +408,7 @@ $result = $koneksi->query($query);
                                 report_agung.Deskripsi, report_agung.DNLN, report_agung.Nomor_Kiriman, report_agung.Uraian_Berita_Acara, 
                                 report_agung.Deskripsi_Iregularitas, report_agung.Tahun_BA, report_agung.Bulan_BA, report_agung.Week, report_agung.month_name,
                                 newreport.Rincian_Root_Cause, newreport.Referensi_Root_Cause, newreport.Tindakan_Pencegahan, newreport.Corrective_Action, 
-                                newreport.Locus, newreport.Nama_NIK_Pegawai, newreport.No_Evidence, newreport.Validasi_Regional, newreport.Validasi_Pusat
+                                newreport.Locus, newreport.Nama_NIK_Pegawai, newreport.No_Evidence, newreport.Validasi_Regional, newreport.Validasi_Pusat, newreport.File_Path
                             FROM 
                                 report_agung
                             LEFT JOIN 
@@ -463,6 +463,7 @@ $result = $koneksi->query($query);
                                             <th>No Evidence</th>
                                             <th>Validasi Regional</th>
                                             <th>Validasi Pusat</th>
+                                            <th>File Evidence</th>
                                         </tr>
                                     </thead>';
                                 echo '<tbody>';
@@ -518,7 +519,16 @@ $result = $koneksi->query($query);
                                     echo '<td>' . $row['No_Evidence'] . '</td>';
                                     echo '<td>' . $row['Validasi_Regional'] . '</td>';
                                     echo '<td>' . $row['Validasi_Pusat'] . '</td>';
-                                    echo '</tr>';
+                                    // Kolom untuk menampilkan link file jika ada    
+                                    echo '<td>';
+                                    if (!empty($row['File_Path'])) {
+                                        // Tampilkan link file jika ada
+                                        echo '<a href="../crud_user_setting_reg/uploads/' . basename($row['File_Path']) . '" target="_blank">Download File</a>';
+                                    } else {
+                                        echo 'Belum Ada File';
+                                    }
+                                    echo '</td>';
+                                        echo '</tr>';
                                 }
                                 echo '</tbody>';
                                 echo '</table>';
