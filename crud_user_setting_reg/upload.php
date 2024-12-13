@@ -76,12 +76,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $targetFilePath = $targetDir . $fileName;
 
         $nik_user = $_SESSION['nik']; // Pastikan Anda memiliki sesi NIK pengguna
-        $query = "SELECT regional FROM loginreg WHERE nik = '$nik_user'";
+        $query = "SELECT kantorasal FROM loginreg WHERE nik = '$nik_user'";
         $result = $koneksi->query($query);
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            $user_regional = $row['regional']; // Ambil nilai regional pengguna
+            $user_kantorasal = $row['kantorasal']; // Ambil nilai kantorasal pengguna
 
             // Pindahkan file ke direktori target
             if (move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $targetFilePath)) {
@@ -95,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             icon: 'success',
                             confirmButtonText: 'OK'
                         }).then(() => {
-                            window.location.href = '../user/user-setting-reg.php?regional=' + '$user_regional';
+                            window.location.href = '../user/user-setting-reg.php?kantorasal=' + '$user_kantorasal'; 
                         });
                     </script>";
                 } else {
@@ -122,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<script>
                 Swal.fire({
                     title: 'Error!',
-                    text: 'Regional pengguna tidak ditemukan.',
+                    text: 'Kantor Tujuan pengguna tidak ditemukan.',
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });

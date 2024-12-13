@@ -141,12 +141,12 @@
                         //$koneksi->query($sql2);
                        // Eksekusi query
                         $nik_user = $_SESSION['nik']; // Pastikan Anda memiliki sesi NIK pengguna
-                        $query = "SELECT regional FROM loginreg WHERE nik = '$nik_user'";
+                        $query = "SELECT kantorasal FROM loginreg WHERE nik = '$nik_user'";
                         $result = $koneksi->query($query);
 
                         if ($result->num_rows > 0) {
                             $row = $result->fetch_assoc();
-                            $user_regional = $row['regional']; // Ambil nilai regional pengguna
+                            $user_kantorasal = $row['kantorasal']; // Ambil nilai kantorasal pengguna
                             
                             // Proses Update Data
                             // Eksekusi query
@@ -159,8 +159,8 @@
                                             confirmButtonText: 'OK'
                                         }).then((result) => {
                                             if (result.isConfirmed) {
-                                                // Redirect ke halaman sesuai regional
-                                                window.location.href = '../user/user-setting-reg.php?regional=' + '$user_regional';
+                                                // Redirect ke halaman sesuai kantorasal
+                                                window.location.href = '../user/user-setting-reg.php?kantorasal=' + '$user_kantorasal';
                                             }
                                         });
                                     </script>";
@@ -349,17 +349,17 @@
                             // Ambil NIK pengguna yang sudah login
                             $nik_user = $_SESSION['nik'];
 
-                            // Query untuk mendapatkan regional pengguna
-                            $query = "SELECT regional FROM loginreg WHERE nik = '$nik_user'";
+                            // Query untuk mendapatkan kantorasal pengguna
+                            $query = "SELECT kantorasal FROM loginreg WHERE nik = '$nik_user'";
                             $result = $koneksi->query($query);
 
                             if ($result->num_rows > 0) {
                             $row = $result->fetch_assoc();
-                            $user_regional = $row['regional'];
+                            $user_kantorasal = $row['kantorasal'];
                             } else {
-                            echo "Regional tidak ditemukan.";
+                            echo "Kantor Asal tidak ditemukan.";
                             } ?>    
-                            <a href="../user/user-setting-reg.php?regional=<?php echo $user_regional; ?>" class="btn btn-secondary">Cancel</a>
+                            <a href="../user/user-setting-reg.php?kantorasal=<?php echo $user_kantorasal; ?>" class="btn btn-secondary">Cancel</a>
                         </form>
                     <?php
                     } else {

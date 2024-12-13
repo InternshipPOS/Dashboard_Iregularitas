@@ -5,24 +5,24 @@ include('config.php');  // Pastikan koneksi ke database sudah dilakukan
 // Ambil NIK pengguna yang sudah login
 $nik_user = $_SESSION['nik'];
 
-// Query untuk mendapatkan regional pengguna
-$query = "SELECT regional FROM loginreg WHERE nik = '$nik_user'";
+// Query untuk mendapatkan kantorasal pengguna
+$query = "SELECT kantorasal FROM loginreg WHERE nik = '$nik_user'";
 $result = $koneksi->query($query);
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    $user_regional = $row['regional'];
+    $user_kantorasal = $row['kantorasal'];
 } else {
-    echo "Regional tidak ditemukan.";
+    echo "Kantor Asal tidak ditemukan.";
 }
 
-// Ambil nilai regional dari URL (parameter query)
-$regional = $_GET['regional'];
+// Ambil nilai kantorasal dari URL (parameter query)
+$kantorasal = $_GET['kantorasal'];
 
-// Query untuk mendapatkan data berdasarkan regional
+// Query untuk mendapatkan data berdasarkan kantorasal
 $query = "SELECT * FROM report_agung
           LEFT JOIN newreport ON report_agung.ID_Sistem = newreport.ID_Sistem
-          WHERE report_agung.ZonaTujuan = '$regional'";
+          WHERE report_agung.Nama_Kantor_Tujuan = '$kantorasal'";
 $result = $koneksi->query($query);
 
 ?>
@@ -157,37 +157,46 @@ $result = $koneksi->query($query);
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
         }
 
-                /* Gaya untuk membuat header tetap di atas */
-                .sticky-header {
+        /* Gaya untuk membuat header tetap di atas */
+        .sticky-header {
             position: sticky;
             top: 0;
-            z-index: 1000; /* Pastikan header berada di atas elemen lain */
-            background-color: white; /* Warna latar belakang untuk header */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Bayangan untuk efek visual */
+            z-index: 1000;
+            /* Pastikan header berada di atas elemen lain */
+            background-color: white;
+            /* Warna latar belakang untuk header */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            /* Bayangan untuk efek visual */
         }
 
         /* Gaya untuk tabel agar tidak mengganggu tampilan */
         .table-responsive {
-            overflow-y: auto; /* Memungkinkan scroll pada tabel */
-            max-height: 600px; /* Atur tinggi maksimum tabel */
+            overflow-y: auto;
+            /* Memungkinkan scroll pada tabel */
+            max-height: 600px;
+            /* Atur tinggi maksimum tabel */
         }
 
         /* Gaya untuk membuat header tabel sticky */
         .table thead th {
             position: sticky;
-            top: 0; /* Jarak dari atas */
-            z-index: 10; /* Pastikan header berada di atas konten lainnya */
-            background-color: white; /* Warna latar belakang untuk header */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Bayangan untuk efek visual */
+            top: 0;
+            /* Jarak dari atas */
+            z-index: 10;
+            /* Pastikan header berada di atas konten lainnya */
+            background-color: white;
+            /* Warna latar belakang untuk header */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            /* Bayangan untuk efek visual */
         }
 
         .table-responsive {
-            overflow-y: auto; /* Memungkinkan scroll pada tabel */
-            max-height: 600px; /* Atur tinggi maksimum tabel */
+            overflow-y: auto;
+            /* Memungkinkan scroll pada tabel */
+            max-height: 600px;
+            /* Atur tinggi maksimum tabel */
         }
-
-
-  </style>
+    </style>
 
 </head>
 
@@ -224,7 +233,7 @@ $result = $koneksi->query($query);
                         <span class="menu-header-text">Pages</span>
                     </li>
                     <li class="menu-item">
-                        <a href="user-setting-reg.php?regional=<?php echo $user_regional; ?>" class="menu-link">
+                        <a href="user-setting-reg.php?kantorasal=<?php echo $user_kantorasal; ?>" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-dock-top"></i>
                             <div data-i18n="Account Settings">Manage Regional</div>
                         </a>
@@ -345,77 +354,26 @@ $result = $koneksi->query($query);
                             die("Connection failed: " . $koneksi->connect_error);
                         }
 
-                        // Ambil data Regional dari ref_kcu_kc
-                        $regional_query = "SELECT DISTINCT Regional FROM ref_kcu_kc";
-                        $regional_result = $koneksi->query($regional_query);
+                        // Ambil data Nama_Kantor dari ref_kcu_kc
+                        $kantorasal_query = "SELECT DISTINCT Nama_Kantor FROM ref_kcu_kc";
+                        $kantorasal_result = $koneksi->query($kantorasal_query);
 
-                        $logged_in_regional = $_SESSION['user_regional'] ?? ''; // Replace with the actual session variable name
+                        $logged_in_kantorasal = $_SESSION['user_kantorasal'] ?? ''; // Replace with the actual session variable name
                         ?>
-
-                        <!-- Form untuk memilih Regional -->
-                        <form method="GET" action="" class="mb-4 p-3 bg-light rounded shadow-sm sticky-header">
-                            <div class="row">
-                                <!-- Filter Regional -->
-                                <div class="col-md-4 mb-3">
-                                    <label for="regional" class="form-label fw-bold">Pilih Regional:</label>
-                                    <select name="regional" id="regional" class="form-select">
-                                        <option value="">--Pilih Regional--</option>
-                                        <?php
-                                        while ($regional = $regional_result->fetch_assoc()) {
-                                            $selected = ($regional['Regional'] == $logged_in_regional) ? 'selected' : '';
-                                            echo "<option value='{$regional['Regional']}' $selected>{$regional['Regional']}</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-
-                                <!-- Filter Year -->
-                                <!-- Filter Year -->
-                                <div class="col-md-4 mb-3">
-                                    <label for="year" class="form-label fw-bold">Pilih Tahun:</label>
-                                    <select name="year" id="year" class="form-select">
-                                        <option value="">--Pilih Tahun--</option>
-                                        <?php
-                                        $currentYear = date("Y");
-                                        for ($i = $currentYear; $i >= $currentYear - 6; $i--) {
-                                            $selected = ($i == ($_GET['year'] ?? '')) ? 'selected' : '';
-                                            echo "<option value='$i' $selected>$i</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-
-                                <!-- Filter Week -->
-                                <div class="col-md-4 mb-3">
-                                    <label for="week" class="form-label fw-bold">Pilih Minggu (Week):</label>
-                                    <select name="week" id="week" class="form-select">
-                                        <option value="">--Pilih Minggu--</option>
-                                        <?php
-                                        for ($i = 1; $i <= 52; $i++) {
-                                            $selected = ($i == ($_GET['week'] ?? '')) ? 'selected' : '';
-                                            echo "<option value='$i' $selected>Minggu $i</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Tampilkan Data</button>
-                        </form>
 
                         <?php
                         // Definisikan variabel default untuk year dan week
-                        $selected_regional = $selected_year = $selected_week = '';
+                        $selected_kantorasal = $selected_year = $selected_week = '';
 
                         // Menangani inputan filter yang dipilih
                         $conditions = [];
-                        // Filter Regional
-                        if (!empty($_GET['regional'])) {
-                            $selected_regional = $_GET['regional'];
-                            $conditions[] = "report_agung.ZonaTujuan = '$selected_regional'";
-                        } elseif (!empty($logged_in_regional)) {
-                            $conditions[] = "report_agung.ZonaTujuan = '$logged_in_regional'";
+                        // Filter KantorAsal
+                        if (!empty($_GET['kantorasal'])) {
+                            $selected_kantorasal = $_GET['kantorasal'];
+                            $conditions[] = "report_agung.Nama_Kantor_Tujuan = '$selected_kantorasal'";
+                        } elseif (!empty($logged_in_kantorasal)) {
+                            $conditions[] = "report_agung.Nama_Kantor_Tujuan = '$logged_in_kantorasal'";
                         }
-
                         // Filter Year
                         if (!empty($_GET['year'])) {
                             $selected_year = $_GET['year'];
@@ -435,16 +393,16 @@ $result = $koneksi->query($query);
                         } else {
                             // Menyusun query dinamis berdasarkan kondisi yang ada
                             $sql = "SELECT 
-                report_agung.ID_Sistem, report_agung.ZonaAsal, report_agung.Nama_Kantor_Asal, report_agung.Kantor_Asal,
-                report_agung.Tanggal_Berita_Acara, report_agung.ZonaTujuan, report_agung.Nama_Kantor_Tujuan, report_agung.Kantor_Tujuan, 
-                report_agung.Deskripsi, report_agung.DNLN, report_agung.Nomor_Kiriman, report_agung.Uraian_Berita_Acara, 
-                report_agung.Deskripsi_Iregularitas, report_agung.Tahun_BA, report_agung.Bulan_BA, report_agung.Week, report_agung.month_name,
-                newreport.Rincian_Root_Cause, newreport.Referensi_Root_Cause, newreport.Tindakan_Pencegahan, newreport.Corrective_Action, 
-                newreport.Locus, newreport.Nama_NIK_Pegawai, newreport.No_Evidence, newreport.Validasi_Regional, newreport.Validasi_Pusat, newreport.File_Path
-            FROM 
-                report_agung
-            LEFT JOIN 
-                newreport ON report_agung.ID_Sistem = newreport.ID_Sistem";
+                                report_agung.ID_Sistem, report_agung.ZonaAsal, report_agung.Nama_Kantor_Asal, report_agung.Kantor_Asal,
+                                report_agung.Tanggal_Berita_Acara, report_agung.ZonaTujuan, report_agung.Nama_Kantor_Tujuan, report_agung.Kantor_Tujuan, 
+                                report_agung.Deskripsi, report_agung.DNLN, report_agung.Nomor_Kiriman, report_agung.Uraian_Berita_Acara, 
+                                report_agung.Deskripsi_Iregularitas, report_agung.Tahun_BA, report_agung.Bulan_BA, report_agung.Week, report_agung.month_name,
+                                newreport.Rincian_Root_Cause, newreport.Referensi_Root_Cause, newreport.Tindakan_Pencegahan, newreport.Corrective_Action, 
+                                newreport.Locus, newreport.Nama_NIK_Pegawai, newreport.No_Evidence, newreport.Validasi_Regional, newreport.Validasi_Pusat, newreport.File_Path
+                            FROM 
+                                report_agung
+                            LEFT JOIN 
+                                newreport ON report_agung.ID_Sistem = newreport.ID_Sistem";
 
                             if (!empty($conditions)) {
                                 $sql .= " WHERE " . implode(" AND ", $conditions);
@@ -506,7 +464,7 @@ $result = $koneksi->query($query);
                                             <i class="bx bx-edit"></i> Edit
                                     </a>
                                                             <br>
-                                    <a href="../crud_user_setting_reg/upload.php?id_sistem='. $row['ID_Sistem'] . '" class="btn btn-success btn-sm d-flex align-items-center gap-2">
+                                    <a href="../crud_user_setting_reg/upload.php?id_sistem=' . $row['ID_Sistem'] . '" class="btn btn-success btn-sm d-flex align-items-center gap-2">
                                             <i class="bx bx-upload"></i> Upload Evidence
                                     </a>
                                  </td>';
@@ -580,7 +538,7 @@ $result = $koneksi->query($query);
 
                                 // Prev button
                                 echo '<li class="page-item ' . ($currentPage <= 1 ? 'disabled' : '') . '">
-                        <a class="page-link" href="?page=' . max(1, $currentPage - 1) . '&regional=' . $selected_regional . '&year=' . $selected_year . '&week=' . $selected_week . '" aria-label="Previous">
+                        <a class="page-link" href="?page=' . max(1, $currentPage - 1) .  '&year=' . $selected_year . '&week=' . $selected_week . '" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>';
@@ -588,13 +546,13 @@ $result = $koneksi->query($query);
                                 // Page numbers
                                 for ($i = 1; $i <= $totalPages; $i++) {
                                     echo '<li class="page-item ' . ($i == $currentPage ? 'active' : '') . '">
-                            <a class="page-link" href="?page=' . $i . '&regional=' . $selected_regional . '&year=' . $selected_year . '&week=' . $selected_week . '">' . $i . '</a>
+                            <a class="page-link" href="?page=' . $i .  '&year=' . $selected_year . '&week=' . $selected_week . '">' . $i . '</a>
                         </li>';
                                 }
 
                                 // Next button
                                 echo '<li class="page-item ' . ($currentPage >= $totalPages ? 'disabled' : '') . '">
-                        <a class="page-link" href="?page=' . min($totalPages, $currentPage + 1) . '&regional=' . $selected_regional . '&year=' . $selected_year . '&week=' . $selected_week . '" aria-label="Next">
+                        <a class="page-link" href="?page=' . min($totalPages, $currentPage + 1) . '&year=' . $selected_year . '&week=' . $selected_week . '" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>';

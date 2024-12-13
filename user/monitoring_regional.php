@@ -31,15 +31,15 @@ if (!isset($_SESSION['nik'])) {
 // Ambil NIK pengguna yang sudah login
 $nik_user = $_SESSION['nik'];
 
-// Query untuk mendapatkan regional pengguna
-$query = "SELECT regional FROM loginreg WHERE nik = '$nik_user'";
+// Query untuk mendapatkan kantorasal pengguna
+$query = "SELECT kantorasal FROM loginreg WHERE nik = '$nik_user'";
 $result = $koneksi->query($query);
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    $user_regional = $row['regional'];
+    $user_kantorasal = $row['kantorasal'];
 } else {
-    echo "Regional tidak ditemukan.";
+    echo "Kantor Asal tidak ditemukan.";
     exit;
 }
 
@@ -49,7 +49,7 @@ $selected_week = $_GET['week'] ?? '';
 $conditions = [];
 
 // Filter berdasarkan Regional
-$conditions[] = "r.ZonaTujuan = '$user_regional'";
+$conditions[] = "r.Nama_Kantor_Tujuan = '$user_kantorasal'";
 
 // Filter berdasarkan Year
 if (!empty($selected_year)) {
