@@ -199,7 +199,7 @@ $result = $koneksi->query($query);
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="../user/monitoring_regional.php" class="menu-link">
+                        <a href="../userReg/monitoring_regional.php" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-line-chart"></i>
                             <div data-i18n="Account Settings">Monitoring</div>
                         </a>
