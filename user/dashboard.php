@@ -18,7 +18,7 @@ if ($result->num_rows > 0) {
 
 
 // Get user's kantorasal information from session
-$kantorasal = $_SESSION['kantorasal'];
+$kantorasal = $_SESSION['kantor_asal'];
 
 // Asumsi: koneksi database sudah ada melalui $koneksi
 $user_id = $_SESSION['id']; // ID user yang sudah login
@@ -334,7 +334,7 @@ while ($row = $result_data->fetch_assoc()) {
                       <div class="card-body">
                         <h5 class="card-title text-primary">
                           Hello <?php echo isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User'; ?>!
-                          <p><strong><?php echo isset($_SESSION['kantorasal']) ? $_SESSION['kantorasal'] : 'Tidak Ditemukan'; ?></strong></p>
+                          <p><strong><?php echo isset($_SESSION['kantor_asal']) ? $_SESSION['kantor_asal'] : 'Tidak Ditemukan'; ?></strong></p>
                         </h5>
                         <p class="mb-4">
                           Selamat datang di <span class="fw-bold">dashboard iregularitas</span>, kelola data dengan efisien dan pantau kinerja secara real-time dengan lebih cepat dan tepat.
