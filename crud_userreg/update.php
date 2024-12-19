@@ -282,6 +282,7 @@
                                     <option value="pengirim tidak melakukan packing dengan baik" <?php echo ($row2['Referensi_Root_Cause'] == 'pengirim tidak melakukan packing dengan baik') ? 'selected' : ''; ?>>Pengirim tidak melakukan packing dengan baik</option>
                                     <option value="pengirim salah memberikan data penerima" <?php echo ($row2['Referensi_Root_Cause'] == 'pengirim salah memberikan data penerima') ? 'selected' : ''; ?>>Pengirim salah memberikan data penerima</option>
                                     <option value="lain-lain" <?php echo ($row2['Referensi_Root_Cause'] == 'lain-lain') ? 'selected' : ''; ?>>Lain-lain</option>
+                                    <input type="hidden" name="referensi_root_cause" value="<?php echo $row2['Referensi_Root_Cause']; ?>">
                                 </select>
                             </div>
                             <!-- Tindakan Pencegahan -->
@@ -301,6 +302,7 @@
                                     <option value="sp3 + denda tingkat berat/phk/penghentian kerjasama" <?php echo ($row2['Corrective_Action'] == 'sp3 + denda tingkat berat/phk/penghentian kerjasama') ? 'selected' : ''; ?>>SP3 + denda tingkat berat/PHK/penghentian kerjasama</option>
                                     <option value="surat pemberitahuan kepada pengirim" <?php echo ($row2['Corrective_Action'] == 'surat pemberitahuan kepada pengirim') ? 'selected' : ''; ?>>Surat pemberitahuan kepada pengirim</option>
                                     <option value="tidak ada" <?php echo ($row2['Corrective_Action'] == 'tidak ada') ? 'selected' : ''; ?>>Tidak ada</option>
+                                    <input type="hidden" name="corrective_action" value="<?php echo $row2['Corrective_Action']; ?>">
                                 </select>
                             </div>
 
